@@ -873,6 +873,192 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
+     Component Lab — grid & cells (light zone)
+     ============================================================ */
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .lab-cell {
+    background: var(--l-bg-1);
+    border: 1px solid var(--l-line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition:
+      border-color 0.2s,
+      transform 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .lab-cell:hover {
+    border-color: #c8c4b3;
+    transform: translateY(-2px);
+  }
+  body[data-theme='dark'] .lab-cell:hover {
+    border-color: #3a3a44;
+  }
+  .lab-preview {
+    background: var(--l-bg-0);
+    border-bottom: 1px dashed var(--l-line);
+    flex: 1;
+    min-height: 160px;
+    padding: 22px;
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .lab-foot {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .lab-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .lab-cat {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--l-text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .lab-cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 1px solid var(--l-line);
+    background: var(--l-bg-1);
+    color: var(--l-text-1);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lab-cat-pill:hover {
+    border-color: #c8c4b3;
+  }
+  .lab-cat-pill.is-active {
+    background: var(--l-text-0);
+    color: var(--l-bg-1);
+    border-color: var(--l-text-0);
+  }
+
+  /* ============================================================
+     Lab modal
+     ============================================================ */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 28, 0.32);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    animation: fadeIn 0.15s ease;
+  }
+  body[data-theme='dark'] .modal-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .modal {
+    width: 100%;
+    max-width: 1080px;
+    max-height: 88vh;
+    background: var(--l-bg-0);
+    color: var(--l-text-0);
+    border-radius: var(--r-xl);
+    border: 1px solid var(--l-line);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    overflow: hidden;
+  }
+  .modal-preview {
+    background: var(--l-bg-1);
+    border-right: 1px solid var(--l-line);
+    padding: 32px;
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+    position: relative;
+  }
+  .modal-side {
+    padding: 28px;
+    overflow-y: auto;
+  }
+  .modal-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--l-line);
+    margin-bottom: 18px;
+  }
+  .modal-tab {
+    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--l-text-2);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+  }
+  .modal-tab.is-active {
+    color: var(--l-text-0);
+    border-color: var(--l-text-0);
+  }
+  @media (max-width: 900px) {
+    .modal {
+      grid-template-columns: 1fr;
+      max-height: 92vh;
+    }
+  }
+
+  /* ============================================================
+     Code block (used in Lab modal)
+     ============================================================ */
+  .code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    background: #18181b;
+    border: 1px solid #18181b;
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    color: #e4e4e7;
+    overflow-x: auto;
+  }
+  body[data-theme='dark'] .code {
+    background: #050507;
+    border-color: #1d1d23;
+  }
+  .tok-key {
+    color: #c4b5fd;
+  }
+  .tok-str {
+    color: #a3e635;
+  }
+  .tok-num {
+    color: #fbbf24;
+  }
+  .tok-com {
+    color: #71717a;
+    font-style: italic;
+  }
+  .tok-fn {
+    color: #67e8f9;
+  }
+  .tok-tag {
+    color: #f472b6;
+  }
+
+  /* ============================================================
      Mock helpers (project card visuals)
      ============================================================ */
   .mock-window {
@@ -1219,6 +1405,14 @@ html:has(body[data-theme='dark']) {
   }
   50% {
     transform: translateY(-12px);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 @keyframes fp-float-5 {

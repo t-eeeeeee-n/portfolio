@@ -4,9 +4,11 @@ import { Career } from '@/components/sections/Career';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
+import { LabTeaser } from '@/components/sections/LabTeaser';
 import { Nav } from '@/components/sections/Nav';
 import { Projects } from '@/components/sections/Projects';
 import { Skills } from '@/components/sections/Skills';
+import { ZoneFade } from '@/components/sections/ZoneFade';
 
 export default function HomePage() {
   return (
@@ -15,6 +17,9 @@ export default function HomePage() {
       <Hero />
       <BuildLog />
       <Projects />
+      <ZoneFade dir="down" />
+      <LabTeaser />
+      <ZoneFade dir="up" />
       <About />
       <Career />
       <Skills />

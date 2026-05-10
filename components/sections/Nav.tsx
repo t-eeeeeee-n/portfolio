@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-const SECTION_IDS = ['home', 'projects', 'about', 'career', 'skills', 'contact'] as const;
+const SECTION_IDS = ['home', 'projects', 'lab', 'about', 'career', 'skills', 'contact'] as const;
 
 const LINKS: Array<[(typeof SECTION_IDS)[number], string]> = [
   ['projects', 'Projects'],
+  ['lab', 'Lab'],
   ['about', 'About'],
   ['career', 'Career'],
   ['contact', 'Contact'],
