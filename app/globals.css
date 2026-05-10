@@ -825,8 +825,44 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
-     Mock helpers (Phase 2 placeholders)
+     Mock helpers (project card visuals)
      ============================================================ */
+  .mock-window {
+    background: var(--d-bg-1);
+    border: 1px solid var(--d-line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    font-size: 11px;
+    width: 100%;
+  }
+  .mock-window-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--d-line-2);
+    background: var(--d-bg-2);
+  }
+  .mock-window-bar > .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #2a2a32;
+  }
+  .mock-window-body {
+    padding: 14px;
+    font-family: var(--font-mono);
+  }
+  .live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-2);
+  }
+
   .mini {
     width: 100%;
     height: 100%;
