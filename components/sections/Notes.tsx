@@ -37,7 +37,7 @@ export function Notes({ notes, bare = false }: Props) {
           </button>
         ))}
       </div>
-      <div>
+      <div data-reveal="stagger">
         {list.length === 0 ? (
           <p className="lede" style={{ paddingTop: 24 }}>
             該当するノートがまだありません。

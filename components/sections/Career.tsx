@@ -6,7 +6,7 @@ export function Career() {
     <section id="career" className="section zone-dark">
       <div className="container">
         <SectionHead n="05" eyebrow="Career" title="Career" />
-        <div>
+        <div data-reveal="stagger">
           {career.map((c) => (
             <div key={c.company + c.period} className="career-row">
               <div className="career-period">{c.period}</div>

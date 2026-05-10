@@ -16,7 +16,7 @@ export function Contact() {
             個人開発・受託開発・技術相談など、内容は問いません。返信しやすい連絡手段でどうぞ。
           </p>
           <div className="flex flex-wrap gap-2.5 mt-8">
-            <a className="btn btn-primary" href="mailto:t.eeee.n.nir@gmail.com">
+            <a className="btn btn-primary" href="mailto:t.eeee.n.nir@gmail.com" data-magnetic="0.22">
               <Mail size={14} /> Email
             </a>
             <a
@@ -24,6 +24,7 @@ export function Contact() {
               href="https://github.com/t-eeeeeee-n"
               target="_blank"
               rel="noopener noreferrer"
+              data-magnetic="0.18"
             >
               <Github size={14} /> GitHub
             </a>
@@ -32,6 +33,7 @@ export function Contact() {
               href="https://www.linkedin.com/in/tensho-arai-b071142a3/"
               target="_blank"
               rel="noopener noreferrer"
+              data-magnetic="0.18"
             >
               <Linkedin size={14} /> LinkedIn
             </a>

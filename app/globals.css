@@ -1495,12 +1495,236 @@ html:has(body[data-theme='dark']) {
 }
 
 /* ============================================================
+   Background FX layer (mesh blobs + haze + cursor spotlight)
+   Mounted by <BackgroundFX /> at the top of body. The base zone
+   (--d-bg-0) covers most of the viewport; bg-fx peeks through at
+   page edges + transparent zones.
+   ============================================================ */
+.bg-fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+body[data-bg-motion='off'] .bg-fx {
+  display: none;
+}
+
+.bg-fx-mesh {
+  position: absolute;
+  inset: -15%;
+  filter: blur(110px);
+  opacity: 0.95;
+  transition: opacity 600ms;
+  /* parallax: shift slightly with scroll (var set by Effects.tsx) */
+  transform: translate3d(0, calc(var(--scroll-y, 0) * -0.04px), 0);
+}
+body[data-theme='dark'] .bg-fx-mesh {
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+body[data-theme='light'] .bg-fx-mesh {
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+.bg-fx-blob {
+  position: absolute;
+  width: 70vw;
+  height: 70vw;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+.bg-fx-blob-1 {
+  top: -22vw;
+  left: -18vw;
+  background: radial-gradient(circle at 40% 40%, rgba(var(--accent-rgb), 0.16), transparent 62%);
+  animation:
+    bg-blob-1 90s ease-in-out infinite,
+    bg-breathe-1 22s ease-in-out infinite;
+}
+.bg-fx-blob-2 {
+  bottom: -26vw;
+  right: -20vw;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.09), transparent 65%);
+  animation:
+    bg-blob-2 110s ease-in-out infinite,
+    bg-breathe-2 28s ease-in-out infinite;
+}
+.bg-fx-blob-3 {
+  top: 30vh;
+  left: 35vw;
+  width: 55vw;
+  height: 55vw;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.05), transparent 70%);
+  animation:
+    bg-blob-3 130s ease-in-out infinite,
+    bg-breathe-3 34s ease-in-out infinite;
+}
+body[data-theme='light'] .bg-fx-blob-1 {
+  background: radial-gradient(circle at 35% 35%, rgba(var(--accent-rgb), 0.28), transparent 65%);
+}
+body[data-theme='light'] .bg-fx-blob-2 {
+  background: radial-gradient(circle at 60% 50%, rgba(248, 168, 75, 0.22), transparent 65%);
+}
+body[data-theme='light'] .bg-fx-blob-3 {
+  background: radial-gradient(circle, rgba(120, 105, 230, 0.18), transparent 65%);
+}
+
+.bg-fx-haze {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(var(--accent-rgb), 0.05), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 30% 100%, rgba(var(--accent-rgb), 0.04), transparent 70%);
+  mix-blend-mode: screen;
+  animation: bg-haze-drift 60s ease-in-out infinite;
+  pointer-events: none;
+}
+body[data-theme='light'] .bg-fx-haze {
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+}
+
+.bg-fx-spotlight {
+  position: absolute;
+  inset: -10%;
+  background: radial-gradient(
+    560px circle at var(--mx, 50%) var(--my, 35%),
+    rgba(var(--accent-rgb), 0.12),
+    transparent 55%
+  );
+  transition: opacity 400ms;
+}
+
+/* ============================================================
+   Scroll reveal — applied by <Effects /> when [data-reveal]
+   crosses the viewport.
+   ============================================================ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 1s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal='stagger'] {
+  /* Container itself stays visible; children become reveal-child. */
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.reveal-child {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.95s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.95s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal-child.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+   Magnetic — micro-translate on hover for CTA buttons
+   ============================================================ */
+[data-magnetic] {
+  transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ============================================================
+   Background FX keyframes
+   ============================================================ */
+@keyframes bg-blob-1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(14vw, 10vh);
+  }
+}
+@keyframes bg-blob-2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-12vw, -8vh);
+  }
+}
+@keyframes bg-blob-3 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10vw, 6vh);
+  }
+}
+@keyframes bg-breathe-1 {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes bg-breathe-2 {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+@keyframes bg-breathe-3 {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes bg-haze-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(3vw, -2vh);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
    Motion preferences (prefers-reduced-motion + data-bg-motion)
    ============================================================ */
 body[data-bg-motion='off'] .hero-aurora,
 body[data-bg-motion='off'] .hero-aurora-2,
-body[data-bg-motion='off'] .fp {
+body[data-bg-motion='off'] .fp,
+body[data-bg-motion='off'] .bg-fx-blob,
+body[data-bg-motion='off'] .bg-fx-haze,
+body[data-bg-motion='off'] .bg-fx-mesh {
   animation: none !important;
+}
+body[data-bg-motion='off'] .bg-fx-mesh {
+  transform: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-aurora,
@@ -1508,11 +1732,21 @@ body[data-bg-motion='off'] .fp {
   .fp,
   .marquee-track,
   .pulse::after,
-  .fade-up {
+  .fade-up,
+  .bg-fx-blob,
+  .bg-fx-haze {
     animation: none !important;
   }
-  .fade-up {
+  .bg-fx-mesh {
+    transform: none !important;
+  }
+  .fade-up,
+  [data-reveal],
+  .reveal-child {
     opacity: 1 !important;
+    transform: none !important;
+  }
+  [data-magnetic] {
     transform: none !important;
   }
 }

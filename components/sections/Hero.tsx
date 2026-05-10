@@ -76,10 +76,10 @@ export function Hero() {
                 animationDelay: '0.25s',
               }}
             >
-              <a className="btn btn-primary" href="#projects">
+              <a className="btn btn-primary" href="#projects" data-magnetic="0.22">
                 Projects を見る <ArrowR size={14} className="btn-arrow" />
               </a>
-              <a className="btn btn-ghost" href="#about">
+              <a className="btn btn-ghost" href="#about" data-magnetic="0.18">
                 About <ArrowUR size={13} />
               </a>
             </div>

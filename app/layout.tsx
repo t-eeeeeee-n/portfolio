@@ -9,6 +9,8 @@ import {
   Inter,
   JetBrains_Mono,
 } from 'next/font/google';
+import { BackgroundFX } from '@/components/effects/BackgroundFX';
+import { Effects } from '@/components/effects/Effects';
 import './globals.css';
 
 const plexSans = IBM_Plex_Sans({
@@ -95,6 +97,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={fontVariables} data-theme="dark" data-font="plex" data-bg-motion="on">
+        <BackgroundFX />
+        <Effects />
         {children}
       </body>
     </html>

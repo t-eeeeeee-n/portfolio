@@ -83,7 +83,7 @@ export function Projects() {
           title="作っているもの。"
           lede="単なるカード一覧ではなく、それぞれ何を考えて作っているかが伝わるように並べています。"
         />
-        <div className="grid gap-6">
+        <div className="grid gap-6" data-reveal="stagger">
           {projects.map((p) => (
             <ProjectCard key={p.slug} p={p} />
           ))}

@@ -22,7 +22,7 @@ export function LabTeaser() {
             </Link>
           }
         />
-        <div className="lab-grid">
+        <div className="lab-grid" data-reveal="stagger">
           {items.map((c) => {
             const Render = c.Render;
             return (

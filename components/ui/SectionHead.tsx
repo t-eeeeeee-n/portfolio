@@ -10,7 +10,7 @@ type SectionHeadProps = {
 
 export function SectionHead({ n, eyebrow, title, lede, action }: SectionHeadProps) {
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-6 items-end mb-12">
+    <div data-reveal className="grid grid-cols-[1fr_auto] gap-6 items-end mb-12">
       <div>
         <div className="eyebrow mb-3.5">
           <span className="mr-3">§ {n}</span>
