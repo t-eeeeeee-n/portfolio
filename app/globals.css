@@ -658,6 +658,54 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
+     Card (decision cards on project detail page)
+     ============================================================ */
+  .card {
+    background: var(--d-bg-1);
+    border: 1px solid var(--d-line-2);
+    border-radius: var(--r-lg);
+    transition:
+      border-color 0.2s,
+      transform 0.2s,
+      background 0.2s;
+  }
+  .card:hover {
+    border-color: var(--d-line);
+  }
+  .zone-light .card {
+    background: var(--l-bg-1);
+    border-color: var(--l-line);
+  }
+  .zone-light .card:hover {
+    border-color: #c8c4b3;
+  }
+
+  /* ============================================================
+     Project detail page chrome
+     ============================================================ */
+  .proj-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(8, 8, 10, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--d-line);
+    padding: 16px 0;
+  }
+  .proj-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 64px;
+  }
+  @media (max-width: 900px) {
+    .proj-meta-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+
+  /* ============================================================
      About
      ============================================================ */
   .about-grid {

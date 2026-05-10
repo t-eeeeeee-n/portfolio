@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { SectionHead } from '@/components/ui/SectionHead';
 import { ArrowR } from '@/components/ui/icons';
 import { projects, type Project } from '@/lib/projects';
@@ -58,9 +59,9 @@ function ProjectCard({ p }: { p: Project }) {
           </div>
         </div>
         <div className="mt-auto pt-3.5 flex gap-2.5">
-          <a className="btn btn-primary" href={p.href}>
+          <Link className="btn btn-primary" href={p.href}>
             詳細を見る <ArrowR size={13} className="btn-arrow" />
-          </a>
+          </Link>
         </div>
       </div>
       <div className="project-card-visual grid-bg">
