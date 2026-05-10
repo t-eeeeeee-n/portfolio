@@ -53,6 +53,9 @@ const config: Config = {
       },
     },
   },
+  corePlugins: {
+    container: false,
+  },
   plugins: [require('@tailwindcss/typography')],
 };
 
