@@ -1,0 +1,64 @@
+---
+title: 'なぜ tRPC ではなく Hono + 型生成にしたか'
+date: '2026-01-06'
+tags: ['TypeScript', 'API']
+summary: '型は Source of Truth として運用したいが、ランタイムは独立しておきたい。Hono + 型生成という選択の理由。'
+draft: false
+---
+
+# なぜ tRPC ではなく Hono + 型生成にしたか
+
+SpecPilot を作るときに、フロント／バックの API 層をどう組むか少しだけ悩んだ。最初の候補は **tRPC**、最終的に選んだのは **Hono + OpenAPI / 型生成** だった。決め手は 3 つある。
+
+## 1. ランタイムをフロントから切り離したかった
+
+tRPC は気持ちのいい体験ができる代わりに、サーバーとクライアントが密結合になる。サーバーの実装変更がクライアント型を直接動かす。これは小さなフルスタック構成では強みだが、
+
+- 「フロントだけ作り直したい」「バックだけ別言語に置き換えたい」という未来をやや塞ぐ
+- API を社外に開く可能性が出てきた瞬間に剥がしにくくなる
+
+SpecPilot は今後 **iOS クライアント** や **CLI**（`vibe-pack` 生成）まで考えていて、HTTP ベースのコントラクトに揃えておきたかった。
+
+## 2. 型は契約（contract）として扱いたい
+
+「型を共有する」と「契約として運用する」は似ているけど違う。tRPC は前者で、OpenAPI は後者。
+
+```ts
+// tRPC: TypeScript の型推論がそのまま契約になる
+const router = t.router({
+  spec: t.procedure.input(z.object({ ... })).query(...)
+});
+type AppRouter = typeof router;
+// ↑ これがクライアントに直接漏れる
+```
+
+```yaml
+# OpenAPI: 仕様書が契約になる
+paths:
+  /spec:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SpecRequest' }
+```
+
+OpenAPI は **「読める」「diff できる」「他言語に降ろせる」** 形で残るので、Agent パイプラインを別言語で書き直したくなったときの選択肢が広い。
+
+## 3. それでも DX は譲りたくない
+
+OpenAPI を選ぶと「型推論の楽さ」を失う。これを取り戻すために [orval](https://orval.dev) でフロント SDK を自動生成している。
+
+```bash
+pnpm orval --input openapi.yaml --output src/lib/api
+```
+
+生成された SDK は Tanstack Query のフックまで作ってくれるので、tRPC とほぼ同じ書き心地で `useGetSpec(...)` が呼べる。**契約は OpenAPI、開発体験は tRPC 風** という両取りが目標。
+
+## まとめ
+
+- tRPC は 1 アプリ完結のときには最強
+- 複数クライアント・複数ランタイムを将来見据えるなら OpenAPI + 型生成
+- Hono を選んだのは「Cloud Run / Cloudflare Workers / Vercel どこでも動く」軽さが今の自分の運用にちょうどよかったから
+
+スタックは目的の関数。今は Hono + 型生成が一番フィットしている。

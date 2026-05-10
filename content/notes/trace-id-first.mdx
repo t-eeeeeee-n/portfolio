@@ -1,0 +1,73 @@
+---
+title: 'trace_id を最初に通しておくと後で楽になる'
+date: '2026-01-20'
+tags: ['Observability']
+summary: 'PoC を作るとき、ログと観測性の整備は後回しにしがち。でも trace_id だけは最初に通しておくと、その後の調査速度がまるで違う。'
+draft: false
+---
+
+# trace_id を最初に通しておくと後で楽になる
+
+PoC を立ち上げるとき、観測性 (observability) の整備は「動いてから」になりがち。だいたいの場合それで困らないけど、**`trace_id` だけは別**。最初に通しておくと、後から困った瞬間に救われる。
+
+## なぜ最初に通すのか
+
+PoC は仕様が変わる。Agent が増える。LLM 呼び出しが入れ子になる。そういうときに「どのリクエストが、どの Agent に渡って、どの LLM 呼び出しでこける」が追えないと、デバッグのたびに何時間も溶ける。
+
+`trace_id` は **後付けが面倒**。途中の関数全部に伝播の引数を足し直す必要が出てきて、結局気合いで grep する羽目になる。
+
+## どこを通すか
+
+最低限ここを貫通させればいい。
+
+| レイヤー | 何をする |
+|---------|---------|
+| Frontend | リクエストヘッダに `traceparent` を付ける |
+| Backend (FastAPI/Hono) | 受け取った `traceparent` を context に保持 |
+| Agent パイプライン | Agent 間 I/O に `trace_id` を必須で渡す |
+| LLM 呼び出し | プロンプト送信時にメタとして添える |
+| 構造化ログ | 全ログ行に `trace_id` を出す |
+
+W3C Trace Context (`traceparent`) を使えば標準フォーマットに乗れる。OpenTelemetry SDK を入れる前でも、まず ID だけ伝播させれば十分。
+
+## 最小実装
+
+Hono の middleware で受け口を作る例：
+
+```ts
+import { Hono } from 'hono';
+import { randomUUID } from 'node:crypto';
+
+const app = new Hono();
+
+app.use('*', async (c, next) => {
+  const incoming = c.req.header('traceparent');
+  const traceId = incoming?.split('-')[1] ?? randomUUID().replace(/-/g, '');
+  c.set('traceId', traceId);
+  await next();
+});
+
+app.get('/spec', async (c) => {
+  const traceId = c.get('traceId');
+  console.log(JSON.stringify({ traceId, evt: 'spec.start' }));
+  // ...
+});
+```
+
+これだけで、後からの調査で **「あの 1 リクエストの全履歴」** を grep 一発で再構成できる。
+
+## 「全部やる」と「これだけやる」の差
+
+PoC のうちは、ログ集約基盤も Sentry も Otel Collector もいらない。**ID と JSON 構造だけ揃えておく**。あとは grep / jq で十分。
+
+```bash
+cat app.log | jq 'select(.traceId == "9f2a1c...")'
+```
+
+仕様変更で Agent が増えても、ID 伝播さえ守られていれば追跡コストは線形にしか増えない。これが最初に通しておくべき理由。
+
+## まとめ
+
+- 観測性整備は後でいい、`trace_id` だけは別
+- W3C Trace Context に乗っかれば標準的に拡張できる
+- 構造化 JSON ログ + `trace_id` フィールドさえあれば PoC では十分
