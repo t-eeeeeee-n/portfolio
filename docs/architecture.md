@@ -49,16 +49,16 @@ app/
 
 ```ts
 export const metadata: Metadata = {
-  title: { default: 'teeen.lab — Engineering Lab / Product Studio', template: '%s — teeen.lab' },
+  title: { default: 'teeeen.lab — Engineering Lab / Product Studio', template: '%s — teeeen.lab' },
   description: 'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Webサービスと AI 活用ツールを作っています。— 新井 天翔 / Tensho Arai',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeen.vercel.app'),
-  authors: [{ name: 'Tensho Arai', url: 'https://teeen.vercel.app' }],
-  openGraph: { type: 'website', locale: 'ja_JP', siteName: 'teeen.lab' },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
+  authors: [{ name: 'Tensho Arai', url: 'https://teeeen.vercel.app' }],
+  openGraph: { type: 'website', locale: 'ja_JP', siteName: 'teeeen.lab' },
   twitter: { card: 'summary_large_image' },
 };
 ```
 
-`NEXT_PUBLIC_SITE_URL` は Vercel の Production / Preview URL の差を吸収するため。Vercel の Project Settings に `https://teeen.vercel.app` を設定する。
+`NEXT_PUBLIC_SITE_URL` は Vercel の Production / Preview URL の差を吸収するため。Vercel の Project Settings に `https://teeeen.vercel.app` を設定する。
 
 各プロジェクト・Notes ページで `generateMetadata` を実装。
 
@@ -362,7 +362,7 @@ export default config;
 
 | 変数 | 用途 | 既定値 |
 |------|------|--------|
-| `NEXT_PUBLIC_SITE_URL` | metadataBase / OG / sitemap | `https://teeen.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | metadataBase / OG / sitemap | `https://teeeen.vercel.app` |
 | `RESEND_API_KEY` 等 | お問い合わせフォームを設置する場合（**現状は `mailto:` で十分、不要**） | — |
 
 `.env.example` を整備し、Vercel Project Settings に同期する運用にする。Resend など外部 SaaS は今は使わない（コストかけない方針）。

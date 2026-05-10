@@ -1,8 +1,8 @@
 {
-  "name": "teeen-lab",
+  "name": "teeeen-lab",
   "version": "0.1.0",
   "private": true,
-  "description": "teeen.lab — Tensho Arai's engineering portfolio",
+  "description": "teeeen.lab — Tensho Arai's engineering portfolio",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

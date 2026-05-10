@@ -12,7 +12,7 @@ export default function HomePage() {
         >
           t.n
         </span>
-        <h1 className="mt-6 text-4xl font-medium tracking-tight">teeen.lab</h1>
+        <h1 className="mt-6 text-4xl font-medium tracking-tight">teeeen.lab</h1>
         <p className="mt-2 font-mono text-sm text-d-text-2">scaffold ready · phase 0</p>
       </div>
     </main>

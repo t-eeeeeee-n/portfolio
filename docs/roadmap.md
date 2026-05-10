@@ -16,10 +16,10 @@
 - [ ] `app/page.tsx` に "Hello, k.lab" だけ
 - [ ] `.gitignore` に `tmp/`, `.next/`, `node_modules/`, `.vercel/`, `*.local` を追加
 - [ ] Git 初期化 + 最初のコミット
-- [ ] Vercel 連携、Project 名を `teeen` で作成（Production URL は `https://teeen.vercel.app`、衝突時は `teeen-arai` / `teeen-lab` の順でフォールバック）
+- [ ] Vercel 連携、Project 名を `teeeen` で作成（Production URL は `https://teeeen.vercel.app`、衝突時は `teeeen-arai` / `teeeen-lab` の順でフォールバック）
 - [ ] Vercel Project Settings → Environment Variables に `NEXT_PUBLIC_SITE_URL` を設定
 
-**完了の合図**：Vercel Production にアクセスして "Hello, teeen.lab" が出る + Lighthouse Performance ≥ 95。
+**完了の合図**：Vercel Production にアクセスして "Hello, teeeen.lab" が出る + Lighthouse Performance ≥ 95。
 
 ---
 

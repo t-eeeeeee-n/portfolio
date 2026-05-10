@@ -1,9 +1,9 @@
-# Portfolio — teeen.lab (Personal Engineering Portfolio)
+# Portfolio — teeeen.lab (Personal Engineering Portfolio)
 
-新井 天翔 (Tensho Arai / handle: **teeen**) の個人ポートフォリオ。職務経歴・プロダクト・コンポーネント実験・ノートを集約する。
+新井 天翔 (Tensho Arai / handle: **teeeen**) の個人ポートフォリオ。職務経歴・プロダクト・コンポーネント実験・ノートを集約する。
 
-**ブランド**：`teeen.lab`（履歴書の `t-eeeeeee-n` とメール `t.eeee.n.nir@gmail.com` から派生したハンドル）。ロゴマーク `[t.n]`。
-**公開先**：`https://teeen.vercel.app`（取れなかった場合のフォールバックは `teeen-arai.vercel.app` / `teeen-lab.vercel.app`）。独自ドメインは取らない。
+**ブランド**：`teeeen.lab`（履歴書の `t-eeeeeee-n` とメール `t.eeee.n.nir@gmail.com` から派生したハンドル）。ロゴマーク `[t.n]`。
+**公開先**：`https://teeeen.vercel.app`（取れなかった場合のフォールバックは `teeeen-arai.vercel.app` / `teeeen-lab.vercel.app`）。独自ドメインは取らない。
 
 ## 何をやっているサイトか
 
@@ -133,7 +133,7 @@ Vercel 連携後は `git push` で自動デプロイ。プレビュー URL が P
 
 **やらない（ユーザー確認なしで進めない）**
 
-- ブランド名 `teeen.lab` / ロゴマーク `[t.n]` の差し替え（本人と決定済み）
+- ブランド名 `teeeen.lab` / ロゴマーク `[t.n]` の差し替え（本人と決定済み）
 - カラートークンや Zone 命名規約の刷新
 - 職務経歴書 PDF の中身書き換え
 - Notes の URL 構造変更（後で SEO に効く）

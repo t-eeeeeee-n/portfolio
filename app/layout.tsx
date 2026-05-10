@@ -60,18 +60,18 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'teeen.lab — Engineering Lab / Product Studio',
-    template: '%s — teeen.lab',
+    default: 'teeeen.lab — Engineering Lab / Product Studio',
+    template: '%s — teeeen.lab',
   },
   description:
     'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。— 新井 天翔 / Tensho Arai',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeen.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
   authors: [{ name: 'Tensho Arai' }],
   creator: 'Tensho Arai',
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
-    siteName: 'teeen.lab',
+    siteName: 'teeeen.lab',
   },
   twitter: { card: 'summary_large_image' },
 };
