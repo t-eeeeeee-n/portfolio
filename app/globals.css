@@ -1378,6 +1378,152 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
+     Tweaks panel — floating dev-style settings popover
+     ============================================================ */
+  .tweaks-fab {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    z-index: 60;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid var(--d-line);
+    background: var(--d-bg-1);
+    display: grid;
+    place-items: center;
+    color: var(--d-text-1);
+    cursor: pointer;
+    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.25);
+    transition:
+      transform 0.18s,
+      border-color 0.18s,
+      color 0.18s;
+  }
+  .tweaks-fab:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  body[data-theme='dark'] .tweaks-fab {
+    box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+  }
+  .tweaks-panel {
+    position: fixed;
+    bottom: 70px;
+    right: 18px;
+    z-index: 60;
+    width: 280px;
+    background: var(--d-bg-1);
+    border: 1px solid var(--d-line);
+    border-radius: var(--r-lg);
+    padding: 14px;
+    box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.35);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--d-text-1);
+    animation: fadeIn 0.18s ease;
+  }
+  .tweaks-section {
+    font-size: 10px;
+    color: var(--d-text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 12px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .tweaks-section:first-child {
+    margin-top: 0;
+  }
+  .tweaks-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0;
+  }
+  .tweaks-row-label {
+    font-size: 12px;
+    color: var(--d-text-1);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tweaks-radio-group {
+    display: flex;
+    gap: 4px;
+    background: var(--d-bg-2);
+    border: 1px solid var(--d-line-2);
+    border-radius: 6px;
+    padding: 2px;
+  }
+  .tweaks-radio {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-2);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
+  .tweaks-radio.is-active {
+    background: var(--d-bg-1);
+    color: var(--d-text-0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+  .tweaks-color-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .tweaks-color-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid var(--d-line-2);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s;
+  }
+  .tweaks-color-swatch:hover {
+    transform: scale(1.1);
+  }
+  .tweaks-color-swatch.is-active {
+    border-color: var(--d-text-0);
+    box-shadow: 0 0 0 2px var(--d-bg-1);
+  }
+  .tweaks-toggle {
+    width: 32px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--d-bg-3);
+    border: 1px solid var(--d-line);
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.18s;
+  }
+  .tweaks-toggle.is-on {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .tweaks-toggle::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: #fff;
+    transition: left 0.18s;
+  }
+  .tweaks-toggle.is-on::before {
+    left: 15px;
+  }
+
+  /* ============================================================
      Zone fades / divider
      ============================================================ */
   .zone-fade-down,

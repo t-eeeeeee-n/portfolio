@@ -54,3 +54,4 @@ export const Layer = (p: IconProps) => <Icon d="M12 2 2 8l10 6 10-6-10-6z M2 14l
 export const Cube = (p: IconProps) => <Icon d="M12 2 3 7v10l9 5 9-5V7l-9-5z M3 7l9 5 9-5 M12 12v10" {...p} />;
 export const Clock = (p: IconProps) => <Icon d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 7v5l3 2" {...p} />;
 export const Box = (p: IconProps) => <Icon d="M3 7l9-4 9 4-9 4-9-4z M3 7v10l9 4 9-4V7 M12 11v10" {...p} />;
+export const Sliders = (p: IconProps) => <Icon d="M4 21V14 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6" {...p} />;

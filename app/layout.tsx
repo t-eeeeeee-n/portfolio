@@ -9,9 +9,34 @@ import {
   Inter,
   JetBrains_Mono,
 } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import { BackgroundFX } from '@/components/effects/BackgroundFX';
 import { Effects } from '@/components/effects/Effects';
+import { TweaksPanel } from '@/components/tweaks/TweaksPanel';
 import './globals.css';
+
+// Inline pre-hydration script: read saved tweaks from localStorage and
+// apply them to <body>/<html> before React mounts so themes/fonts don't
+// flash from defaults.
+const TWEAK_BOOT_SCRIPT = `
+(function(){
+  try {
+    var raw = localStorage.getItem('teeeen.tweaks');
+    if (!raw) return;
+    var t = JSON.parse(raw);
+    var b = document.body;
+    if (t.theme) b.dataset.theme = t.theme;
+    if (t.font) b.dataset.font = t.font;
+    if (typeof t.bgMotion === 'boolean') b.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
+    if (t.accent) {
+      var hex = t.accent.replace('#','');
+      var r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), bl = parseInt(hex.slice(4,6),16);
+      document.documentElement.style.setProperty('--accent', t.accent);
+      document.documentElement.style.setProperty('--accent-rgb', r+', '+g+', '+bl);
+    }
+  } catch (e) {}
+})();
+`.trim();
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -97,9 +122,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={fontVariables} data-theme="dark" data-font="plex" data-bg-motion="on">
+        <script dangerouslySetInnerHTML={{ __html: TWEAK_BOOT_SCRIPT }} />
         <BackgroundFX />
         <Effects />
         {children}
+        <TweaksPanel />
+        <Analytics />
       </body>
     </html>
   );
