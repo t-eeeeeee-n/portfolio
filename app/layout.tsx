@@ -77,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#ece9e0',
+  themeColor: '#08080a',
 };
 
 const fontVariables = [
@@ -94,7 +94,7 @@ const fontVariables = [
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={fontVariables} data-theme="paper" data-font="plex" data-bg-motion="on">
+      <body className={fontVariables} data-theme="dark" data-font="plex" data-bg-motion="on">
         {children}
       </body>
     </html>

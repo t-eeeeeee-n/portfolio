@@ -12,7 +12,7 @@
 - [ ] `tailwind.config.ts` を `docs/architecture.md § 8` の通りに設定
 - [ ] `app/globals.css` に `tmp/portfolio/styles.css` のうち**トークン定義部分（`:root`, `body[data-theme=...]`, `body[data-font=...]`）だけ**コピー
 - [ ] `next/font` で IBM Plex / Geist / Instrument Serif / JetBrains Mono を読み込み、`--font-*` 変数を割り当て
-- [ ] `app/layout.tsx` で `<body data-theme="paper" data-font="plex" data-bg-motion="on">`
+- [ ] `app/layout.tsx` で `<body data-theme="dark" data-font="plex" data-bg-motion="on">`（dark がデザイン参照の既定）
 - [ ] `app/page.tsx` に "Hello, k.lab" だけ
 - [ ] `.gitignore` に `tmp/`, `.next/`, `node_modules/`, `.vercel/`, `*.local` を追加
 - [ ] Git 初期化 + 最初のコミット

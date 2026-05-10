@@ -78,12 +78,15 @@ portfolio/
 
 ### Zone の命名に注意（重要）
 
-CSS の `.zone-dark` / `.zone-light` は **配色ではなくシーンの区別**で、デフォルトテーマ (`paper` 系) では：
+CSS の `.zone-dark` / `.zone-light` は **配色ではなくシーンの区別**で、テーマによって実際の色は変わる：
 
-- `.zone-dark` → 暖色系の薄いグレー (#ece9e0) **（本当のダークではない）**
-- `.zone-light` → 純白 (#ffffff)
+| テーマ | `.zone-dark` | `.zone-light` |
+|--------|-------------|--------------|
+| `dark`（**既定**・デザイン参照と一致） | 真っ黒 `#08080a` | 黒 `#0e0e12` |
+| `paper` | 暖色系の薄グレー `#ece9e0` | 純白 `#ffffff` |
+| `light` | 純白系 `#fafafa` | 純白 `#ffffff` |
 
-ダークテーマ (`body[data-theme="dark"]`) を選んだときに初めて `.zone-dark` が真っ黒 (#08080a) になる。
+つまり既定（dark）では「zone-dark = 黒」で名前と実色が一致するが、`paper` / `light` に切り替えた途端に **`.zone-dark` が dark じゃなくなる**点に注意。
 **リネームの誘惑に注意** — 既に `tmp/portfolio` 全域で使われており、対応する CSS 変数 (`--d-*` / `--l-*`) も同じ命名なので、まとめて変える覚悟がない限りそのまま残す。詳細は `docs/design-system.md`。
 
 ### inline style → Tailwind / CSS Module への移行
