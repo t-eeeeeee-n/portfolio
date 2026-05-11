@@ -594,6 +594,126 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
+     Intro section — quiet "engineer card" between Hero and Projects.
+     Filed-typography aesthetic: a single accent moment (the hairline
+     tick above the stack row) plus a code-comment marker.
+     ============================================================ */
+  .intro-section {
+    padding: 0 0 96px;
+  }
+  .intro-block {
+    max-width: 720px;
+    position: relative;
+  }
+  .intro-marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--d-text-2);
+    margin-bottom: 28px;
+  }
+  .intro-marker-accent {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .intro-headline {
+    font-size: clamp(26px, 3.2vw, 38px);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0;
+    color: var(--d-text-0);
+  }
+  .intro-body {
+    margin-top: 28px;
+  }
+  .intro-body > p {
+    font-size: 17px;
+    line-height: 1.75;
+    letter-spacing: -0.005em;
+    color: var(--d-text-1);
+    margin: 0;
+  }
+  .intro-body > p + p {
+    margin-top: 6px;
+  }
+  .intro-name {
+    color: var(--d-text-0);
+    font-weight: 500;
+  }
+  .intro-stack {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: baseline;
+    margin: 32px 0 0;
+    padding-top: 18px;
+    position: relative;
+  }
+  .intro-stack::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background: var(--d-line);
+  }
+  .intro-stack::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .intro-stack dt {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--d-text-3);
+    margin: 0;
+    padding-right: 14px;
+    border-right: 1px solid var(--d-line);
+  }
+  .intro-stack dd {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--d-text-1);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    row-gap: 6px;
+  }
+  .intro-stack-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--d-line);
+    flex-shrink: 0;
+    display: inline-block;
+  }
+  @media (max-width: 720px) {
+    .intro-stack {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .intro-stack dt {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+
+  /* ============================================================
      Project card
      ============================================================ */
   .project-card {

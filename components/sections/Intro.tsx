@@ -9,7 +9,7 @@ export function Intro() {
       <div className="container">
         <div className="intro-block" data-reveal>
           <div className="intro-marker" aria-hidden="true">
-            <span className="intro-marker-accent">//</span> about
+            <span className="intro-marker-accent">{'//'}</span> about
           </div>
 
           <h2 className="intro-headline">
