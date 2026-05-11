@@ -1,64 +1,46 @@
-/* Short bio panel that sits between Hero and Projects.
-   The longer self-PR lives further down in the About section; this one
-   is the English-leaning, indie-engineer-flavored quick intro. */
+/* Quiet "engineer's pinned card" between Hero and Projects.
+   Filed-typography aesthetic: code-comment marker, sans body, and a
+   stack row framed as a key-value field with a hairline + single
+   accent tick. All decoration is restrained to one accent moment. */
 
 export function Intro() {
   return (
-    <section id="intro" className="zone-dark" style={{ padding: '0 0 96px' }}>
+    <section id="intro" className="zone-dark intro-section">
       <div className="container">
-        <div data-reveal style={{ maxWidth: 720 }}>
-          <h2
-            style={{
-              fontSize: 'clamp(26px, 3.2vw, 38px)',
-              fontWeight: 500,
-              letterSpacing: '-0.025em',
-              lineHeight: 1.15,
-              margin: 0,
-              color: 'var(--d-text-0)',
-            }}
-          >
-            Building AI-native software, end&nbsp;to&nbsp;end.
+        <div className="intro-block" data-reveal>
+          <div className="intro-marker" aria-hidden="true">
+            <span className="intro-marker-accent">//</span> about
+          </div>
+
+          <h2 className="intro-headline">
+            Building AI-native software, end to end.
           </h2>
 
-          <p
-            style={{
-              marginTop: 28,
-              marginBottom: 0,
-              fontSize: 17,
-              lineHeight: 1.7,
-              letterSpacing: '-0.005em',
-              color: 'var(--d-text-1)',
-            }}
-          >
-            <span style={{ color: 'var(--d-text-0)', fontWeight: 500 }}>Tensho Arai</span>.
-            Full-stack &amp; Product Engineer.
-          </p>
+          <div className="intro-body">
+            <p>
+              <span className="intro-name">Tensho Arai</span>. Full-stack &amp; Product Engineer.
+            </p>
+            <p>
+              AI Agent パイプライン、AI-assisted な開発ワークフロー、運用に耐える SaaS を、企画 → 設計 → 実装 → 運用まで一気通貫で。
+            </p>
+          </div>
 
-          <p
-            style={{
-              marginTop: 8,
-              marginBottom: 0,
-              fontSize: 17,
-              lineHeight: 1.7,
-              letterSpacing: '-0.005em',
-              color: 'var(--d-text-1)',
-            }}
-          >
-            AI Agent パイプライン、AI-assisted な開発ワークフロー、運用に耐える SaaS を、企画 → 設計 → 実装 → 運用まで一気通貫で。
-          </p>
-
-          <p
-            style={{
-              marginTop: 18,
-              marginBottom: 0,
-              fontFamily: 'var(--font-mono)',
-              fontSize: 13,
-              letterSpacing: '0.02em',
-              color: 'var(--d-text-2)',
-            }}
-          >
-            Stack: TypeScript · Python · Next.js · Postgres · GCP · Claude&nbsp;/&nbsp;Gemini.
-          </p>
+          <dl className="intro-stack" aria-label="Tech stack">
+            <dt>Stack</dt>
+            <dd>
+              <span>TypeScript</span>
+              <span className="intro-stack-sep" aria-hidden="true" />
+              <span>Python</span>
+              <span className="intro-stack-sep" aria-hidden="true" />
+              <span>Next.js</span>
+              <span className="intro-stack-sep" aria-hidden="true" />
+              <span>Postgres</span>
+              <span className="intro-stack-sep" aria-hidden="true" />
+              <span>GCP</span>
+              <span className="intro-stack-sep" aria-hidden="true" />
+              <span>Claude / Gemini</span>
+            </dd>
+          </dl>
         </div>
       </div>
     </section>
