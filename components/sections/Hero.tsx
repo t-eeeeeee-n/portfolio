@@ -37,25 +37,30 @@ export function Hero() {
               <br />
               アイデアを
               <br />
-              <span style={{ position: 'relative' }}>
-                動くプロダクト
-                <span
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    bottom: -2,
-                    height: 6,
-                    background:
-                      'linear-gradient(90deg, var(--accent), transparent 80%)',
-                    opacity: 0.45,
-                    borderRadius: 3,
-                    filter: 'blur(2px)',
-                  }}
-                />
+              {/* Keep "動くプロダクト" + the trailing "に。" on the same
+                  line so the punctuation never drops down at narrower
+                  viewport widths. */}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                <span style={{ position: 'relative' }}>
+                  動くプロダクト
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      bottom: -2,
+                      height: 6,
+                      background:
+                        'linear-gradient(90deg, var(--accent), transparent 80%)',
+                      opacity: 0.45,
+                      borderRadius: 3,
+                      filter: 'blur(2px)',
+                    }}
+                  />
+                </span>
+                <span style={{ color: 'var(--d-text-2)' }}>に。</span>
               </span>
-              <span style={{ color: 'var(--d-text-2)' }}>に。</span>
             </h1>
             <p
               className="lede fade-up"
