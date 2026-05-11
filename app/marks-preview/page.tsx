@@ -94,7 +94,7 @@ function CurrentMark({ size = 32 }: { size?: number }) {
   );
 }
 
-type MarkComp = (p: MarkProps) => JSX.Element;
+type MarkComp = (p: MarkProps) => React.ReactElement;
 
 const OPTIONS: Array<{ id: string; title: string; pitch: string; Mark: MarkComp }> = [
   {
