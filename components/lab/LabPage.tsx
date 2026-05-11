@@ -31,19 +31,7 @@ export function LabPage() {
   return (
     <>
       {/* Top bar */}
-      <header
-        className="zone-light"
-        style={{
-          borderBottom: '1px solid var(--l-line)',
-          padding: '20px 0',
-          position: 'sticky',
-          top: 0,
-          background: 'rgba(247, 246, 241, 0.92)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          zIndex: 30,
-        }}
-      >
+      <header className="page-header">
         <div className="container flex items-center gap-4">
           <Link
             href="/"

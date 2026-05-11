@@ -681,6 +681,28 @@ html:has(body[data-theme='dark']) {
     }
   }
 
+  /* Sticky top header for zone-light sub-pages (component-lab, notes
+     index). Earlier this was inline-styled with the paper-cream value
+     hardcoded, which looked wrong against the dark default theme.
+     Track the current theme via body[data-theme] so the header sits
+     on the same backdrop as its page. */
+  .page-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--l-line);
+    background: rgba(14, 14, 18, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  body[data-theme='paper'] .page-header {
+    background: rgba(247, 246, 241, 0.92);
+  }
+  body[data-theme='light'] .page-header {
+    background: rgba(255, 255, 255, 0.92);
+  }
+
   /* ============================================================
      About
      ============================================================ */
