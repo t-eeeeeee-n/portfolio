@@ -22,7 +22,7 @@ export default async function HomePage() {
       <Projects />
       <ZoneFade dir="down" />
       <LabTeaser />
-      <Notes notes={notes} />
+      <Notes notes={notes} limit={6} showFilter={false} showSeeAll />
       <ZoneFade dir="up" />
       <About />
       <Career />

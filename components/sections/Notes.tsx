@@ -10,9 +10,22 @@ type Props = {
   notes: NoteMeta[];
   /** When true, render without the home-page SectionHead (used by /notes route). */
   bare?: boolean;
+  /** Hide the tag filter (used on the home page where the section is meant
+   *  as a teaser, not a browsable archive). */
+  showFilter?: boolean;
+  /** Cap the visible list (used on the home page to keep things tight). */
+  limit?: number;
+  /** Show a "See all on /notes →" CTA below the list. */
+  showSeeAll?: boolean;
 };
 
-export function Notes({ notes, bare = false }: Props) {
+export function Notes({
+  notes,
+  bare = false,
+  showFilter = true,
+  limit,
+  showSeeAll = false,
+}: Props) {
   const [filter, setFilter] = useState<string>('All');
 
   const tags = useMemo(() => {
@@ -21,22 +34,26 @@ export function Notes({ notes, bare = false }: Props) {
     return ['All', ...Array.from(s)];
   }, [notes]);
 
-  const list = filter === 'All' ? notes : notes.filter((n) => n.tags.includes(filter));
+  const filtered = filter === 'All' ? notes : notes.filter((n) => n.tags.includes(filter));
+  const list = limit ? filtered.slice(0, limit) : filtered;
+  const hiddenCount = limit ? Math.max(0, filtered.length - limit) : 0;
 
   const Inner = (
     <>
-      <div className="flex flex-wrap gap-1.5 mb-2">
-        {tags.map((t) => (
-          <button
-            type="button"
-            key={t}
-            className={'note-filter' + (filter === t ? ' is-active' : '')}
-            onClick={() => setFilter(t)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
+      {showFilter && (
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {tags.map((t) => (
+            <button
+              type="button"
+              key={t}
+              className={'note-filter' + (filter === t ? ' is-active' : '')}
+              onClick={() => setFilter(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )}
       <div data-reveal="stagger">
         {list.length === 0 ? (
           <p className="lede" style={{ paddingTop: 24 }}>
@@ -61,6 +78,17 @@ export function Notes({ notes, bare = false }: Props) {
           ))
         )}
       </div>
+      {showSeeAll && (
+        <div className="mt-8">
+          <Link
+            href="/notes"
+            className="inline-flex items-center gap-2 font-mono text-[12px] text-l-text-1 hover:text-accent"
+            style={{ letterSpacing: '0.02em' }}
+          >
+            See all notes{hiddenCount > 0 ? ` (+${hiddenCount})` : ''} <ArrowUR size={12} />
+          </Link>
+        </div>
+      )}
     </>
   );
 

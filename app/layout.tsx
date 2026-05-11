@@ -1,14 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import {
-  Geist,
-  Geist_Mono,
-  IBM_Plex_Mono,
-  IBM_Plex_Sans,
-  IBM_Plex_Serif,
-  Instrument_Serif,
-  Inter,
-  JetBrains_Mono,
-} from 'next/font/google';
+import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { BackgroundFX } from '@/components/effects/BackgroundFX';
 import { Effects } from '@/components/effects/Effects';
@@ -16,8 +7,8 @@ import { TweaksPanel } from '@/components/tweaks/TweaksPanel';
 import './globals.css';
 
 // Inline pre-hydration script: read saved tweaks from localStorage and
-// apply them to <body>/<html> before React mounts so themes/fonts don't
-// flash from defaults.
+// apply them to <body>/<html> before React mounts so themes don't flash
+// from defaults.
 const TWEAK_BOOT_SCRIPT = `
 (function(){
   try {
@@ -26,7 +17,6 @@ const TWEAK_BOOT_SCRIPT = `
     var t = JSON.parse(raw);
     var b = document.body;
     if (t.theme) b.dataset.theme = t.theme;
-    if (t.font) b.dataset.font = t.font;
     if (typeof t.bgMotion === 'boolean') b.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
     if (t.accent) {
       var hex = t.accent.replace('#','');
@@ -38,9 +28,14 @@ const TWEAK_BOOT_SCRIPT = `
 })();
 `.trim();
 
+// Only the two fonts actually used at runtime are downloaded. Earlier
+// revisions loaded 8 Google Fonts (Plex Sans/Mono/Serif + Geist +
+// Geist Mono + Instrument Serif + Inter + JetBrains Mono) for a
+// Tweaks "font variant" switcher that was never used in practice;
+// dropping them cut the initial font payload by hundreds of KB.
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
   variable: '--font-plex-sans',
   display: 'swap',
 });
@@ -48,40 +43,6 @@ const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
   variable: '--font-plex-mono',
-  display: 'swap',
-});
-const plexSerif = IBM_Plex_Serif({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  style: ['normal', 'italic'],
-  variable: '--font-plex-serif',
-  display: 'swap',
-});
-const geistSans = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist-sans',
-  display: 'swap',
-});
-const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
-  display: 'swap',
-});
-const instrumentSerif = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
-  variable: '--font-instrument-serif',
-  display: 'swap',
-});
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono',
   display: 'swap',
 });
 
@@ -107,21 +68,12 @@ export const viewport: Viewport = {
   themeColor: '#08080a',
 };
 
-const fontVariables = [
-  plexSans.variable,
-  plexMono.variable,
-  plexSerif.variable,
-  geistSans.variable,
-  geistMono.variable,
-  instrumentSerif.variable,
-  inter.variable,
-  jetbrainsMono.variable,
-].join(' ');
+const fontVariables = [plexSans.variable, plexMono.variable].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={fontVariables} data-theme="dark" data-font="plex" data-bg-motion="on">
+      <body className={fontVariables} data-theme="dark" data-bg-motion="on">
         <script dangerouslySetInnerHTML={{ __html: TWEAK_BOOT_SCRIPT }} />
         <BackgroundFX />
         <Effects />

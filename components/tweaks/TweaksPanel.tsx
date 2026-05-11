@@ -4,21 +4,18 @@ import { useEffect, useState } from 'react';
 import { Sliders, X } from '@/components/ui/icons';
 
 type Theme = 'dark' | 'paper' | 'light';
-type Font = 'plex' | 'geist' | 'editorial';
 type Accent = '#ec5e2a' | '#f59e0b' | '#dc2626' | '#18181b';
 
 const STORAGE_KEY = 'teeeen.tweaks';
 
 type Tweaks = {
   theme: Theme;
-  font: Font;
   accent: Accent;
   bgMotion: boolean;
 };
 
 const DEFAULTS: Tweaks = {
   theme: 'dark',
-  font: 'plex',
   accent: '#ec5e2a',
   bgMotion: true,
 };
@@ -36,7 +33,6 @@ function applyAccent(hex: string) {
 
 function applyTweaks(t: Tweaks) {
   document.body.dataset.theme = t.theme;
-  document.body.dataset.font = t.font;
   document.body.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
   applyAccent(t.accent);
 }
@@ -46,9 +42,6 @@ export function TweaksPanel() {
   const [tweaks, setTweaks] = useState<Tweaks>(DEFAULTS);
   const [hydrated, setHydrated] = useState(false);
 
-  // Hydrate from localStorage on mount (the inline FOIT script in
-  // layout.tsx already applies the values to the DOM before paint;
-  // here we just sync React state).
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -100,23 +93,6 @@ export function TweaksPanel() {
                   onClick={() => update('theme', t)}
                 >
                   {t}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="tweaks-section">Type</div>
-          <div className="tweaks-row">
-            <span className="tweaks-row-label">Font</span>
-            <div className="tweaks-radio-group">
-              {(['plex', 'geist', 'editorial'] as Font[]).map((f) => (
-                <button
-                  type="button"
-                  key={f}
-                  className={'tweaks-radio' + (tweaks.font === f ? ' is-active' : '')}
-                  onClick={() => update('font', f)}
-                >
-                  {f}
                 </button>
               ))}
             </div>

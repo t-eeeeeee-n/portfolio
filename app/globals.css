@@ -45,10 +45,9 @@
   --max-w: 1240px;
   --pad-x: 32px;
 
-  /* default font stack (data-font="plex"); overridden in body[data-font="..."] blocks */
   --font-sans: var(--font-plex-sans), -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN',
     'Yu Gothic', system-ui, sans-serif;
-  --font-display: var(--font-plex-serif), var(--font-instrument-serif), serif;
+  --font-display: var(--font-plex-sans), -apple-system, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
@@ -125,29 +124,6 @@ svg {
 }
 .zone-light a:hover {
   color: var(--accent);
-}
-
-/* ============================================================
-   Font variants (Tweakable via body[data-font="..."])
-   `--font-*-sans` etc. are injected by next/font in app/layout.tsx
-   ============================================================ */
-body[data-font='geist'] {
-  --font-sans: var(--font-geist-sans), -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
-    system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), var(--font-geist-sans), serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
-}
-body[data-font='plex'] {
-  --font-sans: var(--font-plex-sans), -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
-    system-ui, sans-serif;
-  --font-display: var(--font-plex-serif), var(--font-instrument-serif), serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
-}
-body[data-font='editorial'] {
-  --font-sans: var(--font-inter), -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic',
-    system-ui, sans-serif;
-  --font-display: var(--font-instrument-serif), serif;
-  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), ui-monospace, Menlo, monospace;
 }
 
 /* ============================================================
@@ -949,6 +925,15 @@ html:has(body[data-theme='dark']) {
     grid-template-columns: repeat(12, 1fr);
     gap: 16px;
   }
+  /* Mobile: a 12-col grid with span 3-6 cells leaves each cell ~80px
+     wide on a 360px viewport, which is unreadable. Collapse to a
+     single column under 720px; the inline gridColumn:span N still
+     works (1 column means everything spans the full row). */
+  @media (max-width: 720px) {
+    .lab-grid {
+      grid-template-columns: 1fr;
+    }
+  }
   .lab-cell {
     background: var(--l-bg-1);
     border: 1px solid var(--l-line);
@@ -1356,11 +1341,15 @@ html:has(body[data-theme='dark']) {
     color: var(--d-text-3);
   }
   @media (max-width: 1024px) {
+    /* On tablets and below, stack the 5 floating cards in a single
+       column. Mixed densities (price list + trace + pipeline + …)
+       don't grid well at 2-up, so flex column is more honest than the
+       earlier 2-col attempt. */
     .floating-deck {
       min-height: 0;
       height: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 14px;
     }
     .fp {
@@ -1368,12 +1357,8 @@ html:has(body[data-theme='dark']) {
       top: auto;
       left: auto;
       right: auto;
-      width: auto !important;
+      width: 100% !important;
       animation: none !important;
-    }
-    .fp-3,
-    .fp-5 {
-      grid-column: 1 / -1;
     }
   }
 
