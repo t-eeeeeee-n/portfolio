@@ -1,0 +1,77 @@
+---
+title: 'Geolocation API をフックで包む — 状態は 5 つに分けた'
+date: '2026-03-15'
+tags: ['React', 'Frontend', 'UX']
+summary: 'ヤスイミセで「近いスーパー順に並べる」を実装するとき、Geolocation の状態は boolean では足りなくて、idle / prompting / granted / denied / unsupported の 5 状態に分けた。'
+draft: true
+---
+
+# Geolocation API をフックで包む — 状態は 5 つに分けた
+
+ヤスイミセで「現在地から近いスーパー順に並べる」を作るとき、Geolocation API をフックで包んだ。最初は `{ coords, error }` の 2 つだけ持つナイーブな実装で書いたんだけど、すぐに足りないと気付いた。 **「許可されたけどまだ取得してない」「ユーザーが拒否した」「ブラウザが対応してない」「タイムアウトした」が全部別の UX** になるからだ。
+
+結局、status を 5 つに分けた。
+
+```ts
+export type GeoStatus =
+  | 'idle'
+  | 'prompting'
+  | 'granted'
+  | 'denied'
+  | 'unsupported';
+```
+
+各状態でやりたいことを書き出すとこうなる。
+
+- **idle** — ボタンを「近い順で並べる」と出す
+- **prompting** — ボタンを「取得中…」に変えて disabled
+- **granted** — coords を使って距離計算してソート
+- **denied** — ボタンを消して、「ブラウザの位置情報を許可してください」を small text で
+- **unsupported** — そもそもボタンを出さない（PC 等のサポート外環境）
+
+「denied」と「unsupported」を一緒くたにしてた最初の実装だと、ユーザーが拒否したのか、そもそも使えないのかわからない。 **メッセージで「許可してください」と言ってよいかどうかが変わる**。
+
+## エラーは「拒否」かそれ以外か
+
+`PositionError.code === err.PERMISSION_DENIED` のときだけ denied 扱い。それ以外（タイムアウトや位置情報サービス無効）は idle に戻す。
+
+```ts
+(err) => {
+  const denied = err.code === err.PERMISSION_DENIED;
+  setState({
+    status: denied ? 'denied' : 'idle',
+    coords: null,
+    error: err.message,
+  });
+},
+```
+
+タイムアウトで denied 扱いにしてしまうと、「次回試したらいけるかも」のケースを永久に閉じてしまう。 idle に戻して、ユーザーがもう一度ボタンを押せる状態にする。
+
+## 自動取得しないで明示 trigger に
+
+`request()` を呼ばない限り取得を始めない設計にした。理由は単純で、 **ページを開いた瞬間にいきなり許可ダイアログを出されるとユーザーは「とりあえず拒否」する**。
+
+```ts
+return { ...state, request };  // request を呼んで初めて prompting に
+```
+
+「近い順で並べる」ボタンを押した瞬間に `request()` が走る。 **ユーザーが位置情報を欲しがる文脈で許可ダイアログが出る**ので拒否率が下がる。
+
+## オプションは抑えめに
+
+```ts
+{
+  enableHighAccuracy: false,
+  timeout: 10_000,
+  maximumAge: 5 * 60_000,
+}
+```
+
+- `enableHighAccuracy: false` — スーパーの距離なので GPS 精度はいらない。バッテリー消費を抑える
+- `timeout: 10s` — Mobile Safari は時々めちゃめちゃ遅い
+- `maximumAge: 5 分` — 5 分以内のキャッシュなら再取得しない。スーパー選びで毎回 GPS 触る必要はない
+
+---
+
+UI に出る API の状態は、抽象度を 1 段上げると後が楽になる種類のコード。「Geolocation 使う」って瞬間に書きたくなる `{ data, loading, error }` の 3 状態だと、現場で 4 番目・5 番目の状態にぶつかって場当たり的に分岐を増やす羽目になる。最初に 5 つ書き切るのが結局速い。

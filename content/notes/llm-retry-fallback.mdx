@@ -1,0 +1,107 @@
+---
+title: 'LLM は落ちる前提で書く — primary → retry → fallback の最小実装'
+date: '2026-04-01'
+tags: ['AI Agent', 'TypeScript']
+summary: 'SpecPilot の Agent パイプラインで LLM の transient エラーが地味に効く。Anthropic / Gemini / OpenAI を一発で切り替えられる callWithRetry を書いた話。'
+draft: true
+---
+
+# LLM は落ちる前提で書く — primary → retry → fallback の最小実装
+
+SpecPilot の Agent を動かしていると、 **LLM プロバイダ側のエラー** がちょくちょく出る。Anthropic API の 529 (Overloaded)、Vertex AI のリージョン quota エラー、ネットワークタイムアウト。1 回当たりの失敗率は低いけれど、 **Agent パイプラインが Extractor → Question → Designer → Linter の 4 段直列だと「どこかが必ず転ぶ」確率がそこそこ無視できなくなる**。
+
+なので、Agent から SDK を直接叩くのをやめて、 `callWithRetry()` で包むようにした。やってることは単純で、 **「primary を 3 回試して、ダメなら fallback に逃げてもう 3 回試す」だけ**。
+
+## 全体
+
+```ts
+export async function callWithRetry(
+  registry: ProviderRegistry,
+  opts: LLMRequestOptions,
+  retry: RetryOptions = {},
+): Promise<LLMResponse> {
+  const maxRetries = retry.maxRetries ?? 2;
+  const initial = retry.initialDelayMs ?? 1000;
+
+  const tryProvider = async (provider: LLMProvider): Promise<LLMResponse> => {
+    let lastErr: unknown;
+    for (let i = 0; i <= maxRetries; i++) {
+      try {
+        return await provider.call(opts);
+      } catch (err) {
+        lastErr = err;
+        if (i < maxRetries) {
+          await delay(initial * Math.pow(2, i));
+        }
+      }
+    }
+    throw lastErr;
+  };
+
+  try {
+    return await tryProvider(registry.primary);
+  } catch (err) {
+    if (!registry.fallback) throw err;
+    console.warn(
+      `[agent-core] primary ${registry.primary.name} failed, falling back to ${registry.fallback.name}`,
+      err,
+    );
+    return tryProvider(registry.fallback);
+  }
+}
+```
+
+50 行くらい。中身は exponential backoff の素朴な実装。
+
+## Exponential backoff は 1s → 2s → 4s
+
+`delay(initial * Math.pow(2, i))` の `i` は 0, 1, 2 と進むので、 1 秒 → 2 秒 → 4 秒。 **3 回叩いて合計 7 秒待つ**計算。
+
+これより長くすると Agent の UX として「動いてる感」が無くなる。短すぎると、サーバー側の transient error が回復する前に諦めることになる。1-2-4 秒は経験的にちょうど良かった。
+
+## fallback は console.warn で「逃げた」を残す
+
+```ts
+console.warn(
+  `[agent-core] primary ${registry.primary.name} failed, falling back to ${registry.fallback.name}`,
+  err,
+);
+```
+
+fallback が起動した事実は **必ずログに残す**。なぜなら、 fallback で運よくレスポンスが返ってしまうと、ユーザー的には「動いた」ように見えて、 **primary 側の障害に気づかない** から。
+
+`console.warn` を Cloud Logging や Sentry で拾うようにしておけば、「最近 Anthropic が頻繁に落ちてるな」みたいなパターンが見える。
+
+## 呼ぶ側
+
+Agent コードはこれだけ。
+
+```ts
+const registry = buildRegistry(process.env);
+const result = await callWithRetry(registry, {
+  systemPrompt: '...',
+  userPrompt: '...',
+  responseFormat: 'json',
+});
+```
+
+`buildRegistry` の中で「Anthropic (Vertex) を primary、Gemini を fallback」みたいな関係を組む。env で `LLM_DEFAULT_PROVIDER=gemini` にすれば逆順にも切り替えられる。 **Agent 側のコードは触らなくていい** のが大事。
+
+```ts
+switch (def) {
+  case 'gemini':
+    primary = gemini;
+    fallback = anthropic ?? openai;
+    break;
+  // ...
+}
+```
+
+## やらないこと
+
+- **エラー種別での分岐** はやってない。transient（429 / 500 / 529 / timeout）と permanent（400 だしプロンプトが悪い）を区別しようと思えばできるけど、やってみたら **9 割の transient エラーは「単に retry」で解決する**ので、エラー分類のコストの方が高い。シンプルに全部 retry してから fallback。
+- **jitter** も入れてない。SpecPilot の並列度的に thundering herd は起きないので、純粋な指数で十分。
+
+---
+
+「LLM API は安定している」前提で書くと、確実に運用で痛い目を見る。 **「30 回に 1 回は落ちる」前提**で書くと、これくらいの薄い retry レイヤーで結構吸収できる。AI 系のコードでは、SDK を直接叩かずに必ず 1 段挟むのが個人的なルール。

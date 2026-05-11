@@ -1,0 +1,83 @@
+---
+title: 'スクレイピングを画面遷移しても続くようにする'
+date: '2026-03-01'
+tags: ['React', 'Frontend', 'UX']
+summary: 'ヤスイミセでスーパーごとのチラシをスクレイピングするジョブは数分かかる。リロードしてもタブを閉じても進捗が画面に戻ってくる UX を、React Context + localStorage + ポーリングで組んだ話。'
+draft: true
+---
+
+# スクレイピングを画面遷移しても続くようにする
+
+ヤスイミセの管理画面で「全スーパーのチラシをスクレイピングする」ボタンを押すと、店舗 × チラシ枚数で 5-10 分くらいかかるジョブが走る。最初の実装では「ボタン押したらモーダル出してその場で polling」だったんだけど、これだと **モーダルを閉じた瞬間に進捗が消える** し、リロードしたら走り直しになる。明らかに使いにくい。
+
+ジョブの状態を context に持ち上げて、`jobId` を localStorage に置いて、リロード後に勝手に polling を再開する形に直した。これだけで運用負荷が一気に下がった。
+
+## ジョブ本体は API 側、フロントは ID だけ持つ
+
+ジョブのキューと進捗管理はバックエンド側に置く。フロントが持つのは **`jobId` 1 つだけ**。
+
+```ts
+const STORAGE_KEY = 'yasui-mise.scrape-job-id';
+
+function writeStoredJobId(jobId: string | null) {
+  try {
+    if (jobId) window.localStorage.setItem(STORAGE_KEY, jobId);
+    else window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Safari プライベートブラウズなどで localStorage が落ちても無視
+  }
+}
+```
+
+途中の結果まで localStorage に持つかは悩んだけど、結局やめた。`jobId` だけにしておけば、リロード後にサーバーから最新を引っ張ってくれば良い。フロントに二重管理させない。
+
+## マウント時に進行中ジョブを拾う
+
+Provider がマウントしたら localStorage に `jobId` があるか見て、あれば polling を再開する。
+
+```ts
+useEffect(() => {
+  const storedId = readStoredJobId();
+  if (storedId) startPolling(storedId);
+  return () => stopPolling();
+}, [startPolling, stopPolling]);
+```
+
+これだけで、画面遷移・リロード・タブを閉じて開き直し、どのパターンでもジョブの状態が「戻ってくる」。
+
+## 終わったら ID を消す
+
+`completed` / `failed` が来た瞬間に localStorage の ID を消す。次回マウント時に「終わったジョブ」を polling し続ける状態を避けたい。
+
+```ts
+if (status.status === 'completed' || status.status === 'failed') {
+  stopPolling();
+  if (status.status === 'completed' && status.results) {
+    setScrapeResults(status.results);
+  }
+  writeStoredJobId(null);
+}
+```
+
+ついでに、polling 中に **404 が返ってきた**場合（古い `jobId` が API 側で消えてる）も同じ扱いにする。これを忘れると「永遠に 404 を polling」する罠にハマる。
+
+```ts
+catch (error) {
+  console.error('ジョブステータス取得エラー:', error);
+  stopPolling();
+  setJobStatus(null);
+  writeStoredJobId(null);
+}
+```
+
+## polling 間隔は 2 秒
+
+```ts
+const POLLING_INTERVAL_MS = 2000;
+```
+
+雰囲気で決めた。長いジョブだから 5 秒でも良い気はしたけど、進捗バーが「止まってる感」を出すと余計なサポート問い合わせが来る予感がしたので、2 秒に短めに振った。サーバー側も管理画面の数アクセスなら問題なし。
+
+---
+
+「画面閉じたら走り直し」って、開発中は気にならないけど、運用 1 週間で必ず気になる種類の UX 問題。先に潰しておくと、後で「画面遷移して大丈夫?」って気を遣わずに使えるようになる。
