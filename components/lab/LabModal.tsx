@@ -6,29 +6,6 @@ import type { LabEntry } from '@/lib/lab-catalog';
 
 type Tab = 'preview' | 'code' | 'props' | 'notes';
 
-const PROPS_ROWS: Array<[string, string, string]> = [
-  ['variant', '"primary" | "ghost" | "accent"', 'default value'],
-  ['size', '"sm" | "md" | "lg"', '"md"'],
-  ['loading', 'boolean', 'false'],
-  ['onClick', '(e) => void', '—'],
-];
-
-function renderCodeSnippet(name: string) {
-  const safe = name.replace(/\s/g, '');
-  return `import { ${safe} } from "@/lab";
-
-export function Example() {
-  return (
-    <${safe}
-      variant="primary"
-      onClick={() => console.log("clicked")}
-    >
-      Submit
-    </${safe}>
-  );
-}`;
-}
-
 export function LabModal({
   c,
   tab,
@@ -52,11 +29,7 @@ export function LabModal({
   const Render = c.Render;
 
   return (
-    <div
-      className="modal-backdrop"
-      onClick={onClose}
-      role="presentation"
-    >
+    <div className="modal-backdrop" onClick={onClose} role="presentation">
       <div
         className="modal"
         role="dialog"
@@ -145,33 +118,33 @@ export function LabModal({
               <div className="eyebrow" style={{ marginBottom: 8 }}>
                 Use Case
               </div>
-              <p style={{ fontSize: 13, color: 'var(--l-text-1)', lineHeight: 1.6 }}>
-                ヤスイミセや SpecPilot で実際に使われる構成。Preview はこの Lab のライブインスタンスです。
+              <p style={{ fontSize: 13, color: 'var(--l-text-1)', lineHeight: 1.6, margin: 0 }}>
+                {c.useCase}
               </p>
             </div>
           )}
           {tab === 'code' && (
-            <pre className="code" style={{ margin: 0 }}>
-              {renderCodeSnippet(c.name)}
+            <pre className="code" style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+              {c.code}
             </pre>
           )}
           {tab === 'props' && (
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-              {PROPS_ROWS.map(([k, t, d]) => (
+              {c.propsRows.map(([name, type, def]) => (
                 <div
-                  key={k}
+                  key={name}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '100px 1fr',
+                    gridTemplateColumns: '120px 1fr',
                     gap: 12,
                     padding: '10px 0',
                     borderTop: '1px solid var(--l-line)',
                   }}
                 >
-                  <span style={{ color: 'var(--l-text-0)' }}>{k}</span>
+                  <span style={{ color: 'var(--l-text-0)' }}>{name}</span>
                   <div>
-                    <div style={{ color: 'var(--accent)' }}>{t}</div>
-                    <div style={{ color: 'var(--l-text-2)', fontSize: 11, marginTop: 2 }}>{d}</div>
+                    <div style={{ color: 'var(--accent)', wordBreak: 'break-word' }}>{type}</div>
+                    <div style={{ color: 'var(--l-text-2)', fontSize: 11, marginTop: 2 }}>{def}</div>
                   </div>
                 </div>
               ))}
@@ -179,27 +152,26 @@ export function LabModal({
           )}
           {tab === 'notes' && (
             <div style={{ fontSize: 13, lineHeight: 1.7, color: 'var(--l-text-1)' }}>
-              <div style={{ marginBottom: 14 }}>
+              <div style={{ marginBottom: 18 }}>
                 <div className="eyebrow" style={{ marginBottom: 6 }}>
                   Design Note
                 </div>
-                状態と見た目を一致させるため、props は単一の意味単位 (variant, state) に揃えています。色だけで状態を伝えないようにテキストやアイコンも併用。
+                {c.notes}
               </div>
-              <div style={{ marginBottom: 14 }}>
-                <div className="eyebrow" style={{ marginBottom: 6 }}>
-                  Accessibility
+              {c.related.length > 0 && (
+                <div>
+                  <div className="eyebrow" style={{ marginBottom: 6 }}>
+                    Related
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {c.related.map((r) => (
+                      <span key={r} className="tag">
+                        {r}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                role / aria-* / focus-visible / キーボード操作を網羅。重要操作は <kbd>Enter</kbd> と <kbd>Space</kbd> に対応。
-              </div>
-              <div>
-                <div className="eyebrow" style={{ marginBottom: 6 }}>
-                  Related
-                </div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  <span className="tag">ヤスイミセ</span>
-                  <span className="tag">SpecPilot</span>
-                </div>
-              </div>
+              )}
             </div>
           )}
         </div>
