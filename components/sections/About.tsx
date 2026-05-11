@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { SectionHead } from '@/components/ui/SectionHead';
 
 const IDENTITY: Array<[string, string]> = [
@@ -15,14 +16,25 @@ export function About() {
       <div className="container">
         <SectionHead n="04" eyebrow="About" title="About" />
         <div className="about-grid">
-          <div className="about-id">
-            <div className="eyebrow mb-3.5">identity.json</div>
-            {IDENTITY.map(([k, v]) => (
-              <div key={k} className="about-id-row">
-                <span className="about-id-label">{k}</span>
-                <span className="about-id-value">{v}</span>
-              </div>
-            ))}
+          <div className="about-id-stack">
+            <Image
+              src="/avatar.png"
+              alt="Tensho Arai — illustrated portrait, reclining in an egg-shaped hanging chair"
+              width={1536}
+              height={1024}
+              className="about-avatar"
+              sizes="(max-width: 900px) 100vw, 320px"
+              priority={false}
+            />
+            <div className="about-id">
+              <div className="eyebrow mb-3.5">identity.json</div>
+              {IDENTITY.map(([k, v]) => (
+                <div key={k} className="about-id-row">
+                  <span className="about-id-label">{k}</span>
+                  <span className="about-id-value">{v}</span>
+                </div>
+              ))}
+            </div>
           </div>
           <div
             style={{
