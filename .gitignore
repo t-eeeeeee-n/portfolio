@@ -45,6 +45,13 @@ next-env.d.ts.bak
 # design source / drafts (reference-only, not deployable)
 tmp/
 
+# scratch images dropped at repo root (place real assets in public/)
+/image.png
+/image.svg
+/image.jpg
+/image.jpeg
+/image.webp
+
 # pdf working copies (drop a stable public/resume.pdf when ready)
 *.pdf
 !public/resume.pdf

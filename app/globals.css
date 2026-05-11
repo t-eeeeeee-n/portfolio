@@ -844,6 +844,21 @@ html:has(body[data-theme='dark']) {
     gap: 64px;
     align-items: start;
   }
+  /* left column wraps avatar + identity card */
+  .about-id-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+  .about-avatar {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--d-line);
+    background: var(--d-bg-2);
+  }
   .about-id {
     border: 1px solid var(--d-line);
     background: var(--d-bg-1);
