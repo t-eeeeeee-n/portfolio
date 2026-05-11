@@ -503,7 +503,7 @@ const errId = \`\${id}-err\`;
     Render: PreviewVerify,
     desc: 'Agent 出力が条件を満たすかを一覧でチェック（パターン）。',
     useCase:
-      'PLAN → DIFF → VERIFICATION のフローの最終段。schema valid / constraints / coverage / security の各チェックを 1 枚に集約。',
+      'CMスポット PoC で組んだ PLAN → DIFF → COMMANDS → VERIFICATION フローの最終段。schema valid / constraints / coverage / security の各チェックを 1 枚に集約する。',
     code: `<Verification
   checks={[
     { label: 'schema valid', ok: true },
@@ -518,7 +518,7 @@ const errId = \`\${id}-err\`;
       ['onRetry', '() => void', '—'],
     ],
     notes:
-      'CMスポット PoC で実装した PLAN → DIFF → VERIFICATION フローの最終段を SpecPilot 側に移植する形を想定。1 つでも落ちていれば該当チェックの詳細にジャンプできる導線が欲しい。',
+      'CMスポット PoC で実装した PLAN → DIFF → COMMANDS → VERIFICATION フローの最終段を、SpecPilot 側に移植する形を想定。1 つでも落ちていれば該当チェックの詳細にジャンプできる導線が欲しい。',
     related: ['SpecPilot', 'CMスポット PoC'],
     status: 'pattern',
   },
