@@ -61,23 +61,23 @@ export const projects: Project[] = [
     ],
     href: '/projects/yasui-mise',
     challenge:
-      'スーパー独自のチラシレイアウト・商品名表記の揺れを、人手ではメンテし続けられない。OCR と正規化を組み合わせ、運用しても破綻しない仕組みが必要だった。',
+      'スーパーごとにチラシのレイアウトが違う。商品名の表記も「卵」「たまご」「玉子」みたいに揺れる。人手で正規化マスタを直し続ける運用は早晩破綻するのが見えていて、ここを自動で吸収できる仕組みを最初から組まないとサービスとして成立しないと判断した。',
     decisions: [
       {
         title: '商品マスタ正規化',
-        body: 'ベクター + ルールのハイブリッドで類似商品を統合。100% 正解は狙わず、誤マージは UI で訂正できる導線を残す。',
+        body: 'ベクター類似度だけだと精度が頭打ちになったので、ルール（数量・容量・ブランド名）を上に重ねたハイブリッドにした。「100% 正しくマージする」は早々に諦めて、誤マージは UI から訂正できる導線を残す方針に倒した。',
       },
       {
         title: 'OCR パイプライン',
-        body: 'Vertex AI / Gemini にチラシ画像を投げ、構造化 JSON で受ける。失敗したものはキューに戻して再試行。',
+        body: 'チラシ画像をそのまま Gemini に投げて、商品名・価格・有効期限の構造化 JSON で受ける。失敗したものはキューに戻して再試行。「OCR の後段で人手チェック」みたいな運用は最初から作らないと決めた。',
       },
       {
         title: '最小スタック',
-        body: 'Next.js + NestJS + Postgres + Cloud Run。スケールさせるより、一人で運用しやすい構成を優先。',
+        body: 'Next.js + NestJS + Postgres + Cloud Run。最初から「スケールアウトに強い構成」を組むより、一人で運用していて頭の中に全部入る構成を優先した。Cloud Run のオートスケールに任せれば当面は足りる。',
       },
       {
         title: '型安全な連携',
-        body: 'OpenAPI からフロントの SDK を生成。手書きの fetch を消し、契約のずれを発生させない。',
+        body: 'API は OpenAPI で書いて、orval でフロントの SDK を自動生成。手書きの fetch は 0 にする。API の形を変えるとフロントが先に壊れてくれるので、変更が伝わるのが早い。',
       },
     ],
     Mock: YasuimiseMock,
@@ -118,23 +118,23 @@ export const projects: Project[] = [
     ],
     href: '/projects/specpilot',
     challenge:
-      '「打ち合わせした内容を、そのまま設計に落とせる」体験を一人で作り切る必要があった。LLM の揺れ・ハルシネーション・編集容易性のバランスが鍵。',
+      '「打ち合わせした議事録を、そのまま設計と vibe pack に落とせる」体験を一人で作りきりたかった。ただ LLM の出力は揺れるし、ハルシネートもする。そのまま使うと信用できないし、人間が直しすぎると AI を入れた意味がない。このバランスをどう取るかが、結局このプロダクトの肝になった。',
     decisions: [
       {
         title: 'Agent を役割で分ける',
-        body: 'Extractor / Question / Designer / Linter に分割。1 Agent に全部任せず、各段で検証可能に。',
+        body: '1 Agent に「議事録読んで設計書出して」と全部任せると、出力が悪かったときに何が悪かったのか分からなくなる。Extractor（抽出）・Question（未決抽出）・Designer（設計化）・Linter（検証）の 4 段に分けて、各段で出力をその場で検証できる構成にした。',
       },
       {
         title: 'モデル使い分け',
-        body: '抽出は Claude、探索は GPT-4o、長文整理は Gemini。Prompt とモデルを切替可能な Agent 抽象を採用。',
+        body: '抽出は Claude、探索は GPT-4o、長文整理は Gemini。性能特性とコストが用途で違うので役割ごとに替える。Agent 抽象側でモデルとプロンプトを差し替えられるようにしておくと、新しいモデルが出たときに数行で乗せ替えられる。',
       },
       {
         title: '人間のレビュー導線',
-        body: 'AI の出力は常に diff / 採否 UI 越しに反映。後戻りしやすさを優先。',
+        body: 'AI が直接ファイルを書き換える形は採らず、出力は必ず「決定事項カード」越しに人間が確定 / 仮置きするフローに通す。後戻りを優先する設計。スピードは少し落ちるが、信頼できないものに信頼を貸す導線は引かない。',
       },
       {
         title: 'ドキュメント駆動',
-        body: '意思決定ログ・ADR を蓄積し、Agent がそれを参照する設計。',
+        body: '意思決定ログ（D-XXXX）と ADR を最初から書く。これは人間用というより Agent 用で、過去の判断を踏まえた出力を期待するためのコンテキストとして毎回渡す。書き続けるコストはあるが、Agent の出力品質に直接効く投資。',
       },
     ],
     Mock: SpecPilotMock,
@@ -174,23 +174,23 @@ export const projects: Project[] = [
     ],
     href: '/projects/cm-agent',
     challenge:
-      'PoC は仕様が日々変わる。差し替えやすさと、後で「なぜそうなったか」を追えるトレーサビリティを両立する必要があった。',
+      'PoC なので仕様が日替わりで変わる。Agent の責務もちょくちょく動く。一方で運用側の信頼を取るには「なぜそういう判断になったか」を後から追えるトレーサビリティが要る。仕様変更の容易さと観測性の両方を、最初から組み込む必要があった。',
     decisions: [
       {
         title: 'コントラクト先行',
-        body: 'OpenAPI を Single Source of Truth にし、SDK は自動生成。Agent の差し替えコストを最小化。',
+        body: 'OpenAPI を Single Source of Truth にして、TypeScript SDK は orval で自動生成。Agent の責務を入れ替えたり書き直したりしても、フロントの呼び出しコードは API スキーマ側に従う。Agent の中身を書き直す回数が多い PoC では、これが一番効いた。',
       },
       {
         title: 'trace_id を最初から',
-        body: 'W3C Trace Context を Agent 境界・LLM 呼び出し・Queue にまで伝播。1 リクエストの全履歴を後から再構成可能。',
+        body: 'W3C Trace Context を Agent 境界・LLM 呼び出し・Queue にまで全部伝播させた。1 リクエストの全履歴を後から jq で再構成できる状態にする。「あの 1 リクエストの全履歴を見たい」は調査開始の 8 割を占めるので、ここに最初から投資する判断は迷わなかった。',
       },
       {
-        title: 'PLAN → DIFF → VERIFICATION',
-        body: 'Agent 出力は常に「変更提案」として表現。承認フローと自然に接続できる。',
+        title: 'PLAN → DIFF → COMMANDS → VERIFICATION',
+        body: 'Agent の出力は「変更そのもの」ではなく「変更提案」として表現する。PLAN（やろうとしていること）→ DIFF（具体的な差分）→ COMMANDS（実行用コマンド）→ VERIFICATION（検証結果）の 4 ステップで返す。Human-in-the-Loop の承認フローが自然に乗っかる。',
       },
       {
         title: '構造化ログ',
-        body: 'JSON ログに span_id / agent_name / model を必須項目化。あとで分析しやすい形に統一。',
+        body: 'JSON ログを書く時点で span_id / agent_name / model / trace_id を必須項目にする。書く側は窮屈だが、jq で grep する側が一気に楽になる。後から「あの Agent でだけ起きてる」「あの model 呼び出しでだけ遅い」みたいな絞り込みが 1 行でできるようになる。',
       },
     ],
     Mock: CmAgentMock,
