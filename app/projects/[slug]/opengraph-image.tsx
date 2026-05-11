@@ -44,24 +44,16 @@ export default async function OG({ params }: { params: Promise<RouteParams> }) {
 
         {/* Top row: brand mark + crumb */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              background: 'linear-gradient(135deg, #ec5e2a, #c2451a 60%, #8a2f10)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 12,
-              fontSize: 20,
-              fontWeight: 700,
-              fontFamily: 'monospace',
-              letterSpacing: '-0.02em',
-            }}
+          <svg
+            viewBox="0 0 32 32"
+            width="64"
+            height="64"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            t.n
-          </div>
+            <rect x="5" y="9" width="22" height="3.5" rx="1.75" fill="#ec5e2a" />
+            <rect x="5" y="19.5" width="14" height="3.5" rx="1.75" fill="#ec5e2a" />
+            <circle cx="24" cy="21.25" r="2" fill="#ec5e2a" />
+          </svg>
           <div
             style={{
               display: 'flex',

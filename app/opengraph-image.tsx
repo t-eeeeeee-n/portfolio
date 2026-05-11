@@ -35,24 +35,17 @@ export default function OG() {
           }}
         />
 
-        {/* Mark */}
-        <div
-          style={{
-            width: 72,
-            height: 72,
-            background: 'linear-gradient(135deg, #ec5e2a, #c2451a 60%, #8a2f10)',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 14,
-            fontSize: 26,
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-          }}
+        {/* Mark — Morse TN */}
+        <svg
+          viewBox="0 0 32 32"
+          width="80"
+          height="80"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          t.n
-        </div>
+          <rect x="5" y="9" width="22" height="3.5" rx="1.75" fill="#ec5e2a" />
+          <rect x="5" y="19.5" width="14" height="3.5" rx="1.75" fill="#ec5e2a" />
+          <circle cx="24" cy="21.25" r="2" fill="#ec5e2a" />
+        </svg>
 
         {/* spacer */}
         <div style={{ flex: 1, display: 'flex' }} />

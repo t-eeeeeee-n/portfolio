@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { ArrowR } from '@/components/ui/icons';
 import { formatNoteDate, getAllNotes, getNoteMeta } from '@/lib/notes';
 
@@ -58,8 +59,9 @@ export default async function NoteArticlePage({ params }: { params: Promise<Rout
             href="/"
             className="flex items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
+            aria-label="teeeen.lab — home"
           >
-            <span className="nav-logo-mark">t.n</span>
+            <BrandMark size={22} decorative />
             <span>teeeen.lab</span>
             <span className="ml-2 font-mono text-[11px] text-d-text-3">
               / notes / {meta.slug}

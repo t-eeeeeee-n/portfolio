@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Notes } from '@/components/sections/Notes';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { getAllNotes } from '@/lib/notes';
 
 export const metadata: Metadata = {
@@ -25,8 +26,9 @@ export default async function NotesIndexPage() {
             href="/"
             className="flex items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
+            aria-label="teeeen.lab — home"
           >
-            <span className="nav-logo-mark">t.n</span>
+            <BrandMark size={22} decorative />
             <span>teeeen.lab</span>
             <span className="ml-2 font-mono text-[11px] text-l-text-3">/ notes</span>
           </Link>

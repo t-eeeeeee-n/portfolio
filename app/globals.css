@@ -496,21 +496,9 @@ html:has(body[data-theme='dark']) {
   .nav-light .nav-theme-toggle:hover {
     color: var(--l-text-0);
   }
-  .nav-logo-mark {
-    width: 22px;
-    height: 22px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, var(--accent), #c2451a 60%, #8a2f10);
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    box-shadow:
-      0 0 0 1px rgba(0, 0, 0, 0.04),
-      0 4px 14px -4px rgba(var(--accent-rgb), 0.45);
-  }
+  /* .nav-logo-mark was the previous orange-gradient container that
+     wrapped the "t.n" text mark. The new BrandMark component renders
+     a Morse-code SVG and needs no container — the class is retired. */
   body[data-theme='dark'] .nav {
     background: rgba(14, 14, 18, 0.72);
     border-color: rgba(255, 255, 255, 0.08);
@@ -518,11 +506,6 @@ html:has(body[data-theme='dark']) {
   }
   body[data-theme='dark'] .nav-link.is-active {
     background: rgba(255, 255, 255, 0.08);
-  }
-  body[data-theme='dark'] .nav-logo-mark {
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.06),
-      0 4px 14px -4px rgba(var(--accent-rgb), 0.5);
   }
   @media (max-width: 720px) {
     .nav {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ThemeButton } from '@/components/sections/ThemeButton';
+import { BrandMark } from '@/components/ui/BrandMark';
 
 const SECTION_IDS = [
   'home',
@@ -50,8 +51,8 @@ export function Nav() {
 
   return (
     <nav className={'nav' + (light ? ' nav-light' : '')}>
-      <a href="#home" className="nav-logo">
-        <span className="nav-logo-mark">t.n</span>
+      <a href="#home" className="nav-logo" aria-label="teeeen.lab — home">
+        <BrandMark size={22} decorative />
         <span className="nav-link-hide-mobile">teeeen.lab</span>
       </a>
       {LINKS.map(([id, label]) => (
