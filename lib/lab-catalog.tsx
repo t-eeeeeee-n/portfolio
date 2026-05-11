@@ -33,16 +33,17 @@ export type LabEntry = {
   span: 3 | 4 | 6;
   desc: string;
   Render: ComponentType;
-  /** 1-2 sentence specific use case for the preview tab. */
   useCase: string;
-  /** Realistic code snippet (the API doesn't have to exist yet — it
-   *  describes how this Lab component would be consumed). */
   code: string;
   propsRows: PropsRow[];
-  /** Design intent / why-this-shape-not-that. */
   notes: string;
-  /** Project slugs that use (or would use) this component. */
   related: string[];
+  /** `shipped` = a real component in production; `pattern` = a design
+   *  pattern in this Lab that hasn't been productionized yet. */
+  status: 'shipped' | 'pattern';
+  /** Provenance for shipped entries. Displayed at the bottom of the
+   *  modal so visitors can tell where the code came from. */
+  source?: string;
 };
 
 export const labCatalog: LabEntry[] = [
@@ -53,21 +54,27 @@ export const labCatalog: LabEntry[] = [
     name: 'Button',
     span: 3,
     Render: PreviewButton,
-    desc: 'ループ防止のための loading 内包、icon 配置は children に任せる設計。',
+    desc: 'role 名でバリアント命名、isLoading 中もラベルを残す。aria-busy 連携。',
     useCase:
-      '一覧アクション・フォーム送信・Agent 実行など、明確な操作 1 つに紐づく CTA。loading 中もラベルを残してレイアウトシフトを防ぐ。',
-    code: `<Button variant="primary" loading={submitting}>
-  <Spark size={12} /> Generate
+      'SpecPilot のフォーム送信・破壊的操作の確認 CTA・モーダルフッタなど、明確な操作 1 つに紐づくすべての CTA で使用。',
+    code: `<Button variant="primary" isLoading={saving} onClick={save}>
+  保存
+</Button>
+
+<Button variant="danger" size="sm" onClick={() => removeProject(id)}>
+  削除
 </Button>`,
     propsRows: [
-      ['variant', `"primary" | "ghost" | "accent"`, `"primary"`],
-      ['size', `"sm" | "md"`, `"md"`],
-      ['loading', 'boolean', 'false'],
-      ['leadingIcon', 'ReactNode', '—'],
+      ['variant', `"primary" | "secondary" | "ghost" | "danger"`, `"primary"`],
+      ['size', `"sm" | "md" | "lg" | "icon"`, `"md"`],
+      ['isLoading', 'boolean', 'false'],
+      ['...rest', 'ButtonHTMLAttributes', '—'],
     ],
     notes:
-      'variant は色ではなく「役割」で命名（primary / ghost / accent）。色をクラス名にすると後でデザイン変更したとき名前の意味がずれる。',
-    related: ['ヤスイミセ', 'SpecPilot'],
+      'variant は色ではなく「役割」で命名（primary / secondary / ghost / danger）。isLoading 中も spinner + ラベルを並べてレイアウトシフトを防ぐ。disabled / isLoading のどちらでも aria-busy + pointer-events-none で安全に。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/Button.tsx',
   },
   {
     id: 'badge',
@@ -75,20 +82,30 @@ export const labCatalog: LabEntry[] = [
     name: 'Status Badge',
     span: 3,
     Render: PreviewBadge,
-    desc: '状態を色とテキストの両方で表現。色だけに依存しない。',
+    desc: 'success / warning / error / info / primary / neutral / outline の 7 variant、size 2 種、icon スロット。',
     useCase:
-      'Agent パイプラインのステップ状態・CI ステータス・ジョブキューの実行状態など、視覚的に並べたい discrete な状態。',
-    code: `<Badge status="running" />
-<Badge status="ok" />
-<Badge status="failed" />`,
+      'プロジェクトステータス・決定事項の確定/仮置き・チームメンバーの role など、状態を一目で見せたい箇所すべて。',
+    code: `<Badge variant="success" size="sm" icon={<Check size={11} />}>
+  確定
+</Badge>
+
+<Badge variant="warning" rounded="md">仮置き</Badge>
+<Badge variant="outline">下書き</Badge>`,
     propsRows: [
-      ['status', `"running" | "queued" | "ok" | "failed"`, '—'],
-      ['size', `"sm" | "md"`, `"sm"`],
-      ['children', 'ReactNode', 'status をそのまま表示'],
+      [
+        'variant',
+        `"danger" | "warning" | "success" | "info"\n  | "primary" | "neutral" | "outline"`,
+        `"neutral"`,
+      ],
+      ['size', `"sm" | "md"`, `"md"`],
+      ['rounded', `"pill" | "md"`, `"pill"`],
+      ['icon', 'ReactNode', '—'],
     ],
     notes:
-      '色だけでなく必ずテキストラベルを残す（色覚多様性配慮）。ドット + ラベルの並びで「色を抜いても意味が伝わる」状態を保つ。',
-    related: ['SpecPilot', 'CMスポット PoC'],
+      'light / dark 両モードで色を持ち、bg + text を同系列の濃淡で組む。icon を付けると色覚多様性のフォールバックになるので、状態系では icon 推奨。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/Badge.tsx',
   },
   {
     id: 'tabs',
@@ -96,25 +113,31 @@ export const labCatalog: LabEntry[] = [
     name: 'Tabs',
     span: 3,
     Render: PreviewTabs,
-    desc: 'URL と同期可能。controlled / uncontrolled 両対応。',
+    desc: 'ArrowLeft/Right/Home/End キーナビ、role="tablist" + aria-selected + aria-controls 完備。',
     useCase:
-      '同じ場所に置きたい複数ビュー（preview / code / props のような）。syncUrl=true でリロード後も復元。',
-    code: `<Tabs defaultValue="preview" syncUrl>
-  <Tabs.List>
-    <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
-    <Tabs.Trigger value="code">Code</Tabs.Trigger>
-  </Tabs.List>
-  <Tabs.Panel value="preview">…</Tabs.Panel>
-</Tabs>`,
+      '設定画面の Billing / Team / Plan 切替、セッション画面の質問 / 決定事項 / 履歴切替など、URL は同じで中身だけ差し替えたい場面。',
+    code: `const [tab, setTab] = useState<'overview' | 'team'>('overview');
+
+<Tabs
+  items={[
+    { value: 'overview', label: '概要' },
+    { value: 'team',     label: 'チーム' },
+  ]}
+  value={tab}
+  onChange={setTab}
+  ariaLabel="設定タブ"
+/>`,
     propsRows: [
-      ['defaultValue', 'string', '—'],
-      ['value', 'string', 'uncontrolled'],
-      ['onChange', '(v: string) => void', '—'],
-      ['syncUrl', 'boolean', 'false'],
+      ['items', 'ReadonlyArray<TabItem<TValue>>', '—'],
+      ['value', 'TValue', '—'],
+      ['onChange', '(value: TValue) => void', '—'],
+      ['ariaLabel', 'string', '—'],
     ],
     notes:
-      'syncUrl が真のとき `?tab=code` のクエリで状態を URL に持つ。共有時に同じビューが復元できる体験は地味に効く。',
-    related: ['Component Lab'],
+      'ジェネリクスで value 型を縛れる（typo がコンパイル時に落ちる）。フォーカス移動は ArrowLeft/Right で循環し、現在の tab だけ tabIndex=0 にしてフォーカスリングがガサつかない。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/Tabs.tsx',
   },
   {
     id: 'toast',
@@ -122,24 +145,29 @@ export const labCatalog: LabEntry[] = [
     name: 'Toast',
     span: 3,
     Render: PreviewToast,
-    desc: '命令的 API (toast.success) と宣言的 API 両対応。',
+    desc: 'success / error / info / warning の 4 type、aria-live="polite"、スタッキング対応。',
     useCase:
-      'モーダルを出すほどではない短い通知（保存完了・コピー完了・undo 案内）。複数発火しても積み上がる。',
-    code: `import { toast } from '@/lab';
+      'ヤスイミセで「リストに追加しました」「ログインしてください」「価格を訂正しました」など、ブロックしないフィードバック。',
+    code: `// ToastContainer をルートに 1 度配置
+<ToastContainer />
 
-toast.success('Saved to draft', {
-  shortcut: '⌘Z',
-  duration: 4000,
-});`,
+// 任意のコンポーネントから
+const { addToast } = useToast();
+addToast({ type: 'success', message: 'リストに追加しました' });
+
+// 実プロジェクトでは react-hot-toast も併用
+import toast from 'react-hot-toast';
+toast.success('リストに追加しました', { icon: '🛒' });`,
     propsRows: [
-      ['type', `"success" | "error" | "info"`, `"info"`],
+      ['type', `"success" | "error" | "info" | "warning"`, '—'],
+      ['message', 'string', '—'],
       ['duration', 'number (ms)', '4000'],
-      ['shortcut', 'string', '—'],
-      ['action', '{ label, onClick }', '—'],
     ],
     notes:
-      'role="status" + aria-live="polite" でスクリーンリーダーに穏やかに通知。⌘Z などのショートカットは見せると undo の存在に気付いてもらえる。',
-    related: ['SpecPilot'],
+      'aria-live="polite" + aria-atomic="true" でスクリーンリーダーに穏やかに通知。モバイルでは bottom 配置、デスクトップでは top-right に出し分け。type ごとにアイコン + 背景色のセットで色覚多様性に配慮。',
+    related: ['ヤスイミセ'],
+    status: 'shipped',
+    source: 'yasui-mise · src/components/common/Toast.tsx',
   },
   {
     id: 'modal',
@@ -147,25 +175,36 @@ toast.success('Saved to draft', {
     name: 'Modal',
     span: 4,
     Render: PreviewModal,
-    desc: 'Focus trap・Escape・背景クリック制御を内包。',
+    desc: 'Focus trap (Tab/Shift+Tab 循環)、Escape 閉じ、background scroll lock、trigger への focus 復帰。',
     useCase:
-      '削除確認・編集フォーム・Lab Modal のような「ページを離れずに操作を完結したい」場面。HITL Approval の親としても使う。',
-    code: `<Modal open={open} onOpenChange={setOpen} title="削除しますか?">
+      '削除確認・編集ダイアログ・プラン変更モーダル・コマンドパレット（Modal の上に input を載せる）。',
+    code: `const [open, setOpen] = useState(false);
+
+<Modal
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  title="プロジェクトを削除しますか?"
+  size="sm"
+>
   この操作は取り消せません
-  <Modal.Footer>
-    <Button variant="ghost" onClick={cancel}>Cancel</Button>
-    <Button onClick={remove}>Delete</Button>
-  </Modal.Footer>
+  <div className="flex justify-end gap-2 mt-6">
+    <Button variant="ghost" onClick={() => setOpen(false)}>
+      キャンセル
+    </Button>
+    <Button variant="danger" onClick={remove}>削除</Button>
+  </div>
 </Modal>`,
     propsRows: [
-      ['open', 'boolean', '—'],
-      ['onOpenChange', '(open: boolean) => void', '—'],
+      ['isOpen', 'boolean', '—'],
+      ['onClose', '() => void', '—'],
       ['title', 'string', '—'],
-      ['dismissOnBackdrop', 'boolean', 'true'],
+      ['size', `"sm" | "md" | "lg"`, `"md"`],
     ],
     notes:
-      'Focus は Modal 内に閉じ込め、Escape と背景クリックで閉じ、閉じた時に元の trigger にフォーカスを戻す。aria-modal="true" 必須。',
-    related: ['Component Lab', 'SpecPilot'],
+      '開いたら最初のフォーカス可能要素に focus、Tab/Shift+Tab で内部循環、Escape か backdrop クリックで閉じる。閉じる時は document.body.style.overflow を戻し、元の trigger 要素に focus を返す。aria-modal + aria-labelledby（title id）を内部で組み立てる。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/Modal.tsx',
   },
   {
     id: 'form-field',
@@ -173,26 +212,34 @@ toast.success('Saved to draft', {
     name: 'Form Field',
     span: 4,
     Render: PreviewForm,
-    desc: 'label・error・description を aria 属性で連携。',
+    desc: 'error 時に自動で aria-invalid + aria-describedby を error メッセージ ID に配線。',
     useCase:
-      'ユーザー入力を取るどんな input でも label / description / error を一貫した位置関係で出す。Stripe / 設定画面で多用。',
-    code: `<Field
-  label="Email"
-  description="ログインに使うアドレス"
-  error={errors.email}
-  required
->
-  <Input type="email" {...register('email')} />
-</Field>`,
+      'SpecPilot のログイン・プロジェクト作成・チーム招待など、すべての入力フォーム。',
+    code: `const id = useId();
+const errId = \`\${id}-err\`;
+
+<div>
+  <label htmlFor={id}>Email</label>
+  <Input
+    id={id}
+    type="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    error={!!fieldError}
+    errorId={errId}
+  />
+  {fieldError && <p id={errId} role="alert">{fieldError}</p>}
+</div>`,
     propsRows: [
-      ['label', 'string', '—'],
-      ['description', 'string', '—'],
-      ['error', 'string', '—'],
-      ['required', 'boolean', 'false'],
+      ['error', 'boolean', 'false'],
+      ['errorId', 'string', '—'],
+      ['...rest', 'InputHTMLAttributes', '—'],
     ],
     notes:
-      'description は aria-describedby、error は aria-invalid + aria-describedby に自動配線する。error 表示時は role="alert" でスクリーンリーダーに即時伝達。',
+      'forwardRef でフォーム lib (react-hook-form 等) と組み合わせやすく。error が真のとき border + ring を赤系に、aria-invalid="true"、aria-describedby に errorId をマージする（既存の describedby は保つ）。',
     related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/Input.tsx',
   },
   {
     id: 'empty',
@@ -200,77 +247,87 @@ toast.success('Saved to draft', {
     name: 'Empty State',
     span: 4,
     Render: PreviewEmpty,
-    desc: '結果なし・初期状態・エラーで使い分け。',
+    desc: 'title 必須、description / icon / action は任意。「何もない」を中立に伝える。',
     useCase:
-      '検索 0 件・データ未投入・初回オンボーディングなど、「何もない」を中立に伝える。エラーとは見た目を変えるのが鉄則。',
-    code: `<Empty
-  icon={<Box />}
-  title="結果がありません"
-  hint="条件を変えてもう一度お試しください"
-  action={<Button>条件をリセット</Button>}
+      'プロジェクト未作成・チーム未追加・請求履歴なしなど、「初回・空状態」を中立的に示す場面。',
+    code: `<EmptyState
+  title="プロジェクトがありません"
+  description="最初のプロジェクトを作って AI 設計を始めましょう"
+  action={
+    <Button variant="primary" onClick={createProject}>
+      新規プロジェクト
+    </Button>
+  }
 />`,
     propsRows: [
-      ['icon', 'ReactNode', '—'],
       ['title', 'string', '—'],
-      ['hint', 'string', '—'],
+      ['description', 'ReactNode', '—'],
+      ['icon', 'ReactNode', 'デフォルトの中立アイコン'],
       ['action', 'ReactNode', '—'],
     ],
     notes:
-      '「何もない」と「エラー」を視覚的に同じにしない。Empty は中立色、Error は警告色。次に何をすればよいかを action で必ず提示する。',
-    related: ['ヤスイミセ'],
+      '「何もない」と「エラー」を視覚的に同じにしない。Empty は中立色（neutral-100 系）、Error は warning/error 系。次に何をすればよいかを必ず action で提示する（未提示なら使うべき場所を間違えてる）。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/EmptyState.tsx',
   },
 
   // ────────────────────────────────────────── Product ──────────────────────────────────────────
   {
     id: 'search',
     cat: 'Product',
-    name: 'Search Input',
+    name: 'Command Palette',
     span: 4,
     Render: PreviewSearch,
-    desc: '⌘K 起動・サジェスト・検索履歴に対応。',
+    desc: '⌘K / Ctrl+K でグローバル起動、↑↓ + Enter のキーボード操作、role="listbox" + aria-selected。',
     useCase:
-      'ヤスイミセの商品検索やドキュメントの全文検索など、グローバル / インライン両方で使える検索口。',
-    code: `<SearchInput
-  placeholder="商品名で検索…"
-  shortcut="⌘K"
-  history={recent}
-  onSearch={(q) => router.push(\`/search?q=\${q}\`)}
-/>`,
+      'SpecPilot のグローバルアクション（プロジェクト一覧・新規作成・設定・請求にジャンプ）。',
+    code: `// アプリのルートに 1 度だけ配置
+<CommandPalette />
+
+// 内部で useEffect により ⌘K / Ctrl+K の keydown を listen、
+// Modal に input + listbox を載せて ArrowDown/Up で cursor 移動、
+// Enter で item.action() を実行する仕組み`,
     propsRows: [
-      ['placeholder', 'string', `"検索…"`],
-      ['shortcut', 'string', '—'],
-      ['history', 'string[]', '[]'],
-      ['onSearch', '(q: string) => void', '—'],
+      ['items', 'CommandItem[]', 'CommandPalette 内部で定義'],
+      ['onSelect', '(item: CommandItem) => void', 'item.action() を直接呼ぶ'],
     ],
     notes:
-      'shortcut を表示することで「グローバル検索が ⌘K で開く」アフォーダンスを与える。履歴は LocalStorage に保存し、入力空のときだけ提示。',
-    related: ['ヤスイミセ'],
+      'role="listbox" + 各候補に role="option" + aria-selected、mouseEnter で cursor 同期して「マウスとキーボードどっちでも同じ場所をハイライトする」感覚を実現。Modal の focus trap に乗っかってるので Escape で閉じる。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/CommandPalette.tsx',
   },
   {
     id: 'kpi',
     cat: 'Product',
-    name: 'KPI Card',
+    name: 'Projects Summary (KPI)',
     span: 4,
     Render: PreviewKpi,
-    desc: '値・トレンド・期間の比較を 1 カードで完結。',
+    desc: '1 枚カードに 4 セクション (今月の削減工数・完了セッション・確定決定事項・14日推移グラフ) を 1px 罫線で分割。',
     useCase:
-      'ダッシュボードのトップに置く主要指標。MRR / Active Users / 売上など、絶対値 + 変化率を 1 セットで見せる。',
-    code: `<KpiCard
-  label="MRR"
-  value="¥1,240k"
-  delta="+12.4%"
-  trend="up"
-  period="vs last month"
+      'SpecPilot ダッシュボードのトップに置く主要指標。絶対値・先月比 (TrendChip)・補足説明を 1 セットで見せる。',
+    code: `<ProjectsSummary
+  hoursSavedThisMonth={142}
+  hoursSavedChangePercent={12.4}
+  completedSessions={28}
+  vibePacksGenerated={14}
+  confirmedDecisions={86}
+  tracedRequirements={120}
+  dailyHoursSaved={[4, 6, 2, 8, 5, ...]}
+  avgHoursPerDay={4.7}
 />`,
     propsRows: [
-      ['label', 'string', '—'],
-      ['value', 'string', '—'],
-      ['delta', 'string', '—'],
-      ['trend', `"up" | "down" | "flat"`, `"flat"`],
+      ['hoursSavedThisMonth', 'number', '—'],
+      ['hoursSavedChangePercent', 'number', '—'],
+      ['completedSessions / vibePacksGenerated', 'number', '—'],
+      ['dailyHoursSaved / avgHoursPerDay', 'number[] / number', '—'],
     ],
     notes:
-      '数字は font-mono で桁を揃え、delta は色 + 矢印アイコンで二重表現。期間ラベル（vs last month など）を省くと比較対象が曖昧になりがち。',
+      '数字は tabular-nums で桁揃え。先月比は TrendChip で 色 + 矢印アイコンの二重表現。レスポンシブ: sm では divide-y で縦積み、lg で divide-x で 4 カラム。HoursSavedChart は同階層の sparkline コンポーネント。',
     related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/dashboard/ProjectsSummary.tsx',
   },
   {
     id: 'price',
@@ -278,47 +335,56 @@ toast.success('Saved to draft', {
     name: 'Price Comparison',
     span: 4,
     Render: PreviewPriceCmp,
-    desc: 'ヤスイミセ用。最安マーカー・距離・更新時刻。',
+    desc: '同一商品 × 複数店舗の価格 + 距離 + 鮮度を 1 リストに集約。マイストアフィルタ + 価格/距離ソート切替。',
     useCase:
-      '同一商品 × 複数店舗の縦並び比較。最安をアクセント色 + 先頭ドットで強調し、距離と更新時刻でデータ鮮度を伝える。',
-    code: `<PriceList item="国産たまご10個" updatedAt={updated}>
-  {stores.map(s => (
-    <PriceRow
-      key={s.id}
-      store={s.name}
-      price={s.price}
-      distance={s.distance}
-      best={s.best}
-    />
-  ))}
-</PriceList>`,
+      'ヤスイミセの中核 UI。商品ページで「どこで買えば一番安いか」を一目で判断、リスト追加・価格訂正・チラシ確認まで完結する。',
+    code: `<PriceComparison storeProducts={storeProducts} />
+
+// 内部で複数 context / hook を組み合わせ:
+//   useShoppingList()    買い物リスト操作
+//   useUserStores()      マイストア判定
+//   useMyStoreFilter()   フィルタ on/off
+//   useGeolocation()     現在地取得 → 距離計算
+//   useMemo + sort       価格 / 距離ソート（メモ化済み）`,
     propsRows: [
-      ['item', 'string', '—'],
-      ['updatedAt', 'Date', '—'],
-      ['children', 'PriceRow[]', '—'],
+      ['storeProducts', 'StoreProductWithPriceDto[]', '—'],
     ],
     notes:
-      '最安は色だけでなく行頭マーカーでも示す（色覚多様性）。価格は font-mono で桁揃え。distance はメタ情報なので色を 1 段薄く。',
+      'props は 1 つだけだが内部で 4 つの context と Geolocation + Haversine 距離計算を統合。最安は色 (emerald-600) + No.1 バッジ + 行背景色 + 左ボーダー (マイストア) の多重表現。価格鮮度（期限切れ・本日まで）も警告チップで提示。React.memo + useMemo で再計算を抑える。',
     related: ['ヤスイミセ'],
+    status: 'shipped',
+    source: 'yasui-mise · src/components/product/PriceComparison.tsx',
   },
   {
     id: 'stepper',
     cat: 'Product',
-    name: 'Stepper',
+    name: 'Phase Stepper',
     span: 4,
     Render: PreviewStepper,
-    desc: '完了・現在・未完を視覚的に区別。',
+    desc: '収束 → 確認 → 生成 → 検証 の 4 フェーズ、完了 / 現在 / 未到達の 3 状態、戻り操作の制約付き。',
     useCase:
-      'PLAN → DIFF → VERIFICATION のような順序のある状態進行、または検診フローのようなウィザード。',
-    code: `<Stepper current="diff" steps={['plan', 'diff', 'verify']} />`,
+      'SpecPilot セッション画面の最上段。AI 設計のフェーズ進行と現在地、戻り可能範囲を 1 行で見せる。',
+    code: `<PhaseStepper
+  currentPhase="confirmation"
+  onPhaseClick={(phase) => {
+    router.push(\`/sessions/\${id}?phase=\${phase}\`);
+  }}
+  projectName="ヤスイミセ 価格比較画面"
+  backHref="/projects"
+  rightSlot={<SaveStatus />}
+/>`,
     propsRows: [
-      ['steps', 'string[]', '—'],
-      ['current', 'string', '—'],
-      ['orientation', `"horizontal" | "vertical"`, `"horizontal"`],
+      ['currentPhase', `"convergence" | "confirmation" | "processing" | "lint"`, '—'],
+      ['onPhaseClick', '(phase: Phase) => void', '—'],
+      ['projectName', 'string', '—'],
+      ['backHref', 'string', '—'],
+      ['rightSlot', 'ReactNode', '—'],
     ],
     notes:
-      '完了済みは accent で塗りつぶし、現在も accent、未完は枠だけ。3 段階以上は折り返さず横スクロールにする方が読みやすい。',
-    related: ['SpecPilot', 'CMスポット PoC'],
+      'lint フェーズからは収束（index 0）への戻りのみ許可し、processing 中はクリック不可。戻りは破棄を伴うので確認 Modal を内部で組み込む。現在ステップは精密パルス (animate-precision-ping) で「いま動いている」感を演出。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/session/phase-stepper.tsx',
   },
 
   // ────────────────────────────────────────── AI ──────────────────────────────────────────
@@ -328,9 +394,9 @@ toast.success('Saved to draft', {
     name: 'Agent Pipeline View',
     span: 4,
     Render: PreviewAgentPipeline,
-    desc: 'Agent 間のフローと現在のステップを可視化。',
+    desc: 'Agent 間のフローと現在のステップを可視化（パターンのみ・本実装は未）。',
     useCase:
-      'SpecPilot の Extractor / Question / Designer / Linter のような直列・並列 Agent 構成を、データフローの方向ごと 1 枚で説明する。',
+      'SpecPilot の Extractor / Question / Designer / Linter のような直列・並列 Agent 構成を 1 枚で説明する想定。',
     code: `<AgentPipeline
   agents={['extractor', 'question', 'designer', 'linter']}
   current="designer"
@@ -345,8 +411,9 @@ toast.success('Saved to draft', {
       ['edges', `{ from: string; to: string }[]`, '直列なら省略可'],
     ],
     notes:
-      'trace_id とセットで運用し、ノードクリックで該当 Agent のログにジャンプできる導線を用意すると一気に運用ツールになる。',
-    related: ['SpecPilot', 'CMスポット PoC'],
+      '現状 SpecPilot は PhaseStepper で「セッションフェーズ」を見せているが、Agent レベルのフロー可視化はまだ未実装。trace_id と紐付けてノードクリックで該当 Agent のログにジャンプできる導線を入れたい。',
+    related: ['SpecPilot'],
+    status: 'pattern',
   },
   {
     id: 'prompt',
@@ -354,9 +421,9 @@ toast.success('Saved to draft', {
     name: 'Prompt Result Card',
     span: 4,
     Render: PreviewPromptCard,
-    desc: 'モデル・トークン・実行時間を 1 行に集約。',
+    desc: 'LLM 呼び出しのモデル名・実行時間・出力を 1 カードに集約（パターン）。',
     useCase:
-      'LLM 呼び出しの出力 + メタ情報（モデル名・実行時間・状態）をワンセットで残す。後でモデル比較や費用試算するときの一次情報。',
+      'SpecPilot の Extractor / Question Agent の出力をデバッグ用に並べる想定。トークン数・実行時間込みでモデル比較しやすく。',
     code: `<PromptResult
   model="claude-sonnet-4"
   latencyMs={1240}
@@ -373,34 +440,38 @@ toast.success('Saved to draft', {
       ['tokensIn / tokensOut', 'number', '—'],
     ],
     notes:
-      'モデル名と実行時間を必ずヘッダに出すと、後の品質評価が桁違いに楽になる。Highlight 子要素で「LLM が抽出した数」など重要部分を強調できる。',
+      'モデル名と実行時間を必ずヘッダに出すと、後の品質評価・コスト試算が桁違いに楽になる。Highlight 子要素で「LLM が抽出した数」など重要部分を強調できる API にしたい。',
     related: ['SpecPilot'],
+    status: 'pattern',
   },
   {
     id: 'approval',
     cat: 'AI',
-    name: 'HITL Approval',
+    name: 'Decision Card (HITL)',
     span: 4,
     Render: PreviewApproval,
-    desc: 'Agent の操作を人間が承認・却下する UI。',
+    desc: '確定 / 仮置きのトグル、編集 textarea、依存表示、質問への戻し。Agent 出力を人間が「触れる」UI。',
     useCase:
-      'Agent が「やっていいですか」と尋ねるブロッキング承認。CMスポット PoC の枠編集や、SpecPilot の自動修正提案で使う。',
-    code: `<Approval
-  description="承認が必要です"
-  command="schedule.swap(slot_3, slot_5)"
-  diff={<Diff>...</Diff>}
-  onApprove={runCommand}
-  onReject={discard}
+      'SpecPilot 確認フェーズの決定事項一覧。Agent が抽出した結論を人間が編集 / 確定 / 仮置きに戻すことで、自律と統制を両立する。',
+    code: `<DecisionCard
+  decision={decision}
+  onUpdate={(id, content) => api.updateDecision(id, content)}
+  onRevert={(id) => api.revertDecisionToQuestion(id)}
+  onToggleStatus={(id, status) =>
+    api.updateDecisionStatus(id, status)
+  }
 />`,
     propsRows: [
-      ['description', 'string', '—'],
-      ['command', 'string', '—'],
-      ['diff', 'ReactNode', '—'],
-      ['onApprove / onReject', '() => void', '—'],
+      ['decision', 'Decision', '—'],
+      ['onUpdate', '(id, newContent) => void', '—'],
+      ['onRevert', '(id) => void', '—'],
+      ['onToggleStatus', '(id, nextStatus) => void', '—'],
     ],
     notes:
-      'command は mono フォントで実コマンドを見せる（人間がレビューする前提）。Approve は accent ボタン、Reject は ghost で、誤クリックの取り返しがつきやすい配色にする。',
-    related: ['CMスポット PoC', 'SpecPilot'],
+      '左の border-l 色（success / warning）で確定/仮置きを瞬時に判別。編集は inline textarea + 保存ボタン、ホバー時だけ revert/edit のアクションが浮上することで普段は静か、必要なときだけアクセスできる UI に。依存（dependants）も合わせて出す。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/session/decision-card.tsx',
   },
   {
     id: 'diff',
@@ -408,9 +479,9 @@ toast.success('Saved to draft', {
     name: 'Diff Viewer',
     span: 4,
     Render: PreviewDiff,
-    desc: 'Agent の変更提案を diff 形式で表示。',
+    desc: 'Agent の変更提案を before/after で表示（パターン）。',
     useCase:
-      'Agent が提案する設定変更・テキスト編集・スキーマ更新を before/after で見せる。HITL Approval と組み合わせて使うことが多い。',
+      'Agent が提案する設定変更・テキスト編集・スキーマ更新を、レビュー前提で見せる。HITL Approval と組み合わせて使う想定。',
     code: `<Diff>
   <Diff.Line type="remove">spec.coverage = 0.74</Diff.Line>
   <Diff.Line type="add">spec.coverage = 0.86</Diff.Line>
@@ -420,8 +491,9 @@ toast.success('Saved to draft', {
       ['syntax', `"plain" | "json" | "yaml"`, `"plain"`],
     ],
     notes:
-      '+/− を色だけでなく行頭マーカー + 左 border でも示す。差分が長いときは「変更行のみ」モードと「context 込み」モードを切り替えられると親切。',
-    related: ['SpecPilot', 'CMスポット PoC'],
+      '+/- を色だけでなく行頭マーカー + 左 border でも示す。SpecPilot 内では Decision を「直接編集」する設計を選んだので diff まではまだ作っていないが、複数ターン提案を扱うときに必要になる想定。',
+    related: ['SpecPilot'],
+    status: 'pattern',
   },
   {
     id: 'verify',
@@ -429,9 +501,9 @@ toast.success('Saved to draft', {
     name: 'Verification Card',
     span: 4,
     Render: PreviewVerify,
-    desc: 'PLAN→DIFF→VERIFICATION フローの最終段。',
+    desc: 'Agent 出力が条件を満たすかを一覧でチェック（パターン）。',
     useCase:
-      'Agent の出力が「条件を満たしているか」を一覧で示す最終確認。スキーマ・制約・カバレッジ・セキュリティチェックなどを 1 枚に集約。',
+      'PLAN → DIFF → VERIFICATION のフローの最終段。schema valid / constraints / coverage / security の各チェックを 1 枚に集約。',
     code: `<Verification
   checks={[
     { label: 'schema valid', ok: true },
@@ -439,14 +511,16 @@ toast.success('Saved to draft', {
     { label: 'spec coverage > 80%', ok: true },
     { label: 'security review', ok: false },
   ]}
+  onRetry={() => regenerate()}
 />`,
     propsRows: [
       ['checks', `{ label: string; ok: boolean }[]`, '—'],
       ['onRetry', '() => void', '—'],
     ],
     notes:
-      'すべて ok なら次のフェーズに進める。1 つでも落ちていれば該当チェックの詳細にジャンプできる導線が欲しい。pending（時計アイコン）は ok と分けて出す。',
+      'CMスポット PoC で実装した PLAN → DIFF → VERIFICATION フローの最終段を SpecPilot 側に移植する形を想定。1 つでも落ちていれば該当チェックの詳細にジャンプできる導線が欲しい。',
     related: ['SpecPilot', 'CMスポット PoC'],
+    status: 'pattern',
   },
   {
     id: 'trace',
@@ -454,11 +528,11 @@ toast.success('Saved to draft', {
     name: 'Trace Log Viewer',
     span: 4,
     Render: PreviewTrace,
-    desc: 'trace_id 伝播で Agent 横断のログを追跡。',
+    desc: 'trace_id で Agent 横断のログを時系列に並べる（パターン）。',
     useCase:
-      '1 リクエストの全履歴を時系列に並べる。Agent 名・タイムスタンプ・イベント種別で grep / フィルタしながら原因調査する開発者向けビュー。',
+      '1 リクエストの Agent 間ホップを時刻 / Agent / メッセージの 3 カラムで追う、開発者向け可観測ビュー。',
     code: `<TraceLog traceId="9f2-a1c">
-  {events.map(e => (
+  {events.map((e) => (
     <TraceLog.Event
       key={e.id}
       time={e.t}
@@ -474,8 +548,9 @@ toast.success('Saved to draft', {
       ['onEventClick', '(e: TraceEvent) => void', '—'],
     ],
     notes:
-      '時刻 / Agent / メッセージの 3 カラム grid に固定すると視線移動が一定になる。重要イベント（VERIFICATION 完了など）は背景を accent 系で薄く塗ってスキャンしやすく。',
+      'CMスポット PoC では構造化ログを JSON で出して jq で grep していたが、運用に乗せるなら UI が欲しい。重要イベント（VERIFICATION 完了など）は背景を accent 系で薄く塗ってスキャンしやすく。',
     related: ['CMスポット PoC', 'SpecPilot'],
+    status: 'pattern',
   },
 
   // ────────────────────────────────────────── Arch ──────────────────────────────────────────
@@ -485,9 +560,9 @@ toast.success('Saved to draft', {
     name: 'Architecture Diagram',
     span: 6,
     Render: PreviewArch,
-    desc: 'API/AI/DB/Cloud の関係を 1 枚で説明。',
+    desc: 'スタックの関係性を React + SVG で diff 可能に書く（パターン）。',
     useCase:
-      'プロジェクトページの先頭やドキュメントの冒頭で、「このシステムは何と何で出来ているか」を 1 枚で説明する。React + SVG なので diff 可能。',
+      'プロジェクト詳細ページや README で「このシステムは何と何で出来ているか」を 1 枚で説明する想定。',
     code: `<Architecture>
   <Architecture.Node id="next">Next.js</Architecture.Node>
   <Architecture.Node id="api" accent>Hono API</Architecture.Node>
@@ -501,44 +576,44 @@ toast.success('Saved to draft', {
       ['layout', `"auto" | "grid"`, `"auto"`],
     ],
     notes:
-      '画像ではなく React + SVG で書くことで PR で diff が取れる。スタックを変えたとき「絵が古い」問題が起きない。色は控えめにし、accent で 1 ノードだけ強調すると視線誘導が効く。',
+      '画像ではなく React + SVG で書くことで PR で diff が取れる。スタックを変えたとき「絵が古い」問題が起きない。色は控えめにし accent で 1 ノードだけ強調すると視線誘導が効く。',
     related: ['ヤスイミセ', 'SpecPilot', 'CMスポット PoC'],
+    status: 'pattern',
   },
   {
     id: 'toggle',
     cat: 'Arch',
-    name: 'Toggle / Switch',
+    name: 'Theme Toggle',
     span: 3,
     Render: PreviewToggle,
-    desc: 'Feature flag・小さな設定切替に。',
+    desc: 'ライト / ダーク / 自動 の 3 値ラジオ。useTheme フックで永続化、aria-pressed 連携。',
     useCase:
-      '即時反映の二値設定（モーション on/off、experimental flag、通知 on/off）。フォームの送信を介さず変更したい場面に。',
-    code: `<Toggle
-  checked={motionOn}
-  onChange={setMotionOn}
-  label="Background motion"
-/>`,
+      'SpecPilot のヘッダ右側に置くテーマ切替。OS 設定追従の "自動" もデフォルトで用意。',
+    code: `import { ThemeToggle } from '@/components/ui/ThemeToggle';
+
+// 配置するだけ。useTheme() フック側で localStorage 永続化と
+// prefers-color-scheme listener を裏で動かす
+<ThemeToggle />`,
     propsRows: [
-      ['checked', 'boolean', '—'],
-      ['onChange', '(v: boolean) => void', '—'],
-      ['label', 'string', '—'],
-      ['disabled', 'boolean', 'false'],
+      ['(props なし — useTheme フックが状態を持つ)', '—', '—'],
     ],
     notes:
-      'role="switch" + aria-checked で読み上げ。色だけでなく「つまみの位置」でも状態を伝える。disabled 状態は色を一段薄くしてフォーカスリングも落とす。',
-    related: ['Component Lab'],
+      '二値 toggle ではなく 3 値（light / dark / system）を inline ラジオ風 UI で。各ボタンは aria-pressed + aria-label を持ち、currently active なものだけ濃い背景。useTheme は別ファイルで MediaQuery listener + localStorage 同期を担当。',
+    related: ['SpecPilot'],
+    status: 'shipped',
+    source: 'spec-pilot · src/components/ui/ThemeToggle.tsx',
   },
 ];
 
 export const labCategories: ('All' | LabCategory)[] = ['All', 'UI', 'Product', 'AI', 'Arch'];
 
 export const labFeaturedIds = [
-  'pipeline',
   'price',
+  'stepper',
   'approval',
   'kpi',
-  'trace',
-  'diff',
-  'prompt',
-  'verify',
+  'modal',
+  'tabs',
+  'search',
+  'badge',
 ];

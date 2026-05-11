@@ -17,7 +17,6 @@ export function LabModal({
   setTab: (t: Tab) => void;
   onClose: () => void;
 }) {
-  // Escape key closes the modal.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -73,8 +72,36 @@ export function LabModal({
           </div>
         </div>
         <div className="modal-side">
-          <div className="eyebrow" style={{ marginBottom: 8 }}>
-            {c.cat} · Component
+          <div
+            className="eyebrow"
+            style={{ marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}
+          >
+            <span>{c.cat} · Component</span>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 10,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                padding: '2px 6px',
+                borderRadius: 4,
+                color:
+                  c.status === 'shipped'
+                    ? 'var(--accent)'
+                    : 'var(--l-text-3)',
+                border:
+                  c.status === 'shipped'
+                    ? '1px solid rgba(var(--accent-rgb), 0.5)'
+                    : '1px solid var(--l-line)',
+              }}
+              title={
+                c.status === 'shipped'
+                  ? 'Shipped in production'
+                  : 'Pattern — not yet productionized'
+              }
+            >
+              {c.status === 'shipped' ? 'shipped' : 'pattern'}
+            </span>
           </div>
           <h3
             id={`lab-modal-${c.id}-title`}
@@ -124,18 +151,18 @@ export function LabModal({
             </div>
           )}
           {tab === 'code' && (
-            <pre className="code" style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+            <pre className="code" style={{ margin: 0, whiteSpace: 'pre' }}>
               {c.code}
             </pre>
           )}
           {tab === 'props' && (
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-              {c.propsRows.map(([name, type, def]) => (
+              {c.propsRows.map(([name, type, def], i) => (
                 <div
-                  key={name}
+                  key={name + i}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '120px 1fr',
+                    gridTemplateColumns: '140px 1fr',
                     gap: 12,
                     padding: '10px 0',
                     borderTop: '1px solid var(--l-line)',
@@ -143,8 +170,18 @@ export function LabModal({
                 >
                   <span style={{ color: 'var(--l-text-0)' }}>{name}</span>
                   <div>
-                    <div style={{ color: 'var(--accent)', wordBreak: 'break-word' }}>{type}</div>
-                    <div style={{ color: 'var(--l-text-2)', fontSize: 11, marginTop: 2 }}>{def}</div>
+                    <div
+                      style={{
+                        color: 'var(--accent)',
+                        wordBreak: 'break-word',
+                        whiteSpace: 'pre-line',
+                      }}
+                    >
+                      {type}
+                    </div>
+                    <div style={{ color: 'var(--l-text-2)', fontSize: 11, marginTop: 2 }}>
+                      {def}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -174,6 +211,25 @@ export function LabModal({
               )}
             </div>
           )}
+
+          {/* Source attribution / pattern indicator pinned to bottom */}
+          <div
+            style={{
+              marginTop: 24,
+              paddingTop: 14,
+              borderTop: '1px dashed var(--l-line)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 10.5,
+              color: 'var(--l-text-3)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            {c.status === 'shipped' && c.source ? (
+              <>↳ source · {c.source}</>
+            ) : (
+              <>↳ pattern · まだ本実装はしていない設計</>
+            )}
+          </div>
         </div>
       </div>
     </div>
