@@ -1,0 +1,86 @@
+---
+title: 'Agent パイプラインを 7 つに分けた話'
+date: '2026-04-15'
+tags: ['AI Agent', 'TypeScript']
+summary: 'SpecPilot で議事録 → 設計書まで一気通貫の AI 処理を、Extractor / Question / Verifier / Designer / Spec / Linter / Estimator の 7 Agent に分けて 2 段パイプラインで回している話。'
+draft: true
+---
+
+# Agent パイプラインを 7 つに分けた話
+
+SpecPilot は「議事録を渡したら設計書と vibe pack が返ってくる」サービスなので、内部で AI 処理を直列に重ねている。最初は「1 つの強い Agent に全部任せれば良くない?」と思って書き始めたが、すぐにダメだと分かった。
+
+**1 Agent に全部やらせると、何が悪かったのか分からなくなる**。
+
+設計書の品質が低いとき、「議事録の読み込みが浅かった」のか、「要件の抽出が落ちた」のか、「設計化の段で外した」のかが切り分けられない。プロンプトを直そうにも、どこを直せばいいのか手掛かりがない。
+
+なので、Agent を **役割で 7 つに分け、2 つのパイプラインに並べる** ことにした。
+
+## 7 Agent と 2 パイプライン
+
+```
+[Convergence Pipeline]  議事録を取り込んで質問にする
+   Extractor → Question → Verifier
+
+[Generation Pipeline]   決定事項から設計書を吐く
+   Designer → Spec → Linter (+ Estimator)
+```
+
+それぞれの役割：
+
+- **Extractor** — 議事録から要件・制約・決定事項・矛盾を抽出。「読む」係
+- **Question** — 抽出結果と既存決定から、未決の質問を生成。「聞く」係
+- **Verifier** — 質問が既存決定と被ってないか LLM で検証。「ふるい」係
+- **Designer** — 決定事項を archetype に当てて設計書ファイル群を生成。「書く」係
+- **Spec** — Designer が出した設計書から OpenAPI / Prisma / SQL / RBAC を並列で生成
+- **Linter** — 生成された設計書群の整合性をチェック
+- **Estimator** — 工数とタスク分解を生成（ベストエフォート、落ちても止めない）
+
+## なぜ 2 パイプラインに分けたか
+
+最初は 1 本のパイプラインで Extractor → … → Estimator まで通そうとしたけど、無理だった。 **「議事録を入れた瞬間」と「設計書を生成する瞬間」のタイミングが違うから**。
+
+ユーザーは議事録を入れた段階で、生成された質問を眺めて回答を入力する。確定したら設計書生成ボタンを押す。この間、数分から数日空く。
+
+なので：
+
+- **Convergence Pipeline** — 議事録投入を trigger に走る。質問を増やす
+- **Generation Pipeline** — 「設計書を生成」ボタンを trigger に走る。ファイル群を出す
+
+`processingStage` という state を Project に持たせて、今どの Agent を走らせているか UI に出すようにしている。
+
+```ts
+state.processingStage = "extractor";
+await saveState(args.projectId, state);
+const ex = await runExtractor(registry, state);
+```
+
+## 後で気づいた利点
+
+役割で割ったら、副次的に色々と楽になった。
+
+**Per-file 並列**。Designer は途中から per-file 並列呼び出しに切った。設計書 N ファイルを LLM N 回叩く構造。失敗したファイルだけ後で再生成できる。1 Agent だったらこれは無理。
+
+**Per-agent モデル切替**。`AGENT_MODEL_SPEC=gemini-2.5-pro` で Spec だけ Pro モデルに切り替えられる。仕様生成の品質が大事だが、抽出は Flash で十分、みたいな割り当てができる。
+
+```ts
+const agentModels: Partial<Record<AgentName, string>> = {
+  extractor: env.AGENT_MODEL_EXTRACTOR,
+  question: env.AGENT_MODEL_QUESTION,
+  designer: env.AGENT_MODEL_DESIGNER,
+  spec: env.AGENT_MODEL_SPEC,
+  // ...
+};
+```
+
+これは「全部同じモデル」で組んでいたら出来なかった最適化。
+
+## 反省点もある
+
+Agent を増やすと **ログが爆発する**。1 リクエストで LLM 呼び出しが 10 回以上走ることもあるから、`trace_id` を最初から通してないと grep が地獄になる（[別記事](/notes/trace-id-first) でも書いた）。
+
+あと **エラー時の戻し** が地味に重い。Generation が途中で落ちたら state.phase を `convergence` に戻す、みたいなロールバックを手で書く必要がある。 state machine 的な lib を入れたくなる気持ちは分かる。
+
+---
+
+「1 Agent で全部やらせる」ほうが書く側は楽。けど、AI が「なぜ良いものを出さないか」を後で分析できる構造を作ろうとすると、最終的には役割で分ける形に収束する気がする。Designer の出力が悪いなら Designer のプロンプトを直す、で済むのは強い。

@@ -1,0 +1,131 @@
+---
+title: 'Agent 出力に機械的検証を被せる — LLM は嘘をつかなくても「なまける」'
+date: '2026-04-25'
+tags: ['AI Agent', 'TypeScript']
+summary: 'SpecPilot で LLM の出力を「LLM 任せ」にせず、機械的に検証してから state に通している話。groundedOn 欠損の即 archive、DYNAMIC_ARTIFACTS の取りこぼし検知、Zod preprocess での enum 外フォールバック、jsonrepair による JSON 修復、Verifier の fail-open まで。'
+draft: true
+---
+
+# Agent 出力に機械的検証を被せる — LLM は嘘をつかなくても「なまける」
+
+SpecPilot を運用してて段々分かってきたのが、 **LLM は嘘をつかなくても「なまける」** ということ。プロンプトで「groundedOn フィールドを必ず付けてくれ」と書いていても、出力の数 % でフィールドが落ちる。「以下 8 ファイルを出してくれ」と書いていても、7 ファイルしか返ってこないことがある。
+
+これはプロンプトの工夫である程度減らせるけど、ゼロにはならない。なので、 **LLM の出力を信用しない**、機械的検証を Agent の後段に必ず挟むルールにしている。
+
+## groundedOn 欠損は即 archive
+
+Question Agent が出した質問のうち、 **根拠フィールド (`groundedOn`) が欠損しているものは LLM 検証にも回さず、機械的に即 archive する**。
+
+```ts
+let verifierFailures = 0;
+const groundedFresh: Question[] = [];
+for (const question of fresh) {
+  const g = question.groundedOn;
+  const isInvalidGrounding =
+    !g ||
+    typeof g !== "object" ||
+    !g.type ||
+    typeof g.rationale !== "string" ||
+    g.rationale.length === 0;
+  if (isInvalidGrounding) {
+    question.autoArchivedReason =
+      "groundedOn 欠損または不完全: Question agent が分類を出力しなかった";
+    state.archivedQuestions.push(question);
+    verifierFailures++;
+  } else {
+    groundedFresh.push(question);
+  }
+}
+```
+
+理由は単純で、 **根拠が無い質問は人間にとっても採用判断ができない**から。「なぜ聞いてるのか」が無い質問は、ユーザーが回答しようがない。 LLM がたまにフィールドを落とすたびに UI 側で困らせるくらいなら、ここで切る方が建設的。
+
+## DYNAMIC_ARTIFACTS の取りこぼしを catch
+
+Designer Agent は archetype に応じて N 個のファイルを生成するんだけど、 **`activatedPatterns` に応じた dynamic artifact が落ちることがある**。「auth.md を含めて」と頼んだのに含まれない、みたいな。
+
+これも機械的に検出する。archetype 側で「このパターンが activated されてたら、このファイルが出るはず」を定義しておく。
+
+```ts
+export const DYNAMIC_ARTIFACTS: DynamicArtifactDef[] = [
+  // { pattern, path, label, ... }
+];
+```
+
+Designer 実行後、`activatedPatterns` と生成済みファイルパスを突き合わせて、 **欠落分を lint warning として可視化** する。
+
+```ts
+const generatedPaths = new Set(allFiles.map((f) => f.path));
+const activatedSet = new Set(state.activatedPatterns ?? []);
+
+const missingDynamicLintItems = DYNAMIC_ARTIFACTS
+  .filter(
+    (a) => activatedSet.has(a.pattern) && !generatedPaths.has(a.path),
+  )
+  .map((a) => ({
+    severity: "warning" as const,
+    file: a.path,
+    message: `activatedPatterns に "${a.pattern}" が含まれているのに ${a.path} が生成されていません`,
+    suggestion: "Designer 出力で取りこぼされた可能性があります。再生成を試してください。",
+    ruleId: "spec.dynamic-artifact-missing",
+  }));
+```
+
+per-file 並列呼び出しに切ってから取りこぼしは大幅に減ったけど、 **個別呼び出し失敗時の安全網として残してある**。
+
+## Zod preprocess で enum 外を吸収
+
+LLM が enum 外の文字列を返したり、フィールドを丸ごと省略することはよくある。 Zod の `preprocess` で「拾えなかったら other に倒す」ようにしておく。
+
+```ts
+const extractorCategorySchema = z.preprocess(
+  (v) =>
+    typeof v === "string" &&
+    (DECISION_CATEGORIES as readonly string[]).includes(v)
+      ? v
+      : "other",
+  z.enum(DECISION_CATEGORIES),
+);
+```
+
+「enum 違反で全体が parse 失敗 → リトライ」よりも、**defaultive に流して後で人間が見直す方が運用しやすい**。
+
+## JSON 出力は jsonrepair で修復する
+
+LLM が JSON を返すように頼んでも、 **末尾カンマや未エスケープ改行が混じる**ことがある。`JSON.parse` 一発で失敗するときは [`jsonrepair`](https://github.com/josdejong/jsonrepair) で自動修復を試みる。
+
+```ts
+try {
+  raw = JSON.parse(extracted);
+} catch (firstErr) {
+  try {
+    const repaired = jsonrepair(extracted);
+    raw = JSON.parse(repaired);
+    console.warn("[agent-core] JSON parse failed but jsonrepair succeeded");
+  } catch {
+    throw new Error("LLM 出力の JSON パースに失敗");
+  }
+}
+```
+
+修復が成功したら必ず `console.warn` を残す。 **「JSON が修復された」事実をログに残す**ことで、後から「最近この Agent の JSON が乱れてる」が見える。
+
+## Verifier 自体が落ちたら fail-open
+
+これは少しトリッキー。 LLM Verifier （質問の被り検出）が落ちたとき、 **全部弾く（fail-close）より、全部通す（fail-open）の方が UX が良かった**。
+
+```ts
+try {
+  const v = await runVerifier(registry, groundedFresh, state);
+  // ... verdict で archive
+} catch (err) {
+  console.warn("[pipeline] verifier failed, falling back to all-accept", err);
+  state.questions.push(...groundedFresh);
+}
+```
+
+Verifier がたまたま落ちただけで「質問 0 件」になるとユーザーは何もできない。被ってるかも知れないけど全部出す方が、進める。 機械的フィルタ（`groundedOn`）は通ってるので、最低限の品質は保たれてる。
+
+---
+
+「LLM の出力を 100% 信用して直接 state に流す」設計は、書いてるときは速いけど、運用 1 週間で必ず痛い目を見る。 **機械的検証を 1 段挟むだけで、 LLM が「なまけた」ときに人間に困りごとが届くのを止められる**。 Agent パイプラインを書くときの、最初に入れるべきレイヤー。
