@@ -1,76 +1,73 @@
 ---
-title: 'trace_id を最初に通しておくと後で楽になる'
+title: 'trace_id を最初に通しておくと、後で必ず楽になる'
 date: '2026-01-20'
 tags: ['Observability']
-summary: 'PoC を作るとき、ログと観測性の整備は後回しにしがち。でも trace_id だけは最初に通しておくと、その後の調査速度がまるで違う。'
+summary: 'CMスポット PoC で 6 つの Agent + LLM 呼び出しを Frontend → Backend → Agent → LLM まで trace_id で一気通貫させた。後で楽することに先に投資する種類のコードの代表例。'
 draft: true
 ---
 
-> NOTE: この記事は AI が下書きしたサンプル。本人レビュー後に draft を外して公開する。
+# trace_id を最初に通しておくと、後で必ず楽になる
 
+CMスポット PoC をやっていて、自分の中で一番「最初から入れてよかった」と思っているのが trace_id の伝播。Main Agent + 6 Sub Agent の構成で、Frontend → Backend → 各 Agent → LLM 呼び出しまで一気通貫で trace_id を通すようにした。これだけで、後の調査速度が桁違いに変わる。
 
-# trace_id を最初に通しておくと後で楽になる
+## 最初に入れないと、絶対に後付けになる
 
-PoC を立ち上げるとき、観測性 (observability) の整備は「動いてから」になりがち。だいたいの場合それで困らないけど、**`trace_id` だけは別**。最初に通しておくと、後から困った瞬間に救われる。
+PoC は仕様が動く。Agent が増える。LLM 呼び出しが入れ子になる。動いてから「あれ、どのリクエストが詰まったんだ?」を調べる段階で、trace_id が無いと grep ですら追えない。
 
-## なぜ最初に通すのか
+trace_id は **後付けがダルい**。途中の関数全部に伝播の引数を足し直すことになる。だから「最初に通しておく」だけが現実解。
 
-PoC は仕様が変わる。Agent が増える。LLM 呼び出しが入れ子になる。そういうときに「どのリクエストが、どの Agent に渡って、どの LLM 呼び出しでこける」が追えないと、デバッグのたびに何時間も溶ける。
+## 通す場所
 
-`trace_id` は **後付けが面倒**。途中の関数全部に伝播の引数を足し直す必要が出てきて、結局気合いで grep する羽目になる。
+最低限ここを貫通させれば十分。
 
-## どこを通すか
+- Frontend → リクエストに `traceparent` ヘッダを付ける
+- Backend (FastAPI) → 受け取った `traceparent` を `contextvars` に保持
+- Agent パイプライン → Agent 間 I/O のスキーマに `trace_id` を必須で入れる
+- LLM 呼び出し → プロンプト送信時にメタとして添える
+- 構造化ログ → 全行に `trace_id` を出す
 
-最低限ここを貫通させればいい。
+W3C の `traceparent` フォーマットに乗せておけば、後で OpenTelemetry SDK を入れることになっても破綻しない。PoC のうちは ID を伝播させるだけで十分。
 
-| レイヤー | 何をする |
-|---------|---------|
-| Frontend | リクエストヘッダに `traceparent` を付ける |
-| Backend (FastAPI/Hono) | 受け取った `traceparent` を context に保持 |
-| Agent パイプライン | Agent 間 I/O に `trace_id` を必須で渡す |
-| LLM 呼び出し | プロンプト送信時にメタとして添える |
-| 構造化ログ | 全ログ行に `trace_id` を出す |
+## 最小実装（FastAPI）
 
-W3C Trace Context (`traceparent`) を使えば標準フォーマットに乗れる。OpenTelemetry SDK を入れる前でも、まず ID だけ伝播させれば十分。
+middleware で受け口を作って `contextvars` に持つ。Agent 間で受け渡しするときは、ログとプロンプトに混ぜるだけ。
 
-## 最小実装
+```python
+import contextvars
+from uuid import uuid4
+from fastapi import FastAPI, Request
 
-Hono の middleware で受け口を作る例：
+trace_id_ctx = contextvars.ContextVar('trace_id', default='')
 
-```ts
-import { Hono } from 'hono';
-import { randomUUID } from 'node:crypto';
+app = FastAPI()
 
-const app = new Hono();
+@app.middleware('http')
+async def trace_middleware(request: Request, call_next):
+    incoming = request.headers.get('traceparent')
+    trace_id = (
+        incoming.split('-')[1] if incoming else uuid4().hex
+    )
+    trace_id_ctx.set(trace_id)
+    return await call_next(request)
 
-app.use('*', async (c, next) => {
-  const incoming = c.req.header('traceparent');
-  const traceId = incoming?.split('-')[1] ?? randomUUID().replace(/-/g, '');
-  c.set('traceId', traceId);
-  await next();
-});
-
-app.get('/spec', async (c) => {
-  const traceId = c.get('traceId');
-  console.log(JSON.stringify({ traceId, evt: 'spec.start' }));
-  // ...
-});
+@app.get('/agents/run')
+async def run():
+    trace_id = trace_id_ctx.get()
+    logger.info({
+        'traceId': trace_id,
+        'evt': 'agents.start',
+    })
+    # ... Main Agent → 6 Sub Agent
 ```
 
-これだけで、後からの調査で **「あの 1 リクエストの全履歴」** を grep 一発で再構成できる。
-
-## 「全部やる」と「これだけやる」の差
-
-PoC のうちは、ログ集約基盤も Sentry も Otel Collector もいらない。**ID と JSON 構造だけ揃えておく**。あとは grep / jq で十分。
+これだけで、後の grep が一発で済むようになる。
 
 ```bash
-cat app.log | jq 'select(.traceId == "9f2a1c...")'
+$ cat app.log | jq 'select(.traceId == "9f2a1c…")'
 ```
 
-仕様変更で Agent が増えても、ID 伝播さえ守られていれば追跡コストは線形にしか増えない。これが最初に通しておくべき理由。
+PoC のうちは Sentry も OTel Collector もいらない。 **ID と JSON 構造さえ揃えておけば、jq で十分追える**。
 
-## まとめ
+---
 
-- 観測性整備は後でいい、`trace_id` だけは別
-- W3C Trace Context に乗っかれば標準的に拡張できる
-- 構造化 JSON ログ + `trace_id` フィールドさえあれば PoC では十分
+「後で楽することに先に投資する」種類のコードがあって、trace_id はその代表例。CMスポット PoC で一番リターンが大きかった設計判断だった気がする。
