@@ -467,6 +467,35 @@ html:has(body[data-theme='dark']) {
     letter-spacing: -0.01em;
     font-size: 13px;
   }
+  .nav-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--d-text-1);
+    transition:
+      color 0.15s,
+      background 0.15s;
+    margin-left: 2px;
+  }
+  .nav-theme-toggle:hover {
+    color: var(--d-text-0);
+    background: rgba(0, 0, 0, 0.06);
+  }
+  body[data-theme='dark'] .nav-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .nav-light .nav-theme-toggle {
+    color: var(--l-text-1);
+  }
+  .nav-light .nav-theme-toggle:hover {
+    color: var(--l-text-0);
+  }
   .nav-logo-mark {
     width: 22px;
     height: 22px;

@@ -1,70 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Sliders, X } from '@/components/ui/icons';
-
-type Theme = 'dark' | 'paper' | 'light';
-type Accent = '#ec5e2a' | '#f59e0b' | '#dc2626' | '#18181b';
-
-const STORAGE_KEY = 'teeeen.tweaks';
-
-type Tweaks = {
-  theme: Theme;
-  accent: Accent;
-  bgMotion: boolean;
-};
-
-const DEFAULTS: Tweaks = {
-  theme: 'dark',
-  accent: '#ec5e2a',
-  bgMotion: true,
-};
-
-const ACCENT_OPTIONS: Accent[] = ['#ec5e2a', '#f59e0b', '#dc2626', '#18181b'];
-
-function applyAccent(hex: string) {
-  const m = hex.replace('#', '');
-  const r = parseInt(m.slice(0, 2), 16);
-  const g = parseInt(m.slice(2, 4), 16);
-  const b = parseInt(m.slice(4, 6), 16);
-  document.documentElement.style.setProperty('--accent', hex);
-  document.documentElement.style.setProperty('--accent-rgb', `${r}, ${g}, ${b}`);
-}
-
-function applyTweaks(t: Tweaks) {
-  document.body.dataset.theme = t.theme;
-  document.body.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
-  applyAccent(t.accent);
-}
+import { ACCENT_OPTIONS, useTweaks, type Accent, type Theme } from '@/lib/tweaks';
 
 export function TweaksPanel() {
   const [open, setOpen] = useState(false);
-  const [tweaks, setTweaks] = useState<Tweaks>(DEFAULTS);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Partial<Tweaks>;
-        setTweaks({ ...DEFAULTS, ...parsed });
-      }
-    } catch {
-      /* ignore */
-    }
-    setHydrated(true);
-  }, []);
-
-  function update<K extends keyof Tweaks>(key: K, value: Tweaks[K]) {
-    const next = { ...tweaks, [key]: value };
-    setTweaks(next);
-    applyTweaks(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
-  }
+  const { tweaks, update, hydrated } = useTweaks();
 
   if (!hydrated) return null;
 
@@ -107,7 +49,7 @@ export function TweaksPanel() {
                 aria-label={`Accent ${c}`}
                 className={'tweaks-color-swatch' + (tweaks.accent === c ? ' is-active' : '')}
                 style={{ background: c }}
-                onClick={() => update('accent', c)}
+                onClick={() => update('accent', c as Accent)}
               />
             ))}
           </div>

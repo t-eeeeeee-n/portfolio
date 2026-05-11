@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ThemeButton } from '@/components/sections/ThemeButton';
 
 const SECTION_IDS = [
   'home',
@@ -62,6 +63,7 @@ export function Nav() {
           {label}
         </a>
       ))}
+      <ThemeButton />
     </nav>
   );
 }

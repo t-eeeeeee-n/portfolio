@@ -6,23 +6,30 @@ import { Effects } from '@/components/effects/Effects';
 import { TweaksPanel } from '@/components/tweaks/TweaksPanel';
 import './globals.css';
 
-// Inline pre-hydration script: read saved tweaks from localStorage and
-// apply them to <body>/<html> before React mounts so themes don't flash
-// from defaults.
+// Inline pre-hydration script: apply saved tweaks (or the OS color
+// preference if the user has never picked one) to <body>/<html>
+// before React mounts so theme/accent don't flash from defaults.
 const TWEAK_BOOT_SCRIPT = `
 (function(){
   try {
-    var raw = localStorage.getItem('teeeen.tweaks');
-    if (!raw) return;
-    var t = JSON.parse(raw);
     var b = document.body;
-    if (t.theme) b.dataset.theme = t.theme;
-    if (typeof t.bgMotion === 'boolean') b.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
-    if (t.accent) {
-      var hex = t.accent.replace('#','');
-      var r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), bl = parseInt(hex.slice(4,6),16);
-      document.documentElement.style.setProperty('--accent', t.accent);
-      document.documentElement.style.setProperty('--accent-rgb', r+', '+g+', '+bl);
+    var raw = localStorage.getItem('teeeen.tweaks');
+    var t = raw ? JSON.parse(raw) : null;
+    if (t) {
+      if (t.theme) b.dataset.theme = t.theme;
+      if (typeof t.bgMotion === 'boolean') b.dataset.bgMotion = t.bgMotion ? 'on' : 'off';
+      if (t.accent) {
+        var hex = t.accent.replace('#','');
+        var r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), bl = parseInt(hex.slice(4,6),16);
+        document.documentElement.style.setProperty('--accent', t.accent);
+        document.documentElement.style.setProperty('--accent-rgb', r+', '+g+', '+bl);
+      }
+    } else {
+      // First visit: respect the OS color preference. The JSX default
+      // is dark, so only override when the user actually prefers light.
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        b.dataset.theme = 'light';
+      }
     }
   } catch (e) {}
 })();

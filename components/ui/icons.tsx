@@ -55,3 +55,9 @@ export const Cube = (p: IconProps) => <Icon d="M12 2 3 7v10l9 5 9-5V7l-9-5z M3 7
 export const Clock = (p: IconProps) => <Icon d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 7v5l3 2" {...p} />;
 export const Box = (p: IconProps) => <Icon d="M3 7l9-4 9 4-9 4-9-4z M3 7v10l9 4 9-4V7 M12 11v10" {...p} />;
 export const Sliders = (p: IconProps) => <Icon d="M4 21V14 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6" {...p} />;
+export const Sun = (p: IconProps) => (
+  <Icon d="M12 4v2 M12 18v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M4.93 19.07l1.41-1.41 M17.66 6.34l1.41-1.41 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" {...p} />
+);
+export const Moon = (p: IconProps) => (
+  <Icon d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" {...p} />
+);
