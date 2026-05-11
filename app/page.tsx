@@ -3,6 +3,7 @@ import { Career } from '@/components/sections/Career';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
+import { Intro } from '@/components/sections/Intro';
 import { LabTeaser } from '@/components/sections/LabTeaser';
 import { Nav } from '@/components/sections/Nav';
 import { Notes } from '@/components/sections/Notes';
@@ -18,6 +19,7 @@ export default async function HomePage() {
     <>
       <Nav />
       <Hero />
+      <Intro />
       <Projects />
       <ZoneFade dir="down" />
       <LabTeaser />
