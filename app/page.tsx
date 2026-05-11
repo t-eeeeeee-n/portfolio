@@ -1,5 +1,4 @@
 import { About } from '@/components/sections/About';
-import { BuildLog } from '@/components/sections/BuildLog';
 import { Career } from '@/components/sections/Career';
 import { Contact } from '@/components/sections/Contact';
 import { Footer } from '@/components/sections/Footer';
@@ -14,15 +13,15 @@ import { getAllNotes } from '@/lib/notes';
 
 export default async function HomePage() {
   const notes = await getAllNotes();
+  const hasNotes = notes.length > 0;
   return (
     <>
       <Nav />
       <Hero />
-      <BuildLog />
       <Projects />
       <ZoneFade dir="down" />
       <LabTeaser />
-      <Notes notes={notes} limit={6} showFilter={false} showSeeAll />
+      {hasNotes && <Notes notes={notes} limit={6} showFilter={false} showSeeAll />}
       <ZoneFade dir="up" />
       <About />
       <Career />

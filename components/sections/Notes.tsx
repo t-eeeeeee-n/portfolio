@@ -78,7 +78,7 @@ export function Notes({
           ))
         )}
       </div>
-      {showSeeAll && (
+      {showSeeAll && list.length > 0 && (
         <div className="mt-8">
           <Link
             href="/notes"

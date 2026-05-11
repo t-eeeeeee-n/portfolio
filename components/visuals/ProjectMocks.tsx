@@ -7,10 +7,10 @@ import { Search } from '@/components/ui/icons';
    ============================================================ */
 
 const YASUIMISE_STORES: Array<{ name: string; price: number; dist: string; best?: boolean }> = [
-  { name: 'オオゼキ', price: 198, best: true, dist: '350m' },
-  { name: '業務スーパー', price: 218, dist: '620m' },
-  { name: 'ライフ', price: 248, dist: '1.1km' },
-  { name: 'サミット', price: 268, dist: '900m' },
+  { name: 'オオゼキ', price: 228, best: true, dist: '350m' },
+  { name: '業務スーパー', price: 258, dist: '620m' },
+  { name: 'ライフ', price: 288, dist: '1.1km' },
+  { name: 'サミット', price: 308, dist: '900m' },
 ];
 
 export function YasuimiseMock() {

@@ -28,8 +28,6 @@ export function Hero() {
               </span>
               <span className="hero-meta-sep" />
               <span>Tokyo · JST</span>
-              <span className="hero-meta-sep" />
-              <span>v.2026.05</span>
             </div>
             <h1 className="h-hero fade-up" style={{ animationDelay: '0.05s' }}>
               Web<span style={{ color: 'var(--d-text-2)' }}>と、</span>AI

@@ -3,10 +3,10 @@
    prefers-reduced-motion / data-bg-motion="off". */
 
 const priceRows = [
-  { name: 'ヤマハ', price: '¥298', best: true },
-  { name: 'イオン', price: '¥318' },
-  { name: 'ライフ', price: '¥328' },
-  { name: 'サミット', price: '¥348' },
+  { name: 'オオゼキ', price: '¥228', best: true },
+  { name: '業務スーパー', price: '¥258' },
+  { name: 'ライフ', price: '¥278' },
+  { name: 'サミット', price: '¥298' },
 ];
 
 const traceRows: [string, string][] = [

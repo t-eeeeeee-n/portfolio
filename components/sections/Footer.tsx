@@ -7,7 +7,6 @@ export function Footer() {
           <span style={{ marginLeft: 12 }}>Built with Next.js · React · honest effort.</span>
         </div>
         <div className="flex gap-4">
-          <span>last commit · 2026.05.10</span>
           <span style={{ color: 'var(--accent-2)' }}>● online</span>
         </div>
       </div>
