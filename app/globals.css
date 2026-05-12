@@ -2244,7 +2244,10 @@ html:has(body[data-theme='dark']) {
     color: var(--d-text-0);
     font-family: var(--font-mono);
     font-size: 12.5px;
-    word-break: break-word;
+    /* keep-all = CJK 単語の途中で折り返さない（"スポット相|談" を防ぐ）。
+       break-word fallback で長い URL / Email は必要なら任意位置で折り返す。 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
     letter-spacing: 0.005em;
   }
   .sk-profile-row a:hover {
@@ -2533,7 +2536,7 @@ html:has(body[data-theme='dark']) {
     display: grid;
     grid-template-columns: 70px 1fr;
     gap: 10px;
-    padding: 10px 16px 10px 0;
+    padding: 10px 16px;
     border-right: 1px solid var(--d-line-2);
     margin: 0;
   }

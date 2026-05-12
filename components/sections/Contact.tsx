@@ -1,4 +1,4 @@
-import { ArrowUR, Github, Linkedin, Mail } from '@/components/ui/icons';
+import { ArrowUR, Doc, Github, Linkedin, Mail } from '@/components/ui/icons';
 
 export function Contact() {
   return (
@@ -41,6 +41,9 @@ export function Contact() {
             </a>
             <a className="btn btn-ghost" href="/resume.pdf" target="_blank" rel="noopener noreferrer">
               Resume <ArrowUR size={12} />
+            </a>
+            <a className="btn btn-ghost" href="/skill-sheet">
+              <Doc size={13} /> Skill Sheet
             </a>
           </div>
         </div>
