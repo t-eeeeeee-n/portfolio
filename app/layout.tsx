@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     template: '%s — teeeen.lab',
   },
   description:
-    'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。— 新井 天翔 / Tensho Arai',
+    'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。— 荒井天匠 / Tensho Arai',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
   authors: [{ name: 'Tensho Arai' }],
   creator: 'Tensho Arai',
@@ -79,8 +79,19 @@ const fontVariables = [plexSans.variable, plexMono.variable].join(' ');
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
-      <body className={fontVariables} data-theme="dark" data-bg-motion="on">
+    // suppressHydrationWarning on <html> and <body> only — the
+    // pre-hydration TWEAK_BOOT_SCRIPT below intentionally mutates
+    // these elements (sets <body data-theme>, <body data-bg-motion>,
+    // and inline --accent / --accent-rgb on <html>) before React
+    // mounts so the saved theme doesn't flash. Children hydrate
+    // normally; the suppression is scoped to these two nodes.
+    <html lang="ja" suppressHydrationWarning>
+      <body
+        className={fontVariables}
+        data-theme="dark"
+        data-bg-motion="on"
+        suppressHydrationWarning
+      >
         <script dangerouslySetInnerHTML={{ __html: TWEAK_BOOT_SCRIPT }} />
         <BackgroundFX />
         <Effects />

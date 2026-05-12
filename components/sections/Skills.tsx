@@ -1,5 +1,25 @@
 import { SectionHead } from '@/components/ui/SectionHead';
-import { skillGroups } from '@/lib/skills';
+import { skillCategories, type Skill } from '@/lib/skills';
+
+function SkillCell({ skill }: { skill: Skill }) {
+  const isPrimary = skill.level === 'primary';
+  const isSecondary = skill.level === 'secondary';
+  return (
+    <div className={'skill-cell' + (isSecondary ? ' skill-cell-secondary' : '')}>
+      <div className="skill-cell-name">
+        {isPrimary ? (
+          <span aria-hidden="true" className="skill-cell-mark" />
+        ) : !isSecondary ? (
+          <span aria-hidden="true" className="skill-cell-mark-outline" />
+        ) : (
+          <span aria-hidden="true" style={{ width: 5, flexShrink: 0 }} />
+        )}
+        <span>{skill.name}</span>
+      </div>
+      {skill.note && <div className="skill-cell-note">{skill.note}</div>}
+    </div>
+  );
+}
 
 export function Skills() {
   return (
@@ -8,41 +28,24 @@ export function Skills() {
         <SectionHead
           n="06"
           eyebrow="Skills"
-          title="今の主戦場と、隣接領域。"
-          lede="現在の中心は Next.js / TypeScript / Python / GCP / AI Agent。隣接領域や過去経験は控えめに見せています。"
+          title="ドメイン別の技術スタック。"
+          lede="単なる列挙ではなく、ドメインごとに「実務でどう使ったか」を添えています。● = 現在の主戦場 / ○ = 通常稼働 / 薄文字 = 過去経験。"
         />
-        {skillGroups.map((g) => (
-          <div key={g.name} className="skill-group">
-            <div className="skill-group-head">
-              <div className="skill-group-name">{g.name}</div>
-              <div className="skill-group-meta">{g.meta}</div>
+        <div className="skill-sheet" style={{ marginTop: 36 }}>
+          {skillCategories.map((c) => (
+            <div key={c.domain} className="skill-row" data-reveal="">
+              <div className="skill-row-head">
+                <h3 className="skill-row-domain">{c.domain}</h3>
+                <div className="skill-row-meta">{c.meta}</div>
+              </div>
+              <div className="skill-row-items">
+                {c.items.map((s) => (
+                  <SkillCell key={s.name} skill={s} />
+                ))}
+              </div>
             </div>
-            <div className="skill-list">
-              {g.items.map((s) => (
-                <span
-                  key={s}
-                  className={
-                    'skill-item' +
-                    (g.variant === 'primary' ? ' skill-item-primary' : '') +
-                    (g.variant === 'secondary' ? ' skill-item-secondary' : '')
-                  }
-                >
-                  {g.variant === 'primary' && (
-                    <span
-                      style={{
-                        width: 5,
-                        height: 5,
-                        borderRadius: 999,
-                        background: 'var(--accent)',
-                      }}
-                    />
-                  )}
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

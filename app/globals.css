@@ -594,31 +594,19 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
-     Intro section — quiet "engineer card" between Hero and Projects.
-     Filed-typography aesthetic: a single accent moment (the hairline
-     tick above the stack row) plus a code-comment marker.
+     Intro section — "stance declaration" between Hero and Projects.
+     Pared back to two elements: an English claim (Latin sans,
+     large) and a Japanese elaboration (CJK sans, body). The
+     natural Latin/CJK script switch does the work of typographic
+     role-shift; no eyebrow / tick / index annotation is added.
      ============================================================ */
+  /* No bottom padding: Projects.section directly below provides
+     96px top padding, so adding any bottom here doubles the gap. */
   .intro-section {
-    padding: 0 0 96px;
+    padding: 0;
   }
   .intro-block {
     max-width: 720px;
-    position: relative;
-  }
-  .intro-marker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--d-text-2);
-    margin-bottom: 28px;
-  }
-  .intro-marker-accent {
-    color: var(--accent);
-    font-weight: 500;
   }
   .intro-headline {
     font-size: clamp(26px, 3.2vw, 38px);
@@ -629,90 +617,12 @@ html:has(body[data-theme='dark']) {
     color: var(--d-text-0);
   }
   .intro-body {
-    margin-top: 28px;
-  }
-  .intro-body > p {
+    margin: 24px 0 0;
     font-size: 17px;
     line-height: 1.75;
     letter-spacing: -0.005em;
     color: var(--d-text-1);
-    margin: 0;
   }
-  .intro-body > p + p {
-    margin-top: 6px;
-  }
-  .intro-name {
-    color: var(--d-text-0);
-    font-weight: 500;
-  }
-  .intro-stack {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 16px;
-    align-items: baseline;
-    margin: 32px 0 0;
-    padding-top: 18px;
-    position: relative;
-  }
-  .intro-stack::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 1px;
-    background: var(--d-line);
-  }
-  .intro-stack::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 36px;
-    height: 1px;
-    background: var(--accent);
-  }
-  .intro-stack dt {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--d-text-3);
-    margin: 0;
-    padding-right: 14px;
-    border-right: 1px solid var(--d-line);
-  }
-  .intro-stack dd {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 0.02em;
-    color: var(--d-text-1);
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    row-gap: 6px;
-  }
-  .intro-stack-sep {
-    width: 3px;
-    height: 3px;
-    border-radius: 999px;
-    background: var(--d-line);
-    flex-shrink: 0;
-    display: inline-block;
-  }
-  @media (max-width: 720px) {
-    .intro-stack {
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-    .intro-stack dt {
-      border-right: none;
-      padding-right: 0;
-    }
-  }
-
   /* ============================================================
      Project card
      ============================================================ */
@@ -1692,6 +1602,1156 @@ html:has(body[data-theme='dark']) {
     background: var(--d-line);
     margin: 0 auto;
     max-width: var(--max-w);
+  }
+}
+
+@layer components {
+  /* ============================================================
+     Lede key term — typographic-only emphasis. No chips, halos
+     or ornaments inline. "個人で" / "開発" get brighter color
+     (--d-text-0) and weight 500. The technical core "0 → 1" is
+     rendered in mono + accent + slight tracking so it reads as
+     a "state expression" embedded in natural-language text. The
+     phrase emerges from the lede through two-typeface composition
+     (Plex Sans for words, Plex Mono accent for the state core),
+     not through decoration. Aligns naturally with surrounding
+     body text since it's pure inline typography.
+     ============================================================ */
+  .lede-arc {
+    color: var(--d-text-0);
+    font-weight: 500;
+  }
+  .arc-glyph {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 0 2px;
+  }
+
+  /* ============================================================
+     Hero tag grid — 2-tier annotation (domain vs stack), mirrors
+     the intro-stack "engineering spec sheet" aesthetic so the
+     Hero feels like a single labeled document rather than a
+     row of identical pills.
+     ============================================================ */
+  .hero-tag-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .hero-tag-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 16px;
+    align-items: baseline;
+  }
+  .hero-tag-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: var(--d-text-3);
+    text-transform: lowercase;
+  }
+  .hero-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  @media (max-width: 720px) {
+    .hero-tag-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+
+  /* ============================================================
+     Spec sheet — single bordered container divided by hairlines
+     into 4 named blocks. Used by WorkStyle so the section reads
+     as one document rather than 4 floating feature cards.
+     ============================================================ */
+  .spec-sheet {
+    border: 1px solid var(--d-line);
+    border-radius: var(--r-lg);
+    background: var(--d-bg-1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    position: relative;
+  }
+  .spec-block {
+    padding: 30px 30px 34px;
+    position: relative;
+  }
+  .spec-block:nth-child(odd) {
+    border-right: 1px solid var(--d-line);
+  }
+  .spec-block:nth-child(n + 3) {
+    border-top: 1px solid var(--d-line);
+  }
+  .spec-block-tag {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--d-text-3);
+    letter-spacing: 0.16em;
+  }
+  .spec-block-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .spec-block-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .spec-block-heading {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0 0 20px;
+    color: var(--d-text-0);
+  }
+  .spec-item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 11px;
+  }
+  .spec-item {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 10px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    align-items: baseline;
+  }
+  .spec-item-mark {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .spec-item-label {
+    color: var(--d-text-0);
+    font-weight: 500;
+  }
+  .spec-item-detail {
+    color: var(--d-text-2);
+    font-size: 12.5px;
+    margin-left: 10px;
+  }
+  .spec-sheet-note {
+    margin-top: 22px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--d-text-2);
+    line-height: 1.6;
+    max-width: 740px;
+    letter-spacing: 0.005em;
+  }
+  .spec-sheet-note-mark {
+    color: var(--accent);
+    margin-right: 8px;
+  }
+  @media (max-width: 720px) {
+    .spec-sheet {
+      grid-template-columns: 1fr;
+    }
+    .spec-block:nth-child(odd) {
+      border-right: 0;
+    }
+    .spec-block:nth-child(n + 2) {
+      border-top: 1px solid var(--d-line);
+    }
+    .spec-block {
+      padding: 26px 22px 28px;
+    }
+  }
+
+  /* ============================================================
+     Skill sheet — 2-column data layout per domain. Domain head
+     on the left with the 36px orange tick (matches intro-stack);
+     items table-style on the right with primary/normal/secondary
+     tiers expressed as filled dot / hollow dot / dim text.
+     ============================================================ */
+  .skill-sheet {
+    display: grid;
+  }
+  .skill-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    padding: 30px 0 34px;
+    border-top: 1px solid var(--d-line);
+    position: relative;
+  }
+  .skill-row:last-child {
+    border-bottom: 1px solid var(--d-line);
+  }
+  .skill-row-head {
+    position: relative;
+    padding-top: 18px;
+  }
+  .skill-row-head::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .skill-row-domain {
+    font-size: 19px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0 0 6px;
+  }
+  .skill-row-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--d-text-3);
+    text-transform: uppercase;
+  }
+  .skill-row-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px 28px;
+    padding-top: 2px;
+  }
+  .skill-cell {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .skill-cell-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--d-text-0);
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .skill-cell-mark {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .skill-cell-mark-outline {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    border: 1px solid var(--d-text-3);
+    flex-shrink: 0;
+  }
+  .skill-cell-secondary .skill-cell-name {
+    color: var(--d-text-3);
+    font-weight: 400;
+  }
+  .skill-cell-note {
+    font-size: 12px;
+    color: var(--d-text-2);
+    line-height: 1.5;
+    padding-left: 13px;
+  }
+  @media (max-width: 900px) {
+    .skill-row {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
+  /* ============================================================
+     Project card spec details — Solo stamp, code-comment style
+     motivation block, 4-segment phase coverage strip showing
+     ownership across plan / design / build / run.
+     ============================================================ */
+  .pc-stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    padding: 5px 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    border: 1px solid rgba(var(--accent-rgb), 0.4);
+    border-radius: 4px;
+    line-height: 1;
+  }
+  .pc-stamp::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .pc-motivation {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--d-text-0);
+    margin: 0;
+    padding: 14px 18px 16px;
+    background: var(--d-bg-2);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    letter-spacing: 0.005em;
+  }
+  .pc-motivation-tag {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 7px;
+    font-weight: 500;
+  }
+  .pc-coverage {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .pc-coverage-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pc-coverage-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-1);
+    letter-spacing: 0.02em;
+  }
+  .pc-coverage-bar {
+    height: 3px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  .pc-coverage-cell:nth-child(2) .pc-coverage-bar {
+    opacity: 0.85;
+  }
+  .pc-coverage-cell:nth-child(3) .pc-coverage-bar {
+    opacity: 0.7;
+  }
+  .pc-coverage-cell:nth-child(4) .pc-coverage-bar {
+    opacity: 0.55;
+  }
+
+  /* ============================================================
+     Architecture diagram chrome — wraps SVG diagrams in the same
+     mock-window aesthetic as ProjectMocks for visual continuity.
+     ============================================================ */
+  .arch-frame {
+    background: var(--d-bg-1);
+    border: 1px solid var(--d-line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .arch-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--d-line-2);
+    background: var(--d-bg-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-3);
+    letter-spacing: 0.04em;
+  }
+  .arch-bar-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--d-text-3);
+    opacity: 0.45;
+  }
+  .arch-bar-status {
+    margin-left: auto;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .arch-body {
+    padding: 32px 32px 24px;
+    overflow-x: auto;
+  }
+  .arch-foot {
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--d-line-2);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-2);
+  }
+  .arch-foot-mark {
+    color: var(--accent);
+  }
+  .arch-foot-end {
+    margin-left: auto;
+    color: var(--d-text-3);
+  }
+  @media (max-width: 720px) {
+    .arch-body {
+      padding: 22px 18px 16px;
+    }
+  }
+}
+
+@layer components {
+  /* ============================================================
+     Skill Sheet page (/skill-sheet) — Datasheet aesthetic.
+     The page reads like a semiconductor datasheet: front cover
+     spec panel up top, then dense sections with hairline tables.
+     Reuses existing site vocabulary in evolved roles:
+       - pc-coverage strip → 5-seg level meter + phase coverage
+       - arch-frame chrome → project history cards
+       - 36px orange tick → skill domain heads
+       - § NN section index → continued
+     ============================================================ */
+  .sk-page-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 16px 0;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--d-line);
+  }
+  body[data-theme='dark'] .sk-page-header {
+    background: rgba(8, 8, 10, 0.85);
+  }
+  body[data-theme='paper'] .sk-page-header {
+    background: rgba(247, 246, 241, 0.92);
+  }
+
+  /* ============================================================
+     Datasheet front cover panel
+     ============================================================ */
+  .sk-datasheet-wrap {
+    padding: 32px 0 0;
+  }
+  .sk-datasheet {
+    border: 1px solid var(--d-line);
+    background: var(--d-bg-1);
+    padding: 32px 40px 36px;
+  }
+  .sk-ds-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--d-text-3);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .sk-ds-id {
+    color: var(--accent);
+  }
+  .sk-ds-rev {
+    color: var(--d-text-3);
+  }
+  .sk-ds-tick {
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+    margin: 28px 0 24px;
+  }
+  .sk-ds-name {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+  }
+  .sk-ds-name-en {
+    font-family: var(--font-mono);
+    font-size: clamp(26px, 4vw, 40px);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    color: var(--d-text-0);
+    line-height: 1.1;
+  }
+  .sk-ds-name-ja {
+    font-size: 18px;
+    color: var(--d-text-2);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .sk-ds-role {
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--d-text-1);
+    letter-spacing: 0.02em;
+  }
+  .sk-ds-status {
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--d-text-2);
+    letter-spacing: 0.04em;
+  }
+  .sk-ds-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .sk-ds-divider {
+    height: 1px;
+    background: var(--d-line-2);
+    margin: 28px 0;
+  }
+  .sk-ds-block-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--d-text-3);
+    margin-bottom: 14px;
+  }
+  .sk-ds-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .sk-ds-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border: 1px solid var(--d-line);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--d-text-0);
+    background: var(--d-bg-1);
+    letter-spacing: 0.005em;
+  }
+  .sk-ds-chip-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     Sections
+     ============================================================ */
+  .sk-section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--d-line);
+  }
+  .sk-section:last-of-type {
+    border-bottom: 0;
+  }
+  .sk-section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .sk-section-n {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .sk-section-title {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0;
+    color: var(--d-text-0);
+  }
+  .sk-section-note {
+    font-size: 13px;
+    color: var(--d-text-2);
+    line-height: 1.7;
+    margin: 0 0 22px;
+    max-width: 760px;
+  }
+  .sk-eyebrow {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--d-text-2);
+    margin-bottom: 10px;
+  }
+
+  /* Profile grid */
+  .sk-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 0 32px;
+    margin: 0;
+  }
+  .sk-profile-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--d-line-2);
+    margin: 0;
+  }
+  .sk-profile-row dt {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--d-text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+    padding-top: 3px;
+  }
+  .sk-profile-row dd {
+    margin: 0;
+    color: var(--d-text-0);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    word-break: break-word;
+    letter-spacing: 0.005em;
+  }
+  .sk-profile-row a:hover {
+    color: var(--accent);
+  }
+
+  /* ============================================================
+     Tables — hairline only, no background fills
+     ============================================================ */
+  .sk-table-wrap {
+    overflow-x: auto;
+  }
+  .sk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .sk-table th,
+  .sk-table td {
+    padding: 10px 14px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .sk-table th {
+    color: var(--d-text-3);
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--d-line);
+    white-space: nowrap;
+  }
+  .sk-table td {
+    color: var(--d-text-0);
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .sk-table tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* ============================================================
+     Phase aggregate (§02) — phase × ALL projects coverage table
+     ============================================================ */
+  .sk-phase-aggregate {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .sk-phase-aggregate th,
+  .sk-phase-aggregate td {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .sk-phase-aggregate thead th {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--d-text-3);
+    font-weight: 500;
+    border-bottom: 1px solid var(--d-line);
+    white-space: nowrap;
+  }
+  .sk-phase-aggregate tbody th {
+    font-weight: 500;
+    color: var(--d-text-0);
+    font-size: 13px;
+    border-bottom: 1px solid var(--d-line-2);
+    font-family: var(--font-sans);
+    letter-spacing: -0.005em;
+    width: 110px;
+    white-space: nowrap;
+  }
+  .sk-phase-aggregate tbody td {
+    border-bottom: 1px solid var(--d-line-2);
+    color: var(--d-text-1);
+  }
+  .sk-phase-aggregate tbody tr:last-child th,
+  .sk-phase-aggregate tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .sk-cov-cell {
+    width: 200px;
+    white-space: nowrap;
+  }
+  .sk-cov-count {
+    margin-left: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-2);
+    letter-spacing: 0.04em;
+  }
+  .sk-cov-projects {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--d-text-2);
+    letter-spacing: 0.005em;
+    word-break: break-word;
+  }
+  .sk-cov-projects.sk-cov-full {
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+     Coverage strip (14-segment, used in §02 phase aggregate)
+     ============================================================ */
+  .sk-cov {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+    vertical-align: middle;
+  }
+  .sk-cov > span {
+    width: 6px;
+    height: 4px;
+    border-radius: 1px;
+  }
+  .sk-cov-on {
+    background: var(--accent);
+  }
+  .sk-cov-off {
+    background: var(--d-line);
+  }
+
+  /* ============================================================
+     Level meter (pc-coverage applied to skill proficiency)
+     ============================================================ */
+  .sk-meter {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+    vertical-align: middle;
+  }
+  .sk-meter > span {
+    width: 10px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  .sk-meter[data-level='1'] > span:nth-child(n + 2) {
+    opacity: 0.18;
+  }
+  .sk-meter[data-level='2'] > span:nth-child(n + 3) {
+    opacity: 0.18;
+  }
+  .sk-meter[data-level='3'] > span:nth-child(n + 4) {
+    opacity: 0.18;
+  }
+  .sk-meter[data-level='4'] > span:nth-child(n + 5) {
+    opacity: 0.18;
+  }
+
+  /* ============================================================
+     Skill domain heads (36px orange tick continuity)
+     ============================================================ */
+  .sk-skill-block + .sk-skill-block {
+    margin-top: 36px;
+  }
+  .sk-skill-domain {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    font-size: 17px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    color: var(--d-text-0);
+    letter-spacing: -0.012em;
+    position: relative;
+    padding-top: 14px;
+  }
+  .sk-skill-domain-tick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .sk-skill-domain-meta {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--d-text-3);
+    text-transform: uppercase;
+  }
+  .sk-skill-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--d-text-0);
+    letter-spacing: -0.005em;
+  }
+  .sk-skill-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     Phase row (per-project chip strip)
+     ============================================================ */
+  .sk-phase-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-top: 1px solid var(--d-line-2);
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .sk-phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-right: 1px solid var(--d-line-2);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    color: var(--d-text-3);
+  }
+  .sk-phase:last-child {
+    border-right: 0;
+  }
+  .sk-phase-on {
+    color: var(--d-text-0);
+  }
+  .sk-phase-mark {
+    color: var(--d-text-3);
+    font-size: 9px;
+  }
+  .sk-phase-on .sk-phase-mark {
+    color: var(--accent);
+  }
+
+  /* ============================================================
+     Project history — uses .arch-frame chrome from Architecture
+     SVG vocabulary, with skill-sheet-specific body styling.
+     ============================================================ */
+  .sk-projects {
+    display: grid;
+    gap: 28px;
+  }
+  .sk-project-bar-name {
+    margin-left: 4px;
+    color: var(--d-text-2);
+  }
+  .sk-project-bar-industry {
+    margin-left: 12px;
+    color: var(--d-text-3);
+    letter-spacing: 0.04em;
+  }
+  .sk-project-body {
+    padding: 28px 32px 32px;
+  }
+  .sk-project-name {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0 0 10px;
+    color: var(--d-text-0);
+  }
+  .sk-project-summary {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--d-text-1);
+    margin: 0 0 20px;
+  }
+  .sk-project-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    margin: 0 0 24px;
+    border-top: 1px solid var(--d-line-2);
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .sk-meta-row {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    padding: 10px 16px 10px 0;
+    border-right: 1px solid var(--d-line-2);
+    margin: 0;
+  }
+  .sk-meta-row:last-child {
+    border-right: 0;
+  }
+  .sk-meta-row dt {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--d-text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .sk-meta-row dd {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--d-text-0);
+    margin: 0;
+    letter-spacing: 0.005em;
+  }
+  .sk-project-block + .sk-project-block {
+    margin-top: 20px;
+  }
+  .sk-project-phases-wrap {
+    margin-bottom: 20px;
+  }
+  .sk-project-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .sk-project-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+    display: grid;
+    gap: 9px;
+  }
+  .sk-project-highlights li {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--d-text-1);
+    padding-left: 16px;
+    position: relative;
+  }
+  .sk-project-highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* ============================================================
+     Extra skills list — used inside the 6th sk-skill-block in §03,
+     so the wrapper styling comes from sk-skill-block / sk-skill-domain.
+     Only the dl layout is defined here.
+     ============================================================ */
+  .sk-extra-skills-list {
+    display: grid;
+    gap: 14px;
+    margin: 12px 0 0;
+  }
+  .sk-extra-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--d-line-2);
+    margin: 0;
+  }
+  .sk-extra-row:last-child {
+    border-bottom: 0;
+  }
+  .sk-extra-cat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .sk-extra-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+  }
+  .sk-extra-chip {
+    padding: 4px 9px;
+    border: 1px solid var(--d-line-2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--d-text-2);
+    background: transparent;
+    letter-spacing: 0.005em;
+  }
+  @media (max-width: 720px) {
+    .sk-extra-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
+  /* ============================================================
+     Company group (§04 project history grouped by employer)
+     ============================================================ */
+  .sk-company-group + .sk-company-group {
+    margin-top: 48px;
+  }
+  .sk-company-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .sk-company-pageno {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: lowercase;
+  }
+  .sk-company-tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--d-text-3);
+  }
+  .sk-company-delim {
+    position: relative;
+    height: 1px;
+    background: var(--d-line);
+    margin: 56px 0;
+  }
+  .sk-company-delim > span {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--d-bg-0);
+    padding: 0 14px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: var(--d-text-3);
+  }
+  .sk-company-name {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin: 0;
+    color: var(--d-text-0);
+  }
+  .sk-company-meta {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--d-text-3);
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+  .sk-company-projects {
+    display: grid;
+    gap: 22px;
+  }
+
+  @media (max-width: 720px) {
+    .sk-company-meta {
+      margin-left: 0;
+    }
+  }
+
+  /* Footer */
+  .sk-footer {
+    padding: 28px 0 36px;
+    border-top: 1px solid var(--d-line);
+  }
+  .sk-footer a:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .sk-section {
+      padding: 44px 0;
+    }
+    .sk-project {
+      padding: 20px;
+    }
+    .sk-table {
+      font-size: 11px;
+    }
+    .sk-table th,
+    .sk-table td {
+      padding: 8px 10px;
+    }
+    .sk-profile-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .sk-meta-row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+      border-right: 0;
+      border-bottom: 1px solid var(--d-line-2);
+      padding: 10px 0;
+    }
+    .sk-meta-row:last-child {
+      border-bottom: 0;
+    }
   }
 }
 

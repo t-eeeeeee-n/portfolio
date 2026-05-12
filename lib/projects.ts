@@ -16,6 +16,8 @@ export type Project = {
   tagline: string;
   summaryShort: string;
   summaryLong: string;
+  motivation: string;
+  responsibility: string[];
   role: string[];
   stack: string[];
   href: string;
@@ -35,6 +37,9 @@ export const projects: Project[] = [
       '複数のスーパーの価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。',
     summaryLong:
       '複数のスーパーの商品価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。企画、画面設計、API、DB、インフラ、チラシ解析まで一通り自分で実装しています。',
+    motivation:
+      '毎週スーパーを何軒も回って価格を見比べているうちに、これは UI で解ける問題だと気づいた。自分が一番のユーザーなので、欲しい体験を一人で作りに行った。',
+    responsibility: ['企画', '設計', '実装', '運用'],
     role: [
       '企画',
       'MVP スコープ策定',
@@ -92,6 +97,9 @@ export const projects: Project[] = [
       '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。議事録から質問・設計書・vibe pack を生成します。',
     summaryLong:
       '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。打ち合わせの議事録から、仕様の不足や未決事項を整理し、設計書や実装のたたき台までつなげる AI 支援ツールを作っています。',
+    motivation:
+      '要件整理 → 設計書という段を何度も繰り返すうちに、議事録から仕様への翻訳工程の大半は LLM で吸収できると感じた。一人で 0→1 まで運ぶことで、上流〜SaaS まで一貫した思考フローを掴みたかった。',
+    responsibility: ['企画', '設計', '実装', 'GTM 設計'],
     role: [
       '企画から実装まで一人で担当',
       'ターゲット顧客設計',
@@ -149,6 +157,9 @@ export const projects: Project[] = [
       '放送局の CM スポット枠編集・最適化を支援する社内 PoC。Main + 6 Sub Agent のマルチエージェント基盤として設計。',
     summaryLong:
       '放送局の CM スポット枠編集・最適化作業を自動化する社内 PoC。マルチエージェント構成で属人化の解消と作業効率化を目指しました。リードとして全体推進と Agent I/O 設計を担当。',
+    motivation:
+      '属人化した編集業務に Agent を当てるとき、本当に難しいのは Agent そのものより「責務が日替わりで変わる PoC をどう支えるか」だった。マルチエージェント × 観測性の組み合わせで前例を作っておきたかった。',
+    responsibility: ['リード', '設計', '実装', 'PoC 推進'],
     role: [
       'リードとして推進',
       'Main Agent + 6 Sub Agent のマルチエージェント基盤設計',
