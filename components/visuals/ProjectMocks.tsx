@@ -250,7 +250,7 @@ export function SpecPilotMock() {
 }
 
 /* ============================================================
-   Project 03 — 業務オペレーション支援 Multi-Agent PoC
+   Project 03 — メディア業界向け 業務オペレーション支援 AI エージェント基盤 (PoC)
    Trace log viewer with Main + 6 Sub agents, A2A, trace_id tags.
    ============================================================ */
 
