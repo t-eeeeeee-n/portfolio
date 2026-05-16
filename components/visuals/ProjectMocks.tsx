@@ -250,7 +250,7 @@ export function SpecPilotMock() {
 }
 
 /* ============================================================
-   Project 03 — CMスポット枠 自動編集支援エージェント (PoC)
+   Project 03 — 業務オペレーション支援 Multi-Agent PoC
    Trace log viewer with Main + 6 Sub agents, A2A, trace_id tags.
    ============================================================ */
 

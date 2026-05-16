@@ -10,7 +10,7 @@ export const career: CareerEntry[] = [
     period: '2024 — Now',
     company: '株式会社アイタイズ',
     role: 'Full-Stack Engineer',
-    items: ['ヤスイミセ', 'SpecPilot', '放送局向け AI PoC', '飲食店検索ツール', '放送局向けシステム開発'],
+    items: ['ヤスイミセ', 'SpecPilot', 'Multi-Agent PoC', '飲食店検索ツール', '放送局向けシステム開発'],
   },
   {
     period: '2023',

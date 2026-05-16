@@ -825,6 +825,127 @@ html:has(body[data-theme='dark']) {
     }
   }
 
+  /* ── SpecPilot deep-dive responsive overrides ──
+     Section A swaps from a 9-column row into a single stack on tablet,
+     rotating the connector arrows to point down. Section B hides the
+     left rail (the absolute-positioned loop ribbons stop matching the
+     step heights once the cards reflow), and section C collapses to a
+     single column. */
+  @media (max-width: 1024px) {
+    .sp-pos-row {
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+    }
+    .sp-pos-row > div:nth-child(even) {
+      transform: rotate(90deg);
+      padding: 4px 0 !important;
+    }
+    .sp-pos-loop {
+      flex-wrap: wrap;
+    }
+  }
+  @media (max-width: 900px) {
+    .sp-pos-value {
+      grid-template-columns: 1fr !important;
+    }
+    .sp-vibe-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .sp-pipe-rail {
+      display: none !important;
+    }
+  }
+  @media (max-width: 720px) {
+    .sp-pos-card {
+      padding: 32px 20px !important;
+    }
+  }
+
+  /* ── ヤスイミセ deep-dive responsive overrides ──
+     The 4×4 architecture grid, MCP hub row, scraping side panels,
+     and 5-phase rail all collapse below 1024px. The 9-card roadmap
+     drops to 3 then 2 columns. */
+  @media (max-width: 1024px) {
+    .ym-arch-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .ym-arch-keys {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-mcp {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-mcp > svg {
+      transform: rotate(90deg);
+      justify-self: center;
+    }
+    .ym-mcp-principles {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-scrape-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-phases {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .ym-conf {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-collect-principles {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-roadmap {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .ym-arch-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-phases {
+      grid-template-columns: 1fr !important;
+    }
+    .ym-roadmap {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+
+  /* ── CM Agent deep-dive responsive overrides ──
+     The 3-column FE/BE/Agents grid and the 6-card Sub-Agent rail
+     both collapse on tablet; the horizontal state-machine row is
+     replaced by stacked cards (arrows :nth-child(even) get hidden). */
+  @media (max-width: 1024px) {
+    .cm-arch-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .cm-arch-store {
+      grid-template-columns: 1fr !important;
+    }
+    .cm-arch-keys {
+      grid-template-columns: 1fr !important;
+    }
+    .cm-subs {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .cm-patterns {
+      grid-template-columns: 1fr !important;
+    }
+    .cm-states {
+      grid-template-columns: 1fr !important;
+    }
+    .cm-states > div:nth-child(even) {
+      display: none !important;
+    }
+    .cm-states-alt {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .cm-subs {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
   /* Sticky top header for zone-light sub-pages (component-lab, notes
      index). Earlier this was inline-styled with the paper-cream value
      hardcoded, which looked wrong against the dark default theme.

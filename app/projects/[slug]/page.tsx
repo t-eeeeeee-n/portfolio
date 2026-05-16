@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BrandMark } from '@/components/ui/BrandMark';
 import { ArrowR } from '@/components/ui/icons';
-import { CmAgentArchDiagram } from '@/components/visuals/CmAgentArchDiagram';
-import { SpecPilotArchDiagram } from '@/components/visuals/SpecPilotArchDiagram';
+import { CmAgentDeepDive } from '@/components/visuals/CmAgentDeepDive';
+import { SpecPilotDeepDive } from '@/components/visuals/SpecPilotDeepDive';
+import { YasuiMiseDeepDive } from '@/components/visuals/YasuiMiseDeepDive';
 import { projects, projectSlugs, type ProjectSlug } from '@/lib/projects';
 
 type RouteParams = { slug: string };
@@ -129,29 +130,6 @@ export default async function ProjectPage({ params }: { params: Promise<RoutePar
         </div>
       </section>
 
-      {/* Architecture (SpecPilot / CM Agent only) */}
-      {(p.slug === 'specpilot' || p.slug === 'cm-agent') && (
-        <section style={{ padding: '0 0 80px' }}>
-          <div className="container">
-            <div className="eyebrow" style={{ marginBottom: 18 }}>
-              Architecture
-            </div>
-            <h2
-              style={{
-                margin: '0 0 32px',
-                fontSize: 'clamp(24px, 3vw, 32px)',
-                fontWeight: 500,
-                letterSpacing: '-0.02em',
-                maxWidth: 720,
-              }}
-            >
-              構成図
-            </h2>
-            {p.slug === 'specpilot' ? <SpecPilotArchDiagram /> : <CmAgentArchDiagram />}
-          </div>
-        </section>
-      )}
-
       {/* Meta grid */}
       <section style={{ padding: '0 0 80px' }}>
         <div className="container">
@@ -255,6 +233,15 @@ export default async function ProjectPage({ params }: { params: Promise<RoutePar
           </div>
         </div>
       </section>
+
+      {/* ヤスイミセ deep dive — Architecture / Agents / Scraping / Store Collection / Roadmap */}
+      {p.slug === 'yasui-mise' && <YasuiMiseDeepDive />}
+
+      {/* SpecPilot deep dive — Positioning / Agent Pipeline / vibe pack */}
+      {p.slug === 'specpilot' && <SpecPilotDeepDive />}
+
+      {/* CM Agent deep dive — Architecture / Multi-agent flow / Patterns / State machine */}
+      {p.slug === 'cm-agent' && <CmAgentDeepDive />}
 
       {/* Related links */}
       <section

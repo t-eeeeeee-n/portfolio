@@ -168,15 +168,15 @@ build log /  Component Lab · Agent Pipeline View v0.5
 3. **人間のレビュー導線** — AI の出力は常に diff / 採否 UI 越しに反映。後戻りしやすさを優先。
 4. **ドキュメント駆動** — 意思決定ログ・ADR を蓄積し、Agent がそれを参照する設計。
 
-#### Project 03 — 放送局向け CMスポット枠 自動編集支援エージェント (PoC)
+#### Project 03 — 業務オペレーション支援 Multi-Agent PoC
 
 | Key | Value |
 |-----|-------|
 | slug | `cm-agent` |
 | type | Work · PoC Lead · 2025 |
-| tagline | 属人化した編集業務を、Agent で支援する。 |
-| summary（一覧用） | 放送局の CM スポット枠編集・最適化を支援する社内 PoC。Main + 6 Sub Agent のマルチエージェント基盤として設計。 |
-| summary（詳細用） | 放送局の CM スポット枠編集・最適化作業を自動化する社内 PoC。マルチエージェント構成で属人化の解消と作業効率化を目指しました。リードとして全体推進と Agent I/O 設計を担当。 |
+| tagline | 属人化した業務オペレーションを、Agent で支援する。 |
+| summary（一覧用） | 属人化した業務オペレーションを Multi-Agent で支援する社内 PoC。Main + 6 Sub Agent のマルチエージェント基盤として設計。 |
+| summary（詳細用） | 業務オペレーションの編集・最適化作業を Multi-Agent で支援する社内 PoC。属人化の解消と作業効率化を目指し、リードとして全体推進と Agent I/O 設計を担当しました。 |
 | role | リードとして推進 / Main Agent + 6 Sub Agent のマルチエージェント基盤設計 / Sub Agent の I/O コントラクト設計 / FastAPI による OpenAPI コードファースト設計 / Orval による TypeScript SDK 自動生成 / W3C Trace Context による trace_id 伝播設計 / 構造化 JSON ログ基盤 / 仕様変更が多い PoC でも差し替えしやすい構成 |
 | stack | Python / FastAPI / Next.js / TypeScript / OpenAPI / AI Agent / Google ADK / A2A Protocol / PostgreSQL / Docker / Claude Code |
 | Mock | `<CmAgentMock />`（trace ウィンドウ + 5 行の trace ログ + 3 タグ） |
@@ -336,7 +336,7 @@ mono フォントの定義列：
 
 #### 2024 — Now / 株式会社アイタイズ — Full-Stack Engineer
 
-`ヤスイミセ` `SpecPilot` `放送局向けAI PoC` `飲食店検索ツール` `放送局向けシステム開発`
+`ヤスイミセ` `SpecPilot` `Multi-Agent PoC` `飲食店検索ツール` `放送局向けシステム開発`
 
 #### 2023 / 株式会社DYM — Backend Engineer
 
