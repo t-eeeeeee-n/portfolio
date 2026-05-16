@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { BrandMark } from '@/components/ui/BrandMark';
+import { PrintButton } from '@/components/ui/PrintButton';
 import { projects } from '@/lib/projects';
 import { skillCategories, type Skill } from '@/lib/skills';
 import {
@@ -179,8 +180,11 @@ export default function SkillSheetPage() {
             <span>teeeen.lab</span>
             <span className="ml-2 font-mono text-[11px] text-d-text-3">/ skill-sheet</span>
           </Link>
-          <span className="ml-auto font-mono text-xs text-d-text-3">
-            Updated {skillSheetProfile.updated}
+          <span className="ml-auto flex items-center gap-4">
+            <PrintButton />
+            <span className="font-mono text-xs text-d-text-3">
+              Updated {skillSheetProfile.updated}
+            </span>
           </span>
         </div>
       </header>

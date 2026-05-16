@@ -419,7 +419,7 @@ export const extraSkillCategories: { category: ExtraSkillCategory; label: string
   {
     category: 'Framework',
     label: 'フレームワーク / ライブラリ',
-    items: ['Angular', 'Flask', 'Django', 'Bootstrap', 'Spring Boot', 'Nuxt.js', 'Astro'],
+    items: ['Angular', 'Flask', 'Django', 'Bootstrap', 'Spring Boot', 'Astro'],
   },
   {
     category: 'Database',
