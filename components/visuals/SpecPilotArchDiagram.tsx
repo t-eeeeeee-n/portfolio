@@ -16,7 +16,7 @@ export function SpecPilotArchDiagram() {
           viewBox="0 0 960 360"
           role="img"
           aria-labelledby="specpilot-arch-title"
-          style={{ width: '100%', minWidth: 720, height: 'auto', color: 'var(--d-text-1)' }}
+          style={{ width: '100%', minWidth: 640, height: 'auto', color: 'var(--d-text-1)' }}
         >
           <title id="specpilot-arch-title">SpecPilot Architecture</title>
           <defs>
