@@ -49,6 +49,7 @@ export const Linkedin = (p: IconProps) => (
 );
 export const Search = (p: IconProps) => <Icon d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14z M21 21l-4.3-4.3" {...p} />;
 export const X = (p: IconProps) => <Icon d="M5 5l14 14 M19 5L5 19" {...p} />;
+export const Menu = (p: IconProps) => <Icon d="M3 7h18 M3 12h18 M3 17h18" {...p} />;
 export const Doc = (p: IconProps) => <Icon d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z M14 3v6h6 M9 13h6 M9 17h4" {...p} />;
 export const Layer = (p: IconProps) => <Icon d="M12 2 2 8l10 6 10-6-10-6z M2 14l10 6 10-6 M2 11l10 6 10-6" {...p} />;
 export const Cube = (p: IconProps) => <Icon d="M12 2 3 7v10l9 5 9-5V7l-9-5z M3 7l9 5 9-5 M12 12v10" {...p} />;

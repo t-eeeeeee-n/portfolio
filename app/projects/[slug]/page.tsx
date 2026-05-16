@@ -46,26 +46,31 @@ export default async function ProjectPage({ params }: { params: Promise<RoutePar
   return (
     <div className="zone-dark">
       <header className="proj-header">
-        <div className="container flex items-center gap-4">
+        <div className="container flex items-center gap-3 720:gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[13px]"
+            className="flex min-w-0 items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
             aria-label="teeeen.lab — home"
           >
             <BrandMark size={22} decorative />
-            <span>teeeen.lab</span>
-            <span className="ml-2 font-mono text-[11px] text-d-text-3">/ projects / {p.slug}</span>
+            <span className="nav-link-hide-mobile">teeeen.lab</span>
+            <span className="ml-2 truncate font-mono text-[11px] text-d-text-3">
+              / projects / {p.slug}
+            </span>
           </Link>
-          <span className="ml-auto font-mono text-xs text-d-text-2">
+          <span className="ml-auto whitespace-nowrap font-mono text-xs text-d-text-2">
             {p.n} / {total}
           </span>
           <Link
             href="/#projects"
-            className="btn btn-ghost"
+            className="btn btn-ghost whitespace-nowrap"
             style={{ padding: '7px 14px', fontSize: 12 }}
           >
-            ← All projects
+            <span className="hidden 720:inline">← All projects</span>
+            <span className="720:hidden" aria-hidden="true">
+              ←
+            </span>
           </Link>
         </div>
       </header>
@@ -108,15 +113,13 @@ export default async function ProjectPage({ params }: { params: Promise<RoutePar
       <section style={{ padding: '16px 0 80px' }}>
         <div className="container">
           <div
-            className="grid-bg"
+            className="grid-bg proj-visual"
             style={{
               background: 'var(--d-bg-1)',
               border: '1px solid var(--d-line)',
               borderRadius: 'var(--r-xl)',
-              padding: 48,
               display: 'grid',
               placeItems: 'center',
-              minHeight: 400,
             }}
           >
             <div className="w-full max-w-[460px]">

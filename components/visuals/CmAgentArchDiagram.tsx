@@ -25,7 +25,7 @@ export function CmAgentArchDiagram() {
           viewBox="0 0 960 460"
           role="img"
           aria-labelledby="cm-agent-arch-title"
-          style={{ width: '100%', minWidth: 720, height: 'auto', color: 'var(--d-text-1)' }}
+          style={{ width: '100%', minWidth: 640, height: 'auto', color: 'var(--d-text-1)' }}
         >
           <title id="cm-agent-arch-title">CM Agent PoC Architecture</title>
           <defs>
