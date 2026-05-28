@@ -223,12 +223,11 @@ function CmArch() {
   return (
     <div
       data-reveal
-      className="grid-bg"
+      className="grid-bg dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       <div
@@ -421,11 +420,11 @@ function CmAgentFlow() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       {/* main agent banner */}
@@ -769,11 +768,11 @@ function CmStates() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       <div
@@ -871,7 +870,7 @@ function CmStates() {
    =========================================================== */
 export function CmAgentDeepDive() {
   return (
-    <section style={{ padding: '32px 0 96px', borderTop: '1px solid var(--d-line)' }}>
+    <section className="dd-section">
       <div className="container">
         <div data-reveal style={{ marginBottom: 56, maxWidth: 720 }}>
           <div className="eyebrow" style={{ marginBottom: 14 }}>
@@ -894,7 +893,7 @@ export function CmAgentDeepDive() {
           </p>
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <CmHead
             idx="A"
             eyebrow="System Architecture"
@@ -904,7 +903,7 @@ export function CmAgentDeepDive() {
           <CmArch />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <CmHead
             idx="B"
             eyebrow="Multi-agent flow"
@@ -914,7 +913,7 @@ export function CmAgentDeepDive() {
           <CmAgentFlow />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <CmHead
             idx="C"
             eyebrow="Key patterns"

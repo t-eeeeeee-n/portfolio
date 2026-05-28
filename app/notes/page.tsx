@@ -24,15 +24,15 @@ export default async function NotesIndexPage() {
         <div className="container flex items-center gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[13px]"
+            className="flex min-w-0 items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
             aria-label="teeeen.lab — home"
           >
             <BrandMark size={22} decorative />
-            <span>teeeen.lab</span>
-            <span className="ml-2 font-mono text-[11px] text-l-text-3">/ notes</span>
+            <span className="nav-link-hide-mobile">teeeen.lab</span>
+            <span className="ml-2 truncate font-mono text-[11px] text-l-text-3">/ notes</span>
           </Link>
-          <span className="ml-auto font-mono text-xs text-l-text-2">
+          <span className="ml-auto whitespace-nowrap font-mono text-xs text-l-text-2">
             {notes.length} {notes.length === 1 ? 'note' : 'notes'}
           </span>
           <Link href="/" className="btn btn-ghost" style={{ padding: '7px 14px', fontSize: 12 }}>

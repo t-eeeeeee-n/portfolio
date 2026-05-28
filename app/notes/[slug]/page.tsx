@@ -54,25 +54,28 @@ export default async function NoteArticlePage({ params }: { params: Promise<Rout
   return (
     <div className="zone-dark min-h-screen">
       <header className="proj-header">
-        <div className="container flex items-center gap-4">
+        <div className="container flex items-center gap-3 720:gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[13px]"
+            className="flex min-w-0 items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
             aria-label="teeeen.lab — home"
           >
             <BrandMark size={22} decorative />
-            <span>teeeen.lab</span>
-            <span className="ml-2 font-mono text-[11px] text-d-text-3">
+            <span className="nav-link-hide-mobile">teeeen.lab</span>
+            <span className="ml-2 truncate font-mono text-[11px] text-d-text-3">
               / notes / {meta.slug}
             </span>
           </Link>
           <Link
             href="/notes"
-            className="btn btn-ghost ml-auto"
+            className="btn btn-ghost ml-auto whitespace-nowrap"
             style={{ padding: '7px 14px', fontSize: 12 }}
           >
-            ← All notes
+            <span className="hidden 720:inline">← All notes</span>
+            <span className="720:hidden" aria-hidden="true">
+              ←
+            </span>
           </Link>
         </div>
       </header>

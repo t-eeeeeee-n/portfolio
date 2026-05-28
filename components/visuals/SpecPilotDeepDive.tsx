@@ -200,13 +200,12 @@ function SpPositioning() {
   return (
     <div
       data-reveal
-      className="grid-bg sp-pos-card"
+      className="grid-bg sp-pos-card dd-card"
       style={{
         position: 'relative',
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: '48px 36px',
         overflow: 'hidden',
       }}
     >
@@ -348,11 +347,11 @@ function SpPipeline() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: '36px 24px 36px 36px',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -738,7 +737,7 @@ function SpVibePack() {
    =========================================================== */
 export function SpecPilotDeepDive() {
   return (
-    <section style={{ padding: '32px 0 96px', borderTop: '1px solid var(--d-line)' }}>
+    <section className="dd-section">
       <div className="container">
         <div data-reveal style={{ marginBottom: 56, maxWidth: 720 }}>
           <div className="eyebrow" style={{ marginBottom: 14 }}>
@@ -762,7 +761,7 @@ export function SpecPilotDeepDive() {
           </p>
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <SpHead
             idx="A"
             eyebrow="Positioning"
@@ -772,7 +771,7 @@ export function SpecPilotDeepDive() {
           <SpPositioning />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <SpHead
             idx="B"
             eyebrow="Agent Pipeline"
