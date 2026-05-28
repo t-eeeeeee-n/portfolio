@@ -3,7 +3,6 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { BackgroundFX } from '@/components/effects/BackgroundFX';
 import { Effects } from '@/components/effects/Effects';
-import { TweaksPanel } from '@/components/tweaks/TweaksPanel';
 import './globals.css';
 
 // Inline pre-hydration script: apply saved tweaks (or the OS color
@@ -96,7 +95,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <BackgroundFX />
         <Effects />
         {children}
-        <TweaksPanel />
         <Analytics />
       </body>
     </html>

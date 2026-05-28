@@ -17,8 +17,6 @@ export const DEFAULTS: Tweaks = {
   bgMotion: true,
 };
 
-export const ACCENT_OPTIONS: readonly Accent[] = ['#ec5e2a', '#f59e0b', '#dc2626', '#18181b'];
-
 export const STORAGE_KEY = 'teeeen.tweaks';
 const CHANGE_EVENT = 'teeeen-tweaks-changed';
 

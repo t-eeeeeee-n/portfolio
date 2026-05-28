@@ -33,18 +33,18 @@ export function LabPage() {
     <>
       {/* Top bar */}
       <header className="page-header">
-        <div className="container flex items-center gap-4">
+        <div className="container flex items-center gap-3 720:gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[13px]"
+            className="flex min-w-0 items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
             aria-label="teeeen.lab — home"
           >
             <BrandMark size={22} decorative />
-            <span>teeeen.lab</span>
-            <span className="ml-2 font-mono text-[11px] text-l-text-3">/ component-lab</span>
+            <span className="nav-link-hide-mobile">teeeen.lab</span>
+            <span className="ml-2 truncate font-mono text-[11px] text-l-text-3">/ component-lab</span>
           </Link>
-          <span className="ml-auto font-mono text-xs text-l-text-2 flex items-center gap-2">
+          <span className="ml-auto whitespace-nowrap font-mono text-xs text-l-text-2 hidden 720:flex items-center gap-2">
             <span
               className="pulse"
               style={{ background: 'var(--accent)' }}
@@ -54,10 +54,13 @@ export function LabPage() {
           </span>
           <Link
             href="/"
-            className="btn btn-ghost"
+            className="btn btn-ghost whitespace-nowrap ml-auto 720:ml-0"
             style={{ padding: '7px 14px', fontSize: 12 }}
           >
-            ← Home
+            <span className="hidden 720:inline">← Home</span>
+            <span className="720:hidden" aria-hidden="true">
+              ←
+            </span>
           </Link>
         </div>
       </header>

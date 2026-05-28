@@ -169,20 +169,20 @@ export default function SkillSheetPage() {
   return (
     <div className="zone-dark">
       <header className="sk-page-header">
-        <div className="container flex items-center gap-4">
+        <div className="container flex items-center gap-3 720:gap-4">
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[13px]"
+            className="flex min-w-0 items-center gap-2.5 text-[13px]"
             style={{ fontWeight: 550 }}
             aria-label="teeeen.lab — home"
           >
             <BrandMark size={22} decorative />
-            <span>teeeen.lab</span>
-            <span className="ml-2 font-mono text-[11px] text-d-text-3">/ skill-sheet</span>
+            <span className="nav-link-hide-mobile">teeeen.lab</span>
+            <span className="ml-2 truncate font-mono text-[11px] text-d-text-3">/ skill-sheet</span>
           </Link>
-          <span className="ml-auto flex items-center gap-4">
+          <span className="ml-auto flex items-center gap-3 720:gap-4">
             <PrintButton />
-            <span className="font-mono text-xs text-d-text-3">
+            <span className="hidden 720:inline whitespace-nowrap font-mono text-xs text-d-text-3">
               Updated {skillSheetProfile.updated}
             </span>
           </span>

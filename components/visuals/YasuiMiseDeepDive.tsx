@@ -230,12 +230,11 @@ function YmArch() {
   return (
     <div
       data-reveal
-      className="grid-bg"
+      className="grid-bg dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
         overflow: 'hidden',
       }}
     >
@@ -345,11 +344,11 @@ function YmAgents() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       {/* Lv1→Lv4 stair */}
@@ -557,11 +556,11 @@ function YmScraping() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       <div
@@ -747,11 +746,11 @@ function YmStoreCollect() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       <div
@@ -932,11 +931,11 @@ function YmRoadmap() {
   return (
     <div
       data-reveal
+      className="dd-card"
       style={{
         background: TONE.surface,
         border: `1px solid ${TONE.lineSoft}`,
         borderRadius: 16,
-        padding: 36,
       }}
     >
       <div
@@ -1080,7 +1079,7 @@ function YmRoadmap() {
    =========================================================== */
 export function YasuiMiseDeepDive() {
   return (
-    <section style={{ padding: '32px 0 96px', borderTop: '1px solid var(--d-line)' }}>
+    <section className="dd-section">
       <div className="container">
         <div data-reveal style={{ marginBottom: 56, maxWidth: 720 }}>
           <div className="eyebrow" style={{ marginBottom: 14 }}>
@@ -1103,7 +1102,7 @@ export function YasuiMiseDeepDive() {
           </p>
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <YmHead
             idx="A"
             eyebrow="System Architecture"
@@ -1113,7 +1112,7 @@ export function YasuiMiseDeepDive() {
           <YmArch />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <YmHead
             idx="B"
             eyebrow="Agent Architecture"
@@ -1123,7 +1122,7 @@ export function YasuiMiseDeepDive() {
           <YmAgents />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <YmHead
             idx="C"
             eyebrow="Scraping Pipeline"
@@ -1133,7 +1132,7 @@ export function YasuiMiseDeepDive() {
           <YmScraping />
         </div>
 
-        <div style={{ marginBottom: 72 }}>
+        <div className="dd-sub">
           <YmHead
             idx="D"
             eyebrow="Store Collection Batch"
