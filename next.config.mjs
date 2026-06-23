@@ -11,11 +11,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [],
   },
-  async redirects() {
-    return [
-      { source: '/resume', destination: '/resume.pdf', permanent: true },
-    ];
-  },
 };
 
 const withMDX = createMDX({

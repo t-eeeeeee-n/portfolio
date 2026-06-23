@@ -2883,6 +2883,207 @@ html:has(body[data-theme='dark']) {
     color: var(--accent);
   }
 
+  /* ============================================================
+     /resume — conventional 職務経歴書. Reuses the .sk-* print
+     scaffolding (zone flatten + var rewrite + page breaks); these
+     .rs-* rules only style the narrative blocks and lean on the
+     theme vars so they flip to paper automatically when printed.
+     ============================================================ */
+  .rs-doc {
+    padding: 40px 0 56px;
+  }
+  /* Resume reads as a centered single column: narrow every .container
+     on the page (header / document / footer) to one comfortable
+     measure so all left/right edges line up. 920px > A4 text width,
+     so print still fills the sheet. */
+  .rs-page .container {
+    max-width: 920px;
+  }
+  .rs-titlebar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .rs-doctitle {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: var(--d-text-0);
+  }
+  .rs-docsub {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--d-text-2);
+    letter-spacing: 0.01em;
+  }
+  .rs-titlemeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--d-text-3);
+    letter-spacing: 0.04em;
+  }
+  .rs-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: 0 0 8px;
+    border: 1px solid var(--d-line-2);
+  }
+  .rs-contact-row {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 10px;
+    align-items: baseline;
+    padding: 10px 16px;
+    margin: 0;
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .rs-contact-row:nth-child(odd) {
+    border-right: 1px solid var(--d-line-2);
+  }
+  .rs-contact-row.rs-contact-row-wide {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .rs-contact-row dt {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--d-text-3);
+    margin: 0;
+  }
+  .rs-contact-row dd {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--d-text-0);
+    letter-spacing: 0.005em;
+    line-height: 1.6;
+  }
+  .rs-contact-row a:hover {
+    color: var(--accent);
+  }
+  .rs-section {
+    padding: 0;
+    margin-top: 44px;
+  }
+  .rs-prose {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--d-text-1);
+    margin: 0;
+  }
+  .rs-selfpr {
+    display: grid;
+    gap: 14px;
+  }
+  .rs-strengths {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .rs-strength {
+    border-left: 2px solid var(--accent);
+    padding-left: 16px;
+  }
+  .rs-strength-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--d-text-0);
+    letter-spacing: -0.005em;
+    margin: 0 0 6px;
+  }
+  .rs-strength-body {
+    font-size: 13.5px;
+    line-height: 1.72;
+    color: var(--d-text-1);
+    margin: 0;
+  }
+  .rs-jobs {
+    display: grid;
+    gap: 22px;
+  }
+  .rs-job {
+    border: 1px solid var(--d-line-2);
+    border-radius: 8px;
+    padding: 22px 24px;
+    background: var(--d-bg-1);
+  }
+  .rs-job-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--d-line-2);
+  }
+  .rs-job-name {
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--d-text-0);
+    margin: 0;
+  }
+  .rs-job-period {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .rs-job-metagrid {
+    margin: 16px 0;
+  }
+  .rs-job-block {
+    margin-top: 16px;
+  }
+  .rs-job-summary {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--d-text-1);
+    margin: 4px 0 0;
+  }
+  /* Japanese line-breaking: wrap at natural 文節 boundaries so
+     katakana words ("フルスタックエンジニア") and 漢字 phrases don't
+     split mid-word. auto-phrase is Chrome/Edge (where the PDF is
+     exported); other browsers ignore it and fall back gracefully. */
+  .rs-prose,
+  .rs-strength-body,
+  .rs-job-summary,
+  .rs-contact-row dd,
+  .rs-job .sk-project-highlights li {
+    word-break: auto-phrase;
+    line-break: strict;
+  }
+  @media (max-width: 720px) {
+    .rs-contact {
+      grid-template-columns: 1fr;
+    }
+    .rs-contact-row,
+    .rs-contact-row:nth-child(odd) {
+      border-right: 0;
+    }
+    .rs-job {
+      padding: 18px 16px;
+    }
+    .rs-titlemeta {
+      align-items: flex-start;
+    }
+  }
+
   /* "Save as PDF" button in the page header — triggers window.print(). */
   .sk-print-btn {
     display: inline-flex;
@@ -2997,6 +3198,8 @@ html:has(body[data-theme='dark']) {
     .sk-extra-row,
     .sk-datasheet,
     .arch-frame,
+    .rs-job,
+    .rs-strength,
     tr {
       break-inside: avoid;
       page-break-inside: avoid;

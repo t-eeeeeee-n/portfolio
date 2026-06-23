@@ -55,3 +55,6 @@ tmp/
 # pdf working copies (drop a stable public/resume.pdf when ready)
 *.pdf
 !public/resume.pdf
+
+# private job-hunt notes (strategy + message templates, not part of the published site)
+*.local.md
