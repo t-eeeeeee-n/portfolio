@@ -1,6 +1,6 @@
 # Portfolio — teeeen.lab (Personal Engineering Portfolio)
 
-新井 天翔 (Tensho Arai / handle: **teeeen**) の個人ポートフォリオ。職務経歴・プロダクト・コンポーネント実験・ノートを集約する。
+荒井天匠 (Tensho Arai / handle: **teeeen**) の個人ポートフォリオ。職務経歴・プロダクト・コンポーネント実験・ノートを集約する。
 
 **ブランド**：`teeeen.lab`（履歴書の `t-eeeeeee-n` とメール `t.eeee.n.nir@gmail.com` から派生したハンドル）。ロゴマーク `[t.n]`。
 **公開先**：`https://teeeen.vercel.app`（取れなかった場合のフォールバックは `teeeen-arai.vercel.app` / `teeeen-lab.vercel.app`）。独自ドメインは取らない。

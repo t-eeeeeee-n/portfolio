@@ -10,7 +10,7 @@
 |------|-----|
 | サイト名 | teeeen.lab — Engineering Lab / Product Studio |
 | ハンドル | `teeeen`（履歴書の `t-eeeeeee-n` とメール `t.eeee.n` から派生） |
-| 本名 | 新井 天翔 / Tensho Arai |
+| 本名 | 荒井天匠（アライ テンショウ）/ Tensho Arai |
 | ロゴマーク | `t.n`（白文字 / オレンジグラデ角丸 / mono フォント） |
 | 言語 | 日本語（`<html lang="ja">`） |
 | Base | Tokyo · JST |

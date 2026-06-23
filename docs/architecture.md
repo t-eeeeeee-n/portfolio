@@ -50,7 +50,7 @@ app/
 ```ts
 export const metadata: Metadata = {
   title: { default: 'teeeen.lab — Engineering Lab / Product Studio', template: '%s — teeeen.lab' },
-  description: 'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Webサービスと AI 活用ツールを作っています。— 新井 天翔 / Tensho Arai',
+  description: 'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Webサービスと AI 活用ツールを作っています。— 荒井天匠 / Tensho Arai',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
   authors: [{ name: 'Tensho Arai', url: 'https://teeeen.vercel.app' }],
   openGraph: { type: 'website', locale: 'ja_JP', siteName: 'teeeen.lab' },
