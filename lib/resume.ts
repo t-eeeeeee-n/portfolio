@@ -12,12 +12,12 @@ export type ResumeStrength = { title: string; body: string };
 
 export const resumeMeta = {
   /** ISO date. Bump when you revise the resume prose below. */
-  updated: '2026-06-16',
+  updated: '2026-08-03',
   /** Engagement types accepted, shown under the profile. */
   engagements: '副業 / 業務委託 / 技術顧問 / スポット相談',
   /** Availability line — kept in sync with JOBHUNT.local.md §2-A. */
   workStyle:
-    '週10〜32h・フルリモート（案件に応じて調整）。実装は平日朝夜・土日が中心ですが、朝・昼の短時間同期は平日も対応でき、テレワーク日など平日日中はまとまった同期も可能です。',
+    '週10〜32h・フルリモート（案件に応じて調整）。平日朝夜・土日を中心に稼働しています。平日日中も Slack 等でのテキストコミュニケーションは円滑に対応でき、空き時間で開発を進めることも可能です。オンライン MTG はテレワーク日、または平日朝夜・土日での調整をお願いしています。',
 };
 
 /* 職務要約 — the lead paragraph a recruiter reads first. */
