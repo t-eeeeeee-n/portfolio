@@ -1,160 +1,72 @@
 # Roadmap
 
-各フェーズは **deployable な状態で完了**させる（Vercel に出して URL を共有できる）。途中で止まっても見せられる粒度に切る。
+**現在地：Phase 0〜7 は完了し、公開・運用フェーズに入っている。** 実装期間は 2026-05 〜 2026-08（当初は「概ね 1 週間」と見積もっていたが、実際は約 3 か月かかった）。
+
+このファイルの役割は着手前の計画ではなく、**何が終わり / 何を意図的に落とし / 何が残っているか**の記録。
 
 ---
 
-## Phase 0 — Scaffold（半日）
+## 完了した構築フェーズ
 
-**ゴール**：Next.js プロジェクトが立ち上がり、空のトップが表示される。
-
-- [ ] `pnpm create next-app@latest .` で App Router + TS + Tailwind + ESLint + import alias を選択
-- [ ] `tailwind.config.ts` を `docs/architecture.md § 8` の通りに設定
-- [ ] `app/globals.css` に `tmp/portfolio/styles.css` のうち**トークン定義部分（`:root`, `body[data-theme=...]`, `body[data-font=...]`）だけ**コピー
-- [ ] `next/font` で IBM Plex / Geist / Instrument Serif / JetBrains Mono を読み込み、`--font-*` 変数を割り当て
-- [ ] `app/layout.tsx` で `<body data-theme="dark" data-font="plex" data-bg-motion="on">`（dark がデザイン参照の既定）
-- [ ] `app/page.tsx` に "Hello, k.lab" だけ
-- [ ] `.gitignore` に `tmp/`, `.next/`, `node_modules/`, `.vercel/`, `*.local` を追加
-- [ ] Git 初期化 + 最初のコミット
-- [ ] Vercel 連携、Project 名を `teeeen` で作成（Production URL は `https://teeeen.vercel.app`、衝突時は `teeeen-arai` / `teeeen-lab` の順でフォールバック）
-- [ ] Vercel Project Settings → Environment Variables に `NEXT_PUBLIC_SITE_URL` を設定
-
-**完了の合図**：Vercel Production にアクセスして "Hello, teeeen.lab" が出る + Lighthouse Performance ≥ 95。
+| Phase | 内容 | 結果 |
+|-------|------|------|
+| 0 | Scaffold（Next.js + TS + Tailwind + Vercel 連携） | 完了。Production URL は `https://teeeen.vercel.app` を確保 |
+| 1 | トップページ MVP（Nav / Hero / Projects / About / Career / Skills / Contact / Footer） | 完了。加えて `<Intro />` と `<WorkStyle />` を後から追加 |
+| 2 | Visuals（Project Mock 3 種・FloatingDeck） | 完了。Mock は `ProjectMocks.tsx` に 3 つ同居、詳細ページ用は `*DeepDive.tsx` に分離 |
+| 3 | Project 詳細（3 slug + OG 画像） | 完了 |
+| 4 | Component Lab（19 件・4 タブモーダル・hash deep link） | 完了。preview は `previews.tsx` 単一ファイル、cell は `LabPage.tsx` に内包 |
+| 5 | Notes（MDX 一覧 + 詳細） | 記事 7 本公開。**コードハイライトのみ未達**（下記） |
+| 6 | Effects polish（BackgroundFX / reveal / magnetic） | 完了。`<Effects />` 1 コンポーネントに集約。CursorHalo は不採用 |
+| 7 | OG 画像 / sitemap / robots / RSS / favicon / resume.pdf / Analytics / 404 | 完了。Tweaks パネルは単体 UI を作らず `<ThemeButton />` に縮小 |
 
 ---
 
-## Phase 1 — Top page MVP（1〜2 日）
+## 意図的に落としたもの
 
-**ゴール**：トップページ（Hero + BuildLog + Projects 一覧 + About + Career + Skills + Contact + Footer）が、エフェクト最小限で見られる。
+計画にあったが**採用しなかった**。復活させる場合は理由から見直すこと。
 
-- [ ] `<Nav />`（floating capsule、active 検出は IntersectionObserver）
-- [ ] `<Hero />`：見出し・サブコピー・CTA・タグ列。**FloatingDeck はダミー（静的）でよい**
-- [ ] `<BuildLog />`：マーキー（CSS のみ）
-- [ ] `<Projects />`：3 カード（Mock は仮、`<div className="grid-bg" />` で代替してよい）
-- [ ] `<About />`：identity.json + 文章
-- [ ] `<Career />`：3 社のタイムライン
-- [ ] `<Skills />`：3 グループ
-- [ ] `<Contact />` + `<Footer />`
-- [ ] `lib/projects.ts`, `lib/career.ts`, `lib/skills.ts` を `docs/content.md` から起こす
-
-**完了の合図**：トップを縦スクロールして、すべてのセクションが描画される。Mock やエフェクトは未完成でよい。Lighthouse Accessibility ≥ 95。
+- **フォント切替（`data-font`）** — 8 書体の読み込みコストに見合わなかった。現在は IBM Plex Sans / Mono の 2 書体のみ（`docs/design-system.md § 3.2`）
+- **密度切替（density）** — Tweaks の 5 軸構想のうち font と併せて削除。永続化する値は `theme` / `accent` / `bgMotion` の 3 つ
+- **`<TweaksPanel />` 単体パネル** — テーマ切替だけ Nav の `<ThemeButton />` として残した
+- **`<CursorHalo />`** — desktop 限定の装飾。実装せず
+- **`<HeroPipeline />`** — FloatingDeck で代替
+- **`/resume` の 302 リダイレクト** — データ駆動の HTML ページ（`app/resume/page.tsx`）に変更。PDF は `public/resume.pdf` に別途置く
+- **GitHub Actions** — Vercel のビルドを唯一のゲートとし、`lint` / `typecheck` / `format:check` はローカル運用
 
 ---
 
-## Phase 2 — Visuals（1 日）
+## 残件
 
-**ゴール**：Project の Mock 3 種が動き、Hero の FloatingDeck が浮く。
+**すべて「未着手」であり、意図的に見送ったものではない**（2026-08 確認）。落とした判断は前節に分けてある。
 
-- [ ] `components/visuals/YasuimiseMock.tsx` — 4 店の価格比較リスト
-- [ ] `components/visuals/SpecPilotMock.tsx` — Agent ノード図 + KPI 2 枚
-- [ ] `components/visuals/CmAgentMock.tsx` — trace ログ 5 行
-- [ ] `components/visuals/FloatingDeck.tsx` — 5 枚のフロートカード（CSS keyframes で完結）
-- [ ] `components/visuals/HeroPipeline.tsx` — 元の interval 動的版（任意。FloatingDeck で代替する選択も）
+1. **Component Lab の Code / Props タブ** — 擬似コードとモックのまま。実物に寄せるほど Lab の説得力が上がる
+2. **`<BuildLog />`** — 実装済みだが `app/page.tsx` から呼んでいない。トップに出すか、コンポーネントごと削除するか未決
 
-**完了の合図**：Hero と Projects のスクショが `tmp/portfolio/index.html` のスクショと並べて違和感がない。
+### 2026-08-05 に消化した分
 
----
-
-## Phase 3 — Project 詳細（半日）
-
-**ゴール**：`/projects/yasui-mise`, `/projects/specpilot`, `/projects/cm-agent` が動く。
-
-- [ ] `app/projects/[slug]/page.tsx` + `generateStaticParams`
-- [ ] sticky header（`← All projects` ボタン）
-- [ ] hero 大見出し + tagline + summary
-- [ ] Visual showcase（Mock を 460px 幅で grid-bg 上に表示）
-- [ ] meta grid: Stack / Role / Challenge / Design Decisions
-- [ ] "Next project" リンク（次の slug にローテーション）
-- [ ] `generateMetadata` で OG・タイトル設定
-
-**完了の合図**：3 ページとも見られる。Lighthouse SEO ≥ 95。
+- **コードハイライト / 見出しアンカー** — `rehype-pretty-code`（+ shiki）/ `rehype-slug` / `rehype-autolink-headings` を導入。Phase 5 の完了条件「コードハイライトが効いている」を達成。設定で踏んだ罠は `docs/architecture.md § 4.1.1`
+- **JSON-LD** — トップに `Person`、各 Notes に `BlogPosting`（`lib/structured-data.ts`）
 
 ---
 
-## Phase 4 — Component Lab（1〜2 日）
+## 継続運用
 
-**ゴール**：`/component-lab` でカタログとモーダルが動く。
-
-- [ ] `app/component-lab/page.tsx`
-- [ ] カテゴリフィルタ（All / UI / Product / AI / Arch）
-- [ ] `components/lab/previews/*.tsx` を 19 種すべて移植
-- [ ] `lib/lab-catalog.tsx` で束ねる
-- [ ] `<LabCell />`（hover でリフト）
-- [ ] `<LabModal />`：タブ 4 種 + Escape / 背景クリックで閉じる
-- [ ] hash deep link (`/component-lab#trace`)
-
-**完了の合図**：19 件すべて Preview / Code / Props / Notes タブで開ける。モーダルにフォーカストラップが効いている。
+- 新しい Project ができたら `lib/projects.ts` に追記 → `generateStaticParams` で詳細ページが自動的に生える
+- 新しい Notes は `content/notes/<slug>.mdx` を切るだけ。**日付プレフィックスは付けない**（ファイル名がそのまま slug になるため、付けると URL 構造が変わる）
+- `lib/skills.ts` の `level` は半期に 1 度見直し（`primary` → `normal` → `secondary` に流す or 削除）
+- 稼働条件が変わったら `lib/availability.ts` だけを直す（`/resume`・`/skill-sheet`・トップの Work Style に自動反映される）
+- `<BuildLog />` を復活させる場合は `lib/build-log.ts` の 8 件を月 1 回更新
 
 ---
 
-## Phase 5 — Notes（1 日）
+## 品質ゲート
 
-**ゴール**：`/notes` 一覧と `/notes/[slug]` 詳細が MDX で動く。
+**計測条件**：Production URL (`https://teeeen.vercel.app`) に対して、Lighthouse の **モバイル・throttling あり**（既定設定）で測る。デスクトップは常に高く出るので判定に使わない。
 
-- [ ] `@next/mdx` + `gray-matter` + `rehype-pretty-code` 導入
-- [ ] `mdx-components.tsx` で h1〜h4・code・blockquote の Tailwind スタイル
-- [ ] `lib/notes.ts` で frontmatter 一覧 / 個別取得
-- [ ] `app/notes/page.tsx` — タグフィルタ + 一覧（トップに埋め込んでいる `<Notes />` をそのままページ化）
-- [ ] `app/notes/[slug]/page.tsx` — MDX 本文 + 前後ナビ
-- [ ] `content/notes/*.mdx` を最低 1〜2 本（テスト用）。残り 6 本は順次
-- [ ] トップの `<Notes />` セクションは `lib/notes.ts` から最新 N 件を取って描画
+| 観点 | 目標 | 根拠 |
+|------|------|------|
+| Performance | ≥ 90 | Google が「good」と定義する境界。hero の aurora（760px 要素に `blur(40〜110px)`）がある構成でモバイル 95 は現実的でないため、ここで止める |
+| Accessibility | ≥ 95 | 静的サイトで達成できない理由がない。下回ったら実装のミス |
+| SEO | ≥ 95 | 同上。metadata / sitemap / robots が揃っているので通るはず |
 
-**完了の合図**：MDX 記事が崩れずに表示。コードハイライトが効いている。
-
----
-
-## Phase 6 — Effects polish（半日〜1 日）
-
-**ゴール**：tmp/portfolio と同じインタラクションが復元される。
-
-- [ ] `<BackgroundFX />` をルートに mount（mesh blob × 3、haze、spotlight）
-- [ ] `<CursorHalo />`（desktop only）
-- [ ] `useScrollReveal()` で `data-reveal` を全箇所に
-- [ ] `useMagnetic()` で CTA ボタン
-- [ ] `prefers-reduced-motion` の経路を全部に通す
-- [ ] `data-bg-motion="off"` で BG エフェクトが完全停止することを確認
-
-**完了の合図**：マウスを止めると hero の aurora が静かに drift しているのが見える + 設定で全停止できる。Lighthouse Performance ≥ 90 を維持。
-
----
-
-## Phase 7 — Tweaks panel + Polish + SEO（任意・1 日）
-
-**ゴール**：見栄えと運用の最後の仕上げ。
-
-- [ ] `<TweaksPanel />`（theme / font / accent / motion / density）
-  - [ ] localStorage 永続化
-  - [ ] FOIT 防止の inline script
-- [ ] OG 画像（@vercel/og）— ロゴマーク `[t.n]` + ページタイトル + アクセントカラーで構成
-- [ ] sitemap.xml / robots.txt / RSS feed (`app/feed.xml/route.ts`)
-- [ ] favicon / apple-touch-icon — `[t.n]` をそのまま 32×32 / 180×180 で書き出す
-- [ ] `public/resume.pdf` 配置（`tmp/pdf/resume_20260510.pdf` を最新としてコピー、日付サフィックスは外す）
-- [ ] Vercel Analytics 有効化（無料枠）
-- [ ] 404 ページのデザイン
-- [ ] `/resume` route → `/resume.pdf` redirect
-
-**完了の合図**：sitemap / RSS が valid。OG 画像が Slack / X で展開される。
-
----
-
-## Phase 8 — 継続運用
-
-- 月 1 回、`<BuildLog />` の 8 件を更新
-- 新しい Project ができたら `lib/projects.ts` に追記、`generateStaticParams` で自動的に詳細ページが生える
-- 新しい Notes は `content/notes/YYYY-MM-DD-slug.mdx` を切るだけ
-- `<Skills />` の Now / Comfortable は半期に 1 度見直し（Past に流す or 削除）
-
----
-
-## 全体スケジュール感（1 人で集中する場合）
-
-| 範囲 | 工数 |
-|------|------|
-| Phase 0 + 1 | 2〜3 日 |
-| Phase 2 + 3 | 1.5 日 |
-| Phase 4 | 1〜2 日 |
-| Phase 5 | 1 日 |
-| Phase 6 + 7 | 1〜2 日 |
-| **合計（MVP〜公開）** | **概ね 1 週間** |
-
-Phase 0〜3 までやれば「ポートフォリオとして見せられる」状態。Phase 4 以降は差別化。
+Performance が 90 を切る場合、まず疑うのは背景エフェクト（`BackgroundFX` の blob × 3 + haze + spotlight）。blob 数を減らすか `transform` のみで動かす（`docs/architecture.md § 10`）。

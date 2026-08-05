@@ -6,6 +6,7 @@ import { ArrowR } from '@/components/ui/icons';
 import { CmAgentDeepDive } from '@/components/visuals/CmAgentDeepDive';
 import { SpecPilotDeepDive } from '@/components/visuals/SpecPilotDeepDive';
 import { YasuiMiseDeepDive } from '@/components/visuals/YasuiMiseDeepDive';
+import { buildDate } from '@/lib/build-info';
 import { projects, projectSlugs, type ProjectSlug } from '@/lib/projects';
 
 type RouteParams = { slug: string };
@@ -272,7 +273,7 @@ export default async function ProjectPage({ params }: { params: Promise<RoutePar
       <footer className="footer">
         <div className="container flex justify-between">
           <span>© 2026 teeeen.lab</span>
-          <span>last commit · 2026.05.10</span>
+          <span>last commit · {buildDate}</span>
         </div>
       </footer>
     </div>

@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app';
+import { siteUrl as BASE } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
   return {

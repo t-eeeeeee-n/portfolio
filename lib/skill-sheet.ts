@@ -18,6 +18,8 @@ export type SkillSheetProfile = {
   base: string;
   email: string;
   github: string;
+  /** Contact のボタンと JSON-LD の sameAs が共有する。 */
+  linkedin: string;
   portfolio: string;
   availability: string;
   engagements: readonly string[];
@@ -36,6 +38,7 @@ export const skillSheetProfile: SkillSheetProfile = {
   base: 'Tokyo, Japan',
   email: 't.eeee.n.nir@gmail.com',
   github: 'https://github.com/t-eeeeeee-n',
+  linkedin: 'https://www.linkedin.com/in/tensho-arai-b071142a3/',
   portfolio: 'https://teeeen.vercel.app',
   availability: availability.status,
   engagements: availability.engagements,

@@ -1,3 +1,5 @@
+import { buildDate } from '@/lib/build-info';
+
 export function Footer() {
   return (
     <footer className="footer zone-dark">
@@ -7,6 +9,7 @@ export function Footer() {
           <span style={{ marginLeft: 12 }}>Built with Next.js · React · honest effort.</span>
         </div>
         <div className="flex gap-4">
+          <span>last commit · {buildDate}</span>
           <span style={{ color: 'var(--accent-2)' }}>● online</span>
         </div>
       </div>
