@@ -58,3 +58,4 @@ tmp/
 
 # private job-hunt notes (strategy + message templates, not part of the published site)
 *.local.md
+*.local.txt

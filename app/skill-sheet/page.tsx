@@ -69,9 +69,18 @@ function PhaseRow({ active }: { active: readonly WorkPhase[] }) {
   );
 }
 
-function ProfileRow({ label, children }: { label: string; children: ReactNode }) {
+function ProfileRow({
+  label,
+  wide,
+  children,
+}: {
+  label: string;
+  /** 値が長い行はグリッド全幅に伸ばす（列に収まらず隣と重なるのを防ぐ）。 */
+  wide?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <div className="sk-profile-row">
+    <div className={`sk-profile-row${wide ? ' sk-profile-row-wide' : ''}`}>
       <dt>{label}</dt>
       <dd>{children}</dd>
     </div>
@@ -267,6 +276,9 @@ export default function SkillSheetPage() {
               >
                 {skillSheetProfile.portfolio.replace('https://', '')}
               </a>
+            </ProfileRow>
+            <ProfileRow label="稼働" wide>
+              {skillSheetProfile.workStyle}
             </ProfileRow>
           </dl>
         </div>

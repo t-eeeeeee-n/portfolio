@@ -5,6 +5,9 @@ import { ThemeButton } from '@/components/sections/ThemeButton';
 import { BrandMark } from '@/components/ui/BrandMark';
 import { Menu, X } from '@/components/ui/icons';
 
+/* Document order — the active-link logic walks this list top to bottom
+   and keeps the last section whose top has scrolled past, so the order
+   must match app/page.tsx. */
 const SECTION_IDS = [
   'home',
   'projects',
@@ -13,6 +16,7 @@ const SECTION_IDS = [
   'about',
   'career',
   'skills',
+  'work-style',
   'contact',
 ] as const;
 
@@ -22,6 +26,7 @@ const LINKS: Array<[(typeof SECTION_IDS)[number], string]> = [
   ['notes', 'Notes'],
   ['about', 'About'],
   ['career', 'Career'],
+  ['work-style', 'Work Style'],
   ['contact', 'Contact'],
 ];
 
