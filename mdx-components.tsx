@@ -27,12 +27,22 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     h4: (props) => <h4 className="mt-6 mb-2 text-[15px] font-medium" {...props} />,
     p: (props) => <p className="my-4 text-[15.5px] leading-[1.75] text-d-text-1" {...props} />,
-    a: (props) => (
-      <a
-        className="underline decoration-[1.5px] decoration-d-line underline-offset-4 transition-colors hover:decoration-accent hover:text-accent"
-        {...props}
-      />
-    ),
+    /* rehype-autolink-headings が見出しを包むアンカーにも a が使われる。
+       そちらは見出しの一部なので本文リンクの下線を当てない（`.heading-anchor`
+       の見た目は globals.css 側）。CSS で打ち消す方法もあるが、globals.css は
+       @layer components にあり Tailwind の utility に負けるため、ここで分ける。 */
+    a: ({ className, ...props }) =>
+      (className ?? '').includes('heading-anchor') ? (
+        <a className={className} {...props} />
+      ) : (
+        <a
+          className={
+            'underline decoration-[1.5px] decoration-d-line underline-offset-4 transition-colors hover:decoration-accent hover:text-accent ' +
+            (className ?? '')
+          }
+          {...props}
+        />
+      ),
     ul: (props) => <ul className="my-4 list-disc pl-6 text-d-text-1 [&_li]:my-1.5" {...props} />,
     ol: (props) => <ol className="my-4 list-decimal pl-6 text-d-text-1 [&_li]:my-1.5" {...props} />,
     blockquote: (props) => (
@@ -41,15 +51,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {...props}
       />
     ),
-    code: ({ className, ...props }) => (
-      <code
-        className={
-          'rounded bg-d-bg-2 px-1.5 py-0.5 font-mono text-[0.9em] text-d-text-0 ' +
-          (className ?? '')
-        }
-        {...props}
-      />
-    ),
+    /* インライン code だけ chip 状にする。コードブロック内の <code> にも
+       同じ背景と padding が乗ると崩れるため、rehype-pretty-code が付与する
+       data-language の有無で振り分ける。 */
+    code: ({ className, ...props }) =>
+      'data-language' in (props as Record<string, unknown>) ? (
+        <code className={className} {...props} />
+      ) : (
+        <code
+          className={
+            'rounded bg-d-bg-2 px-1.5 py-0.5 font-mono text-[0.9em] text-d-text-0 ' +
+            (className ?? '')
+          }
+          {...props}
+        />
+      ),
     pre: ({ className, children, ...props }) => (
       <pre
         className={

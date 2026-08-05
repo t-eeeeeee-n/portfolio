@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllNotes } from '@/lib/notes';
 import { projectSlugs } from '@/lib/projects';
-
-const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app';
+import { siteUrl as BASE } from '@/lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const notes = await getAllNotes();

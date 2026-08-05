@@ -1,4 +1,5 @@
 import { ArrowUR, Doc, Github, Linkedin, Mail } from '@/components/ui/icons';
+import { skillSheetProfile } from '@/lib/skill-sheet';
 
 export function Contact() {
   return (
@@ -18,12 +19,16 @@ export function Contact() {
             返信は基本 24h 以内、設計判断や見積もりは文書で先に提示します。
           </p>
           <div className="flex flex-wrap gap-2.5 mt-8">
-            <a className="btn btn-primary" href="mailto:t.eeee.n.nir@gmail.com" data-magnetic="0.22">
+            <a
+              className="btn btn-primary"
+              href={`mailto:${skillSheetProfile.email}`}
+              data-magnetic="0.22"
+            >
               <Mail size={14} /> Email
             </a>
             <a
               className="btn btn-ghost"
-              href="https://github.com/t-eeeeeee-n"
+              href={skillSheetProfile.github}
               target="_blank"
               rel="noopener noreferrer"
               data-magnetic="0.18"
@@ -32,7 +37,7 @@ export function Contact() {
             </a>
             <a
               className="btn btn-ghost"
-              href="https://www.linkedin.com/in/tensho-arai-b071142a3/"
+              href={skillSheetProfile.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               data-magnetic="0.18"

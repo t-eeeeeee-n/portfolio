@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { BackgroundFX } from '@/components/effects/BackgroundFX';
 import { Effects } from '@/components/effects/Effects';
+import { siteUrl } from '@/lib/site';
 import './globals.css';
 
 // Inline pre-hydration script: apply saved tweaks (or the OS color
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
   },
   description:
     'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。副業 / 業務委託・技術顧問の相談を受け付けています。— 荒井天匠 / Tensho Arai',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
+  metadataBase: new URL(siteUrl),
   authors: [{ name: 'Tensho Arai' }],
   creator: 'Tensho Arai',
   openGraph: {

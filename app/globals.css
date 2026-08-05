@@ -138,7 +138,10 @@ body[data-theme='paper'] {
   --d-line-2: #ddd8c5;
   --d-text-0: #1a1a1c;
   --d-text-1: #3f3f46;
-  --d-text-2: #6b6b73;
+  /* #6b6b73 だと --d-bg-0 上で 4.46:1、--d-bg-3 上で 4.26:1 と AA 通常
+     テキスト（4.5:1）を切る。.eyebrow は 11px でセクションラベル＝情報を
+     担うので装飾扱いにはできない。この値なら 4.80:1 / 4.58:1 で両方通る。 */
+  --d-text-2: #666670;
   --d-text-3: #a1a1aa;
   --l-bg-0: #ffffff;
   --l-bg-1: #faf8f3;
@@ -2234,6 +2237,62 @@ html:has(body[data-theme='dark']) {
 
 @layer components {
   /* ============================================================
+     MDX article extras — heading anchors (rehype-autolink-headings)
+     and shiki code blocks (rehype-pretty-code). Both only appear
+     inside content/notes/*.mdx.
+     ============================================================ */
+
+  /* behavior: 'wrap' なので見出しテキスト全体がアンカーになる。既定では
+     見出しと見分けがつかず、hover で初めてリンクだと分かる形にする。 */
+  .heading-anchor {
+    color: inherit;
+    text-decoration: none;
+  }
+  .heading-anchor:hover {
+    color: var(--accent);
+  }
+  /* hover 時に左に # を出す。absolute にして行送りを動かさない。 */
+  .heading-anchor::before {
+    content: '#';
+    position: absolute;
+    margin-left: -1.1em;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.15s;
+    font-weight: 400;
+  }
+  .heading-anchor:hover::before {
+    opacity: 0.6;
+  }
+
+  /* shiki は各行を span.line として出す。行単位の余白はここで持たせる
+     （pre 側の padding だけだと横スクロール時に行頭が詰まる）。
+     セレクタは必ず `pre` を挟む — インライン code に display:grid が
+     当たると単語が行ごとに分かれて崩れる。 */
+  [data-rehype-pretty-code-figure] pre {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  [data-rehype-pretty-code-figure] pre code {
+    display: grid;
+  }
+  [data-rehype-pretty-code-figure] pre .line {
+    padding: 0 16px;
+  }
+  /* ```ts title="foo.ts" を書いたときのファイル名ラベル。 */
+  [data-rehype-pretty-code-title] {
+    margin-bottom: -18px;
+    padding: 8px 14px;
+    border: 1px solid var(--d-line-2);
+    border-bottom: 0;
+    border-radius: var(--r-sm) var(--r-sm) 0 0;
+    background: var(--d-bg-2);
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--d-text-2);
+  }
+
+  /* ============================================================
      Skill Sheet page (/skill-sheet) — Datasheet aesthetic.
      The page reads like a semiconductor datasheet: front cover
      spec panel up top, then dense sections with hairline tables.
@@ -3688,4 +3747,26 @@ body[data-bg-motion='off'] .bg-fx-mesh {
   [data-magnetic] {
     transform: none !important;
   }
+}
+
+/* ============================================================
+   Unlayered — Tailwind の utility に詳細度で勝つ必要がある。
+   Tailwind v3 は `@tailwind utilities` をネイティブ @layer で囲まないため、
+   カスケードレイヤーではなく素の詳細度勝負になる。utility は単一クラス
+   (0,1,0) なので、型セレクタだけの `pre code` (0,0,2) では負ける。
+   属性セレクタを足して (0,1,2) にすることで初めて上書きできる。
+   ============================================================ */
+
+/* mdx-components.tsx の `code` はインライン用にチップ状のスタイル
+   （背景・padding・文字サイズ）を当てる。rehype-pretty-code が処理した
+   コードブロックは data-language の有無で振り分けられるが、**言語未指定の
+   フェンス**（agent-pipeline-7-roles.mdx の ASCII 図など）は data-language が
+   付かないためインライン側の分岐に落ち、行ごとに背景ボックスが出てしまう。
+   pre の中では常にチップを外す。 */
+pre code[class] {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font-size: inherit;
 }

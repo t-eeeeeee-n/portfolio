@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BrandMark } from '@/components/ui/BrandMark';
 import { ArrowR } from '@/components/ui/icons';
+import { buildDate } from '@/lib/build-info';
 import { formatNoteDate, getAllNotes, getNoteMeta } from '@/lib/notes';
+import { blogPostingJsonLd, jsonLdScript } from '@/lib/structured-data';
 
 type RouteParams = { slug: string };
 
@@ -53,6 +55,10 @@ export default async function NoteArticlePage({ params }: { params: Promise<Rout
 
   return (
     <div className="zone-dark min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(blogPostingJsonLd(meta)) }}
+      />
       <header className="proj-header">
         <div className="container flex items-center gap-3 720:gap-4">
           <Link
@@ -145,7 +151,7 @@ export default async function NoteArticlePage({ params }: { params: Promise<Rout
       <footer className="footer">
         <div className="container flex justify-between">
           <span>© 2026 teeeen.lab</span>
-          <span>last commit · 2026.05.10</span>
+          <span>last commit · {buildDate}</span>
         </div>
       </footer>
     </div>
