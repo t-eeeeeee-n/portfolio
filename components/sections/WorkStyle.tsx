@@ -1,5 +1,9 @@
 import { SectionHead } from '@/components/ui/SectionHead';
-import { workStyleBlocks, workStyleNote } from '@/lib/work-style';
+import {
+  workStyleBlocks,
+  workStyleNote,
+  workStyleStatus,
+} from '@/lib/work-style';
 
 const BLOCK_TAGS = ['A', 'B', 'C', 'D'];
 
@@ -13,6 +17,14 @@ export function WorkStyle() {
           title="どう働けるか。"
           lede="副業 / 業務委託の打診を受け付けています。「何を任せられるか」が 5 秒で判断できるよう、1 枚の仕様書として明示しました。"
         />
+        <dl className="spec-status" data-reveal="">
+          {workStyleStatus.map((s) => (
+            <div key={s.label} className="spec-status-item">
+              <dt className="spec-status-label">{s.label}</dt>
+              <dd className="spec-status-value">{s.value}</dd>
+            </div>
+          ))}
+        </dl>
         <div className="spec-sheet" data-reveal="">
           {workStyleBlocks.map((b, i) => (
             <div key={b.heading} className="spec-block">

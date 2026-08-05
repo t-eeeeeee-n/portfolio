@@ -1,3 +1,5 @@
+import { availability } from './availability';
+
 export type WorkStyleItem = {
   label: string;
   detail?: string;
@@ -8,6 +10,22 @@ export type WorkStyleBlock = {
   eyebrow: string;
   items: WorkStyleItem[];
 };
+
+export type WorkStyleStatusItem = {
+  label: string;
+  value: string;
+};
+
+/**
+ * 稼働条件のサマリー。打診前に相手が最初に確認する項目なので、spec
+ * sheet より前に置く。文面は lib/availability.ts が正本。
+ */
+export const workStyleStatus: WorkStyleStatusItem[] = [
+  { label: 'Start', value: availability.start },
+  { label: 'Hours', value: availability.hours },
+  { label: 'Mode', value: availability.mode },
+  { label: 'Daytime', value: availability.daytime },
+];
 
 export const workStyleBlocks: WorkStyleBlock[] = [
   {
@@ -53,5 +71,4 @@ export const workStyleBlocks: WorkStyleBlock[] = [
   },
 ];
 
-export const workStyleNote =
-  '稼働枠・契約形態・成果物の粒度はプロジェクトに合わせて柔軟に調整します。まずは Email で気軽にどうぞ。';
+export const workStyleNote = `稼働は平日朝夜・土日が中心です。${availability.meetings}稼働枠・契約形態・成果物の粒度はプロジェクトに合わせて柔軟に調整します。まずは Email で気軽にどうぞ。`;

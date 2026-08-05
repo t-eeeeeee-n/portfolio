@@ -542,7 +542,10 @@ html:has(body[data-theme='dark']) {
   body[data-theme='dark'] .nav-link.is-active {
     background: rgba(255, 255, 255, 0.08);
   }
-  @media (max-width: 720px) {
+  /* 820px（他セクションの 720px より早い）— リンク 7 本のピルは実測
+     685px あり、720px 幅では左右の余白が合計 18px しか残らない。ナビだけ
+     早めにドロワーへ切り替える。リンクを増やしたらこの数字を再確認する。 */
+  @media (max-width: 820px) {
     .nav {
       font-size: 12px;
     }
@@ -1821,6 +1824,61 @@ html:has(body[data-theme='dark']) {
   }
 
   /* ============================================================
+     Spec status — the datasheet's header row. Sits above the spec
+     sheet so 稼働条件 is the first thing scanned, matching the
+     order a client actually evaluates an engagement in.
+     ============================================================ */
+  .spec-status {
+    border: 1px solid var(--d-line);
+    border-radius: var(--r-lg);
+    background: var(--d-bg-1);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: hidden;
+    margin: 0 0 14px;
+  }
+  .spec-status-item {
+    padding: 18px 22px 20px;
+  }
+  .spec-status-item + .spec-status-item {
+    border-left: 1px solid var(--d-line);
+  }
+  .spec-status-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 9px;
+  }
+  .spec-status-value {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    color: var(--d-text-1);
+  }
+  @media (max-width: 900px) {
+    .spec-status {
+      grid-template-columns: 1fr 1fr;
+    }
+    .spec-status-item + .spec-status-item {
+      border-left: 0;
+    }
+    .spec-status-item:nth-child(even) {
+      border-left: 1px solid var(--d-line);
+    }
+    .spec-status-item:nth-child(n + 3) {
+      border-top: 1px solid var(--d-line);
+    }
+  }
+  @media (max-width: 720px) {
+    .spec-status-item {
+      padding: 16px 18px 18px;
+    }
+  }
+
+  /* ============================================================
      Spec sheet — single bordered container divided by hairlines
      into 4 named blocks. Used by WorkStyle so the section reads
      as one document rather than 4 floating feature cards.
@@ -2408,6 +2466,14 @@ html:has(body[data-theme='dark']) {
   }
   .sk-profile-row a:hover {
     color: var(--accent);
+  }
+  /* 稼働のような長い値は auto-fit の 1 列に収まらず隣の行と重なるので、
+     全幅の帯として最後に置く。 */
+  .sk-profile-row-wide {
+    grid-column: 1 / -1;
+  }
+  .sk-profile-row-wide dt {
+    padding-top: 2px;
   }
 
   /* ============================================================

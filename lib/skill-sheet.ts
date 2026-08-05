@@ -6,6 +6,7 @@
    specpilot / yasui-mise) reuse data from lib/projects.ts; all
    other entries carry their own description / stack inline. */
 
+import { availability } from './availability';
 import type { ProjectSlug } from './projects';
 import type { Skill } from './skills';
 
@@ -19,7 +20,9 @@ export type SkillSheetProfile = {
   github: string;
   portfolio: string;
   availability: string;
-  engagements: string[];
+  engagements: readonly string[];
+  /** 稼働条件。エージェントが最初に照合する項目なので § 01 に出す。 */
+  workStyle: string;
   languages: string[];
   /** ISO date string, e.g., '2026-05-12'. */
   updated: string;
@@ -34,10 +37,11 @@ export const skillSheetProfile: SkillSheetProfile = {
   email: 't.eeee.n.nir@gmail.com',
   github: 'https://github.com/t-eeeeeee-n',
   portfolio: 'https://teeeen.vercel.app',
-  availability: '副業 / 業務委託 受付中',
-  engagements: ['副業', '業務委託', '技術顧問', 'スポット相談'],
+  availability: availability.status,
+  engagements: availability.engagements,
+  workStyle: availability.prose,
   languages: ['日本語 (native)', 'English (technical)'],
-  updated: '2026-05-12',
+  updated: '2026-08-03',
 };
 
 export const workPhases = [

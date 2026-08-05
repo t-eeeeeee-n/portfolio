@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     template: '%s — teeeen.lab',
   },
   description:
-    'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。— 荒井天匠 / Tensho Arai',
+    'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Web サービスと AI 活用ツールを作っています。副業 / 業務委託・技術顧問の相談を受け付けています。— 荒井天匠 / Tensho Arai',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
   authors: [{ name: 'Tensho Arai' }],
   creator: 'Tensho Arai',
