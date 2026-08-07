@@ -3294,20 +3294,17 @@ html:has(body[data-theme='dark']) {
       animation: none !important;
     }
 
-    /* Page chrome that doesn't belong on paper. */
+    /* Page chrome that doesn't belong on paper. The nav header and
+       footer are UI, not document content — the document already
+       carries its own title block (職務経歴書 / 氏名 / 日付) and
+       repeats the portfolio URL in the contact list. On paper their
+       links ("skill-sheet ↗", "← teeeen.lab portfolio") are dead
+       ink, and the footer alone was pushing a trailing blank sheet. */
     .bg-fx,
-    .sk-print-btn {
+    .sk-print-btn,
+    .sk-page-header,
+    .sk-footer {
       display: none !important;
-    }
-
-    /* Sticky header would otherwise tile on every page. */
-    .sk-page-header {
-      position: static !important;
-      background: transparent !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      border-bottom: 1px solid #ccc !important;
-      padding: 6px 0 10px !important;
     }
 
     /* Flatten zones to white. */
@@ -3331,14 +3328,17 @@ html:has(body[data-theme='dark']) {
     }
 
     /* Each employer (= "page NN/NN" label) starts a fresh sheet,
-       so the printed layout matches the in-page pagination claim. */
-    .sk-company-group {
+       so the printed layout matches the in-page pagination claim.
+
+       Do NOT reach for :first-of-type to exempt the first employer —
+       .sk-section-head is also a div and takes that slot, so the
+       exemption never matched and the first group broke too, leaving
+       the "§ 03 職務経歴" heading orphaned on a near-empty sheet.
+       The sibling combinator says "every group after the first"
+       without depending on element type. */
+    .sk-company-group ~ .sk-company-group {
       break-before: page;
       page-break-before: always;
-    }
-    .sk-company-group:first-of-type {
-      break-before: auto;
-      page-break-before: auto;
     }
     /* The "// next employer" delimiter is redundant once each
        group lives on its own page. */
@@ -3352,13 +3352,6 @@ html:has(body[data-theme='dark']) {
     .sk-project,
     .sk-skill-block {
       box-shadow: none !important;
-    }
-
-    /* The footer "← teeeen.lab portfolio" link is not useful in
-       a printed copy — keep the text, drop the underline tone. */
-    .sk-footer a {
-      color: #555 !important;
-      text-decoration: none !important;
     }
   }
 
