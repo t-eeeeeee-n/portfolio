@@ -1,6 +1,6 @@
 ---
 title: 'Hono と tRPC を組み合わせた理由'
-date: '2026-01-06'
+date: '2026-03-05'
 tags: ['TypeScript', 'API']
 summary: 'SpecPilot のバックエンドを書き始めるとき、Hono を下に敷いて tRPC を上に載せ、OpenAPI は Lint 用のドキュメントに置いた。少し変則的なので理由を残しておく。'
 draft: false
@@ -18,7 +18,7 @@ SpecPilot は将来 iOS クライアントや CLI（`vibe-pack` を吐くコマ�
 
 ## 上に tRPC
 
-同じ Next.js アプリの中からは tRPC で叩く。「クライアントとサーバーの型が一致しないと作業が止まる」からで、これは個人開発で何より優先したい体験。
+同じ Next.js アプリの中からは tRPC で叩く。「クライアントとサーバーの型が一致しないと作業が止まる」からで、これは一人で書いているときに何より優先したい体験。
 
 ```ts
 const app = new Hono();
