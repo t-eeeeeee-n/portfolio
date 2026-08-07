@@ -3340,6 +3340,33 @@ html:has(body[data-theme='dark']) {
       page-break-after: avoid;
     }
 
+    /* A flowing card must break BETWEEN its blocks, never through
+       one. Each of these is a few lines at most, so holding them
+       whole costs no space — and a sliced .sk-phase-row would leave
+       its top border on one sheet and its bottom on the next. */
+    .rs-job-metagrid,
+    .sk-phase-row,
+    .sk-project-stack,
+    .sk-project-highlights li {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* "業務内容" / "担当工程" etc. are display:block labels, so they
+       can end a page with their content on the following one. */
+    .rs-job .sk-eyebrow {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    /* Never strand a single line of prose on either side of a break. */
+    .rs-prose,
+    .rs-job-summary,
+    .rs-strength-body {
+      orphans: 2;
+      widows: 2;
+    }
+
     /* 職務経歴 is where the reader starts scanning for fit, so it
        opens its own sheet instead of picking up wherever § 02 ran
        out. The break belongs on the section, not on the first
