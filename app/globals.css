@@ -3327,6 +3327,16 @@ html:has(body[data-theme='dark']) {
       page-break-inside: avoid;
     }
 
+    /* 職務経歴 is where the reader starts scanning for fit, so it
+       opens its own sheet instead of picking up wherever § 02 ran
+       out. The break belongs on the section, not on the first
+       employer group — putting it on the group would leave the
+       heading stranded at the foot of the previous page. */
+    .rs-section-history {
+      break-before: page;
+      page-break-before: always;
+    }
+
     /* Each employer (= "page NN/NN" label) starts a fresh sheet,
        so the printed layout matches the in-page pagination claim.
 
