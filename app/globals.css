@@ -1770,7 +1770,7 @@ html:has(body[data-theme='dark']) {
 @layer components {
   /* ============================================================
      Lede key term — typographic-only emphasis. No chips, halos
-     or ornaments inline. "個人で" / "開発" get brighter color
+     or ornaments inline. "一人で" / "開発" get brighter color
      (--d-text-0) and weight 500. The technical core "0 → 1" is
      rendered in mono + accent + slight tracking so it reads as
      a "state expression" embedded in natural-language text. The

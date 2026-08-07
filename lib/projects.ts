@@ -31,7 +31,7 @@ export const projects: Project[] = [
     slug: 'yasui-mise',
     n: '01',
     name: 'ヤスイミセ',
-    type: 'Personal · Web Service · 2024–Now',
+    type: 'Work · Web Service · 2024–Now',
     tagline: '近所のスーパーの価格を一画面で比較する。',
     summaryShort:
       '複数のスーパーの価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。',
@@ -91,7 +91,7 @@ export const projects: Project[] = [
     slug: 'specpilot',
     n: '02',
     name: 'SpecPilot',
-    type: 'Personal · AI SaaS · 2025–Now',
+    type: 'Work · AI SaaS · 2025–Now',
     tagline: '議事録から、設計書と実装のたたき台へ。',
     summaryShort:
       '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。議事録から質問・設計書・vibe pack を生成します。',
