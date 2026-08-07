@@ -3314,17 +3314,30 @@ html:has(body[data-theme='dark']) {
       color: #111111 !important;
     }
 
-    /* Don't slice cards / blocks / table rows across page breaks. */
+    /* Don't slice cards / blocks / table rows across page breaks.
+
+       .rs-job is deliberately NOT in this list. A job card runs to
+       ~25 lines once it carries a 10-bullet 実績 list, so keeping it
+       whole meant any card that missed the remaining space jumped to
+       the next sheet — that is what left § 03 alone on a 3-line page
+       and pushed the document to 15 sheets. Job cards flow instead;
+       the rule below keeps their heading attached to the body so
+       flowing never strands a title at the foot of a page. */
     .sk-project,
     .sk-skill-block,
     .sk-extra-row,
     .sk-datasheet,
     .arch-frame,
-    .rs-job,
     .rs-strength,
     tr {
       break-inside: avoid;
       page-break-inside: avoid;
+    }
+
+    .rs-job-head,
+    .sk-company-head {
+      break-after: avoid;
+      page-break-after: avoid;
     }
 
     /* 職務経歴 is where the reader starts scanning for fit, so it
