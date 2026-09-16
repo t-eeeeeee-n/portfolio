@@ -1770,7 +1770,7 @@ html:has(body[data-theme='dark']) {
 @layer components {
   /* ============================================================
      Lede key term — typographic-only emphasis. No chips, halos
-     or ornaments inline. "個人で" / "開発" get brighter color
+     or ornaments inline. "一人で" / "開発" get brighter color
      (--d-text-0) and weight 500. The technical core "0 → 1" is
      rendered in mono + accent + slight tracking so it reads as
      a "state expression" embedded in natural-language text. The
@@ -3294,20 +3294,17 @@ html:has(body[data-theme='dark']) {
       animation: none !important;
     }
 
-    /* Page chrome that doesn't belong on paper. */
+    /* Page chrome that doesn't belong on paper. The nav header and
+       footer are UI, not document content — the document already
+       carries its own title block (職務経歴書 / 氏名 / 日付) and
+       repeats the portfolio URL in the contact list. On paper their
+       links ("skill-sheet ↗", "← teeeen.lab portfolio") are dead
+       ink, and the footer alone was pushing a trailing blank sheet. */
     .bg-fx,
-    .sk-print-btn {
+    .sk-print-btn,
+    .sk-page-header,
+    .sk-footer {
       display: none !important;
-    }
-
-    /* Sticky header would otherwise tile on every page. */
-    .sk-page-header {
-      position: static !important;
-      background: transparent !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      border-bottom: 1px solid #ccc !important;
-      padding: 6px 0 10px !important;
     }
 
     /* Flatten zones to white. */
@@ -3317,28 +3314,81 @@ html:has(body[data-theme='dark']) {
       color: #111111 !important;
     }
 
-    /* Don't slice cards / blocks / table rows across page breaks. */
+    /* Don't slice cards / blocks / table rows across page breaks.
+
+       .rs-job is deliberately NOT in this list. A job card runs to
+       ~25 lines once it carries a 10-bullet 実績 list, so keeping it
+       whole meant any card that missed the remaining space jumped to
+       the next sheet — that is what left § 03 alone on a 3-line page
+       and pushed the document to 15 sheets. Job cards flow instead;
+       the rule below keeps their heading attached to the body so
+       flowing never strands a title at the foot of a page. */
     .sk-project,
     .sk-skill-block,
     .sk-extra-row,
     .sk-datasheet,
     .arch-frame,
-    .rs-job,
     .rs-strength,
     tr {
       break-inside: avoid;
       page-break-inside: avoid;
     }
 
-    /* Each employer (= "page NN/NN" label) starts a fresh sheet,
-       so the printed layout matches the in-page pagination claim. */
-    .sk-company-group {
+    .rs-job-head,
+    .sk-company-head {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    /* A flowing card must break BETWEEN its blocks, never through
+       one. Each of these is a few lines at most, so holding them
+       whole costs no space — and a sliced .sk-phase-row would leave
+       its top border on one sheet and its bottom on the next. */
+    .rs-job-metagrid,
+    .sk-phase-row,
+    .sk-project-stack,
+    .sk-project-highlights li {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* "業務内容" / "担当工程" etc. are display:block labels, so they
+       can end a page with their content on the following one. */
+    .rs-job .sk-eyebrow {
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    /* Never strand a single line of prose on either side of a break. */
+    .rs-prose,
+    .rs-job-summary,
+    .rs-strength-body {
+      orphans: 2;
+      widows: 2;
+    }
+
+    /* 職務経歴 is where the reader starts scanning for fit, so it
+       opens its own sheet instead of picking up wherever § 02 ran
+       out. The break belongs on the section, not on the first
+       employer group — putting it on the group would leave the
+       heading stranded at the foot of the previous page. */
+    .rs-section-history {
       break-before: page;
       page-break-before: always;
     }
-    .sk-company-group:first-of-type {
-      break-before: auto;
-      page-break-before: auto;
+
+    /* Each employer (= "page NN/NN" label) starts a fresh sheet,
+       so the printed layout matches the in-page pagination claim.
+
+       Do NOT reach for :first-of-type to exempt the first employer —
+       .sk-section-head is also a div and takes that slot, so the
+       exemption never matched and the first group broke too, leaving
+       the "§ 03 職務経歴" heading orphaned on a near-empty sheet.
+       The sibling combinator says "every group after the first"
+       without depending on element type. */
+    .sk-company-group ~ .sk-company-group {
+      break-before: page;
+      page-break-before: always;
     }
     /* The "// next employer" delimiter is redundant once each
        group lives on its own page. */
@@ -3352,13 +3402,6 @@ html:has(body[data-theme='dark']) {
     .sk-project,
     .sk-skill-block {
       box-shadow: none !important;
-    }
-
-    /* The footer "← teeeen.lab portfolio" link is not useful in
-       a printed copy — keep the text, drop the underline tone. */
-    .sk-footer a {
-      color: #555 !important;
-      text-decoration: none !important;
     }
   }
 

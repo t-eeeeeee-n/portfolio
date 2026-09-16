@@ -57,7 +57,7 @@ export function Hero() {
               style={{ marginTop: 28, maxWidth: 560, animationDelay: '0.15s' }}
             >
               <span className="lede-arc">
-                個人で <span className="arc-glyph">0 → 1</span> 開発
+                一人で <span className="arc-glyph">0 → 1</span> 開発
               </span>
               を主軸に、AI 活用 SaaS / MVP / PoC を企画から運用まで一貫対応。
               <br />

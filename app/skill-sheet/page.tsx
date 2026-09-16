@@ -189,8 +189,20 @@ export default function SkillSheetPage() {
             <span className="nav-link-hide-mobile">teeeen.lab</span>
             <span className="ml-2 truncate font-mono text-[11px] text-d-text-3">/ skill-sheet</span>
           </Link>
-          <span className="ml-auto flex items-center gap-3 720:gap-4">
+          <span className="ml-auto flex items-center gap-2 720:gap-4">
             <PrintButton />
+            {/* エージェント提出用。先方が編集できる素の .docx を返す
+                （生成は app/skill-sheet/export/route.ts）。 */}
+            <a
+              href="/skill-sheet/export"
+              className="sk-print-btn"
+              aria-label="Download as Word (.docx)"
+            >
+              <span aria-hidden="true" className="sk-print-btn-icon">
+                ⤓
+              </span>
+              <span>Save as Word</span>
+            </a>
             <span className="hidden 720:inline whitespace-nowrap font-mono text-xs text-d-text-3">
               Updated {skillSheetProfile.updated}
             </span>

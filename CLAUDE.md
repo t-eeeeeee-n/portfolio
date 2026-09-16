@@ -7,7 +7,7 @@
 
 ## 何をやっているサイトか
 
-- ヤスイミセ・SpecPilot などの個人/受託プロダクトを「**何を考えて作っているか**」が伝わる形で紹介する
+- ヤスイミセ・SpecPilot などの自社/受託プロダクトを「**何を考えて作っているか**」が伝わる形で紹介する。**ヤスイミセと SpecPilot はアイタイズの事業として立ち上げているもので「個人開発」ではない**（体制が 1 名なだけ。「一人で」は可、「個人開発」は不可）
 - `/component-lab` で再利用可能な UI を Preview / Code / Props / Notes の 4 面で公開する
 - `/notes` で設計判断や開発ログを軽量な記事として残す
 - About / Career / Skills / Work Style / Contact を一画面でスクロールでき、必要な人にすぐ届く形にする
@@ -23,6 +23,7 @@
 | Styling      | **Tailwind CSS** + 既存 CSS 変数（`docs/design-system.md` 準拠） |
 | Content      | **MDX** で `content/notes/*.mdx` を管理                    |
 | Fonts        | `next/font` (IBM Plex Sans / IBM Plex Mono の 2 書体のみ)  |
+| Word export  | **docx**（`/skill-sheet/export` で .docx 生成）             |
 | Deploy       | **Vercel**                                             |
 | Lint/Format  | ESLint (next) + Prettier                               |
 | Type-check   | `tsc --noEmit`                                         |
@@ -43,7 +44,8 @@ portfolio/
 │   ├── projects/[slug]/      # page.tsx + opengraph-image.tsx
 │   ├── notes/                # page.tsx, [slug]/page.tsx, [slug]/opengraph-image.tsx
 │   ├── resume/page.tsx       # HTML 版 職務経歴書（noindex）
-│   ├── skill-sheet/page.tsx  # 詳細スキルシート（noindex）
+│   ├── skill-sheet/          # page.tsx（詳細スキルシート・noindex）
+│   │   └── export/route.ts   # 同内容の Word (.docx) を配信
 │   ├── feed.xml/route.ts
 │   ├── robots.ts · sitemap.ts · not-found.tsx
 │   └── icon.tsx · apple-icon.tsx · opengraph-image.tsx
@@ -59,6 +61,7 @@ portfolio/
 │   ├── projects.ts · career.ts · skills.ts · build-log.ts
 │   ├── work-style.ts         # Work Style セクション
 │   ├── resume.ts · skill-sheet.ts
+│   ├── skill-sheet-docx.ts   # Word 版の組み立て（docx パッケージ・server-only）
 │   ├── lab-catalog.tsx       # React の preview を含むため .tsx
 │   ├── notes.ts              # server-only。メタ取得
 │   ├── note-types.ts         # client からも読む型だけ分離

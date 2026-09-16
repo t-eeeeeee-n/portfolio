@@ -97,7 +97,7 @@ export function Projects() {
           n="01"
           eyebrow="Projects · Featured Work"
           title="一人で 0 → 1 まで作っているもの。"
-          lede="3 案件すべて、企画から実装・運用までを個人で担当。それぞれ「なぜ作ったか / 何が難しかったか / どう設計判断したか」が伝わるように並べています。"
+          lede="企画から実装・運用まで一人称で関わった 3 案件。それぞれ「なぜ作ったか / 何が難しかったか / どう設計判断したか」が伝わるように並べています。"
         />
         <div className="grid gap-6" data-reveal="stagger">
           {projects.map((p) => (

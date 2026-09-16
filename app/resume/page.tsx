@@ -214,8 +214,9 @@ export default function ResumePage() {
           </div>
         </section>
 
-        {/* § 03 職務経歴 */}
-        <section className="sk-section rs-section">
+        {/* § 03 職務経歴 — starts its own sheet when printed
+            (see the .rs-section-history rule in globals.css). */}
+        <section className="sk-section rs-section rs-section-history">
           <div className="sk-section-head">
             <span className="sk-section-n">§ 03</span>
             <h2 className="sk-section-title">職務経歴</h2>

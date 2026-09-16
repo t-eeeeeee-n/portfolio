@@ -36,10 +36,14 @@ app/
 │       ├── page.tsx           # MDX 記事詳細
 │       └── opengraph-image.tsx
 ├── resume/page.tsx            # HTML 版 職務経歴書。noindex
-└── skill-sheet/page.tsx       # 詳細スキルシート。noindex
+└── skill-sheet/
+    ├── page.tsx               # 詳細スキルシート。noindex
+    └── export/route.ts        # 同内容の .docx を配信（force-static）
 ```
 
 `/resume` は当初 `/resume.pdf` への 302 リダイレクト (`route.ts`) を想定していたが、**データ駆動の HTML ページに変更した**（`lib/resume.ts` + `lib/skill-sheet.ts` から生成）。PDF は `public/resume.pdf` として別に置き、Contact の "Resume" ボタンはそちらを指す。
+
+`/skill-sheet/export` はエージェント提出用の Word 版。`lib/skill-sheet-docx.ts` が 画面と同じ `lib/skill-sheet.ts` / `skills.ts` / `projects.ts` だけを読んで `docx` パッケージで 組み立てる（文面はここにハードコードしない）。中身はビルド時に確定するので `dynamic = 'force-static'` で事前生成する。
 
 `app/api/` は無い。OG 画像はすべてルートセグメント直下の `opengraph-image.tsx` で生成している。
 
