@@ -201,6 +201,42 @@ html:has(body[data-theme='dark']) {
   background: #08080a;
 }
 
+/* Paper is white whatever theme is on screen. This must stay outside
+   @layer: the theme variants above are unlayered, and an unlayered
+   declaration beats any layered one regardless of specificity, so the
+   override inside the print rules of @layer components never applied
+   and dark-theme prints came out as near-white text on white. */
+@media print {
+  html,
+  html:has(body[data-theme='dark']) {
+    background: #ffffff;
+  }
+  body,
+  body[data-theme='dark'],
+  body[data-theme='paper'],
+  body[data-theme='light'] {
+    --d-bg-0: #ffffff;
+    --d-bg-1: #ffffff;
+    --d-bg-2: #f6f5ef;
+    --d-bg-3: #ecebe2;
+    --d-text-0: #111111;
+    --d-text-1: #2b2b2b;
+    --d-text-2: #555555;
+    --d-text-3: #6a6a6a;
+    --d-line: #d4d2cb;
+    --d-line-2: #e7e5dc;
+    --l-bg-0: #ffffff;
+    --l-bg-1: #ffffff;
+    --l-bg-2: #f6f5ef;
+    --l-text-0: #111111;
+    --l-text-1: #2b2b2b;
+    --l-text-2: #555555;
+    --l-text-3: #6a6a6a;
+    --l-line: #d4d2cb;
+    --l-line-2: #e7e5dc;
+  }
+}
+
 /* ============================================================
    Layout primitives
    ============================================================ */
@@ -3257,24 +3293,11 @@ html:has(body[data-theme='dark']) {
       margin: 14mm 12mm 16mm;
     }
 
-    /* Override every theme to a white-paper palette by rewriting
-       the CSS variables that every .sk-* rule already references. */
-    body,
-    body[data-theme='dark'],
-    body[data-theme='paper'],
-    body[data-theme='light'] {
+    /* The white-paper palette itself lives in the unlayered
+       @media print block after the theme variants. */
+    body {
       background: #ffffff !important;
       color: #111111 !important;
-      --d-bg-0: #ffffff;
-      --d-bg-1: #ffffff;
-      --d-bg-2: #f6f5ef;
-      --d-bg-3: #ecebe2;
-      --d-text-0: #111111;
-      --d-text-1: #2b2b2b;
-      --d-text-2: #555555;
-      --d-text-3: #6a6a6a;
-      --d-line: #d4d2cb;
-      --d-line-2: #e7e5dc;
     }
 
     /* Keep accent ticks, status dots, level meters etc in color. */
