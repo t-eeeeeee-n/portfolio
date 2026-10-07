@@ -59,3 +59,8 @@ tmp/
 # private job-hunt notes (strategy + message templates, not part of the published site)
 *.local.md
 *.local.txt
+
+# private Codex setup for job-hunt workflows
+AGENTS.override.md
+.agents/skills/*.local/
+.codex/agents/*.local.toml
