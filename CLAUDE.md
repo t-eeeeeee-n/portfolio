@@ -17,61 +17,9 @@
 
 ## 技術スタック（決定済み）
 
-| Layer        | Choice                                                 |
-| ------------ | ------------------------------------------------------ |
-| Framework    | **Next.js (App Router)** + TypeScript                  |
-| Styling      | **Tailwind CSS** + 既存 CSS 変数（`docs/design-system.md` 準拠） |
-| Content      | **MDX** で `content/notes/*.mdx` を管理                    |
-| Fonts        | `next/font` (IBM Plex Sans / IBM Plex Mono の 2 書体のみ)  |
-| Word export  | **docx**（`/skill-sheet/export` で .docx 生成）             |
-| Deploy       | **Vercel**                                             |
-| Lint/Format  | ESLint (next) + Prettier                               |
-| Type-check   | `tsc --noEmit`                                         |
-
 フォントは 2 書体だけ読む。以前は Tweaks の「font variant」切替のために 8 書体を読んでいたが、その機能ごと撤去した（経緯は `app/layout.tsx` 冒頭コメント）。**Geist / Instrument Serif / JetBrains Mono / Inter は使っていない。**
 
 設計の参照実装だった `tmp/portfolio/`（React + Babel-CDN 版）は**撤去済み**。現在 `tmp/` にあるのは `resume.pdf` と `skill.sheet.teeeen.lab.pdf` の 2 ファイルだけ。デザイントークンの正本は `app/globals.css` に移っている。
-
-## ディレクトリ構成
-
-```
-portfolio/
-├── app/
-│   ├── layout.tsx            # ルートレイアウト・フォント・テーマ復元 inline script・<Analytics/>
-│   ├── page.tsx              # トップ (Hero + Intro + Projects + LabTeaser + Notes + About + Career + Skills + WorkStyle + Contact)
-│   ├── globals.css           # ★ CSS 変数・全コンポーネントスタイルの正本（約 3700 行）
-│   ├── component-lab/page.tsx
-│   ├── projects/[slug]/      # page.tsx + opengraph-image.tsx
-│   ├── notes/                # page.tsx, [slug]/page.tsx, [slug]/opengraph-image.tsx
-│   ├── resume/page.tsx       # HTML 版 職務経歴書（noindex）
-│   ├── skill-sheet/          # page.tsx（詳細スキルシート・noindex）
-│   │   └── export/route.ts   # 同内容の Word (.docx) を配信
-│   ├── feed.xml/route.ts
-│   ├── robots.ts · sitemap.ts · not-found.tsx
-│   └── icon.tsx · apple-icon.tsx · opengraph-image.tsx
-├── components/
-│   ├── sections/             # Nav, Hero, Intro, Projects, LabTeaser, Notes, About, Career, Skills, WorkStyle, Contact, Footer, BuildLog(未使用), ThemeButton, ZoneFade
-│   ├── ui/                   # SectionHead, BrandMark, PrintButton, icons
-│   ├── lab/                  # LabPage, LabModal, previews.tsx（19 種を 1 ファイルに）
-│   ├── visuals/              # FloatingDeck, ProjectMocks, {YasuiMise,SpecPilot,CmAgent}DeepDive
-│   └── effects/              # BackgroundFX, Effects（reveal / magnetic を内包）
-├── content/notes/            # *.mdx（記事本体）
-├── lib/
-│   ├── availability.ts       # ★ 稼働条件の正本（resume / skill-sheet / work-style が参照）
-│   ├── projects.ts · career.ts · skills.ts · build-log.ts
-│   ├── work-style.ts         # Work Style セクション
-│   ├── resume.ts · skill-sheet.ts
-│   ├── skill-sheet-docx.ts   # Word 版の組み立て（docx パッケージ・server-only）
-│   ├── lab-catalog.tsx       # React の preview を含むため .tsx
-│   ├── notes.ts              # server-only。メタ取得
-│   ├── note-types.ts         # client からも読む型だけ分離
-│   └── tweaks.ts             # theme / accent / bgMotion の永続化
-├── public/                   # avatar.png, resume.pdf
-├── docs/                     # 設計仕様
-├── tmp/                      # PDF 2 本のみ（コミット対象外）
-├── mdx-components.tsx · tailwind.config.ts · next.config.mjs · postcss.config.mjs
-└── CLAUDE.md
-```
 
 Tailwind の `container` は無効化（`corePlugins.container = false`）し、`.container` は `app/globals.css` で自前定義している。
 
@@ -115,15 +63,6 @@ Tailwind の `container` は無効化（`corePlugins.container = false`）し、
 - Contact の "Resume" ボタンは PDF (`/resume.pdf`) を指す。HTML 版の職務経歴書は別ページ `/resume`
 
 ## コマンド
-
-```sh
-pnpm install                  # 依存導入（pnpm 必須。package.json の packageManager で固定）
-pnpm dev                      # 開発サーバ (http://localhost:3000)
-pnpm build && pnpm start      # 本番ビルド + ローカル本番起動
-pnpm lint                     # ESLint
-pnpm typecheck                # tsc --noEmit
-pnpm format                   # Prettier 書き込み（format:check で確認のみ）
-```
 
 CI は無く、Vercel のビルドが唯一のゲート。`lint` / `typecheck` はローカルで回す。
 
