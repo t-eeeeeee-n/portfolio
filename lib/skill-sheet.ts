@@ -183,7 +183,6 @@ export const projectHistory: ProjectHistoryEntry[] = [
       '各エージェントの責務分離、I/O コントラクト設計および実装',
       '既存業務 DB からのデータ取得層の設計',
       'FastAPI による OpenAPI コードファースト設計 + TypeScript SDK 自動生成パイプラインの構築',
-      'W3C Trace Context によるフロント〜バックエンド〜AI エージェント間の trace_id 伝播設計',
       '構造化 JSON ログ基盤の整備（span_id / agent_name / model を必須項目化）',
       'Registry / Pipeline 構成で仕様変更頻発下でも責務差し替えを容易に',
       'PLAN → DIFF → COMMANDS → VERIFICATION の段階的開発フロー設計',
