@@ -31,7 +31,7 @@ export const strengths: ResumeStrength[] = [
   },
   {
     title: '生成 AI / AI Agent のプロダクト実装',
-    body: 'Claude / GPT-4o / Gemini を用途別に使い分け、Extractor / Question / Designer / Linter のような役割分割パイプライン、Human-in-the-Loop の承認フロー、W3C Trace Context による trace_id 伝播までを設計・実装。LLM の揺れを機械的に検証してから扱う実装に知見があります。',
+    body: 'Claude / GPT-4o / Gemini を用途別に使い分け、Extractor / Question / Designer / Linter のような役割分割パイプライン、Human-in-the-Loop の承認フローまでを設計・実装。LLM の揺れを機械的に検証してから扱う実装に知見があります。',
   },
   {
     title: '運用と再利用を見据えた設計',
