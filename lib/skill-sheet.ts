@@ -18,7 +18,7 @@ export type SkillSheetProfile = {
   base: string;
   email: string;
   github: string;
-  /** Contact のボタンと JSON-LD の sameAs が共有する。 */
+  /** Contact のボタンが参照する。実名のページなので JSON-LD の sameAs には入れない。 */
   linkedin: string;
   portfolio: string;
   availability: string;

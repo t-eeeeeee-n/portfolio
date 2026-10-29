@@ -56,9 +56,9 @@ app/
 ```ts
 export const metadata: Metadata = {
   title: { default: 'teeeen.lab — Engineering Lab / Product Studio', template: '%s — teeeen.lab' },
-  description: 'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Webサービスと AI 活用ツールを作っています。— 荒井天匠 / Tensho Arai',
+  description: 'Webと、AIで、アイデアを動くプロダクトに。Next.js / TypeScript / Python / GCP を中心に、Webサービスと AI 活用ツールを作っています。',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teeeen.vercel.app'),
-  authors: [{ name: 'Tensho Arai', url: 'https://teeeen.vercel.app' }],
+  authors: [{ name: 'teeeen' }],
   openGraph: { type: 'website', locale: 'ja_JP', siteName: 'teeeen.lab' },
   twitter: { card: 'summary_large_image' },
 };
@@ -402,9 +402,10 @@ export default config;
 - `app/robots.ts` で `Allow: /` + sitemap URL
 - 各 Notes 記事 / Project 詳細の OG 画像：ルートセグメント直下の `opengraph-image.tsx` で動的生成
 - `app/feed.xml/route.ts` で RSS を配信
-- `/resume` と `/skill-sheet` は `robots: { index: false, follow: false }`
+- `/resume` と `/skill-sheet` は `robots: { index: false, follow: false }`。`/resume.pdf` と `/skill-sheet/export` は meta を書けないので `next.config.mjs` の `headers()` で `X-Robots-Tag: noindex, nofollow`
 - 構造化データ（JSON-LD）：トップに `Person`、各 Notes に `BlogPosting`。組み立ては `lib/structured-data.ts`
-  - 値は `lib/skill-sheet.ts` / `lib/skills.ts` から引く。氏名や URL をここで再掲しない
+  - `Person.name` はハンドル `teeeen` のみ。実名・LinkedIn は入れない（実名検索でこのサイトを出さない方針）
+  - その他の値は `lib/skill-sheet.ts` / `lib/skills.ts` から引く。URL をここで再掲しない
   - `Person` に `@id`（`{siteUrl}/#person`）を振り、`BlogPosting` の `author` / `publisher` はその `@id` を参照するだけにする。人物情報を記事ごとに複製しない
   - `knowsAbout` は `level: 'primary'` のスキルだけ。全件並べると薄まる
   - 出力は `dangerouslySetInnerHTML`（JSON-LD の標準手法）。値はビルド時定数だけだが、`jsonLdScript()` で `<` を `<` にエスケープしている — 文字列中に `</script>` が現れるとスクリプトが早期終了するため

@@ -23,8 +23,7 @@
 | 04 | About | `sections/About.tsx` | 同ファイル内 `IDENTITY` + 本文 |
 | 05 | Career | `sections/Career.tsx` | `lib/career.ts` |
 | 06 | Skills | `sections/Skills.tsx` | `lib/skills.ts` |
-| 07 | Work Style | `sections/WorkStyle.tsx` | `lib/work-style.ts` + `lib/availability.ts` |
-| 08 | Contact | `sections/Contact.tsx` | 同ファイル内 |
+| 07 | Contact | `sections/Contact.tsx` | 同ファイル内 |
 | — | Footer | `sections/Footer.tsx` | `lib/build-info.ts`（日付） |
 
 別ページ：`/component-lab`（`lib/lab-catalog.tsx`）、`/notes`、`/projects/[slug]`、`/resume`（`lib/resume.ts`）、`/skill-sheet`（`lib/skill-sheet.ts`）。
@@ -78,7 +77,7 @@
 
 **サブコピー** — 1 段落目の `0 → 1` は `.lede-arc` / `.arc-glyph` で強調する。
 
-**CTA は 3 つまで**。`Projects を見る` / `働き方を見る`（`#work-style`）/ `Contact`。`/component-lab` へのリンクは**Hero から外した** — 副業の打診を受ける導線として、Lab より「働き方」と「連絡先」を優先したいため。Lab へは Nav と § 02 から入る。
+**CTA は 2 つ**。`Projects を見る` / `Contact`。`/component-lab` へのリンクは**Hero から外した** — Lab より「連絡先」を優先したいため。以前あった `働き方を見る`（`#work-style`）は Work Style セクションをトップから外した際に削除（CLAUDE.md「検索に実名を出さない」）。Lab へは Nav と § 02 から入る。
 
 **タグ列**は 2 行構成（`// domain` / `// stack`）。domain 側が「何をやる人か」、stack 側が「何で作るか」。stack は 4 つに絞る（全スタックは § 06 と `/skill-sheet` にある）。
 
@@ -150,9 +149,11 @@
 
 ---
 
-## 9. Work Style（§ 07）
+## 9. Work Style（現在トップから外している）
 
-Nav の `Work Style` と Hero の「働き方を見る」CTA（`#work-style`）の着地点。構成は `lib/work-style.ts`、**稼働条件の文面は `lib/availability.ts` が単一の正本**。
+**現在 `app/page.tsx` から外しており表示されない**。インデックスされるトップに稼働条件を出さない方針のため（CLAUDE.md「検索に実名を出さない」）。以下は戻すときのための記録。
+
+かつては Nav の `Work Style` と Hero の「働き方を見る」CTA（`#work-style`）の着地点だった。構成は `lib/work-style.ts`、**稼働条件の文面は `lib/availability.ts` が単一の正本**。
 
 ### 稼働ステータス（spec sheet の上のヘッダー帯）
 
@@ -172,7 +173,7 @@ Engagement（受付中の案件タイプ）/ Focus（関心領域）/ Phase（�
 
 ---
 
-## 10. Contact（§ 08）
+## 10. Contact（§ 07）
 
 コピーは `sections/Contact.tsx` にハードコード。ボタンは Email（主 CTA）/ GitHub / LinkedIn / Resume（`/resume.pdf`）/ Skill Sheet（`/skill-sheet`）。
 

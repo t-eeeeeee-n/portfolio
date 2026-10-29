@@ -36,7 +36,7 @@ export async function GET() {
     <title>teeeen.lab — Notes</title>
     <link>${BASE}/notes</link>
     <atom:link href="${BASE}/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Engineering Lab / Product Studio · 設計メモと開発ログ by Tensho Arai</description>
+    <description>Engineering Lab / Product Studio · 設計メモと開発ログ by teeeen</description>
     <language>ja</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items}

@@ -6,7 +6,7 @@ export function Contact() {
     <section id="contact" className="section zone-dark">
       <div className="container">
         <div className="contact-cta">
-          <div className="eyebrow mb-4">§ 08 · Contact</div>
+          <div className="eyebrow mb-4">§ 07 · Contact</div>
           <h2 className="h-section" style={{ maxWidth: 720 }}>
             一緒にプロダクトを作る話、
             <br />
@@ -14,7 +14,7 @@ export function Contact() {
             <span style={{ color: 'var(--d-text-2)' }}>気軽にどうぞ。</span>
           </h2>
           <p className="lede mt-4 max-w-[620px]">
-            副業 / 業務委託・個人開発・技術相談など、内容は問いません。
+            プロダクト開発・技術相談など、内容は問いません。
             <br />
             返信は基本 24h 以内、設計判断や見積もりは文書で先に提示します。
           </p>

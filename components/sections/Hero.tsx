@@ -17,8 +17,6 @@ export function Hero() {
                 <span className="pulse" /> open to collaborate
               </span>
               <span className="hero-meta-sep" />
-              <span>副業 / 業務委託 相談受付中</span>
-              <span className="hero-meta-sep" />
               <span>Tokyo · JST</span>
             </div>
             <h1 className="h-hero fade-up" style={{ animationDelay: '0.05s' }}>
@@ -62,7 +60,7 @@ export function Hero() {
               を主軸に、AI 活用 SaaS / MVP / PoC を企画から運用まで一貫対応。
               <br />
               <br />
-              Next.js / TypeScript / Python / GCP / 生成 AI を中心に、議事録から設計書を生む AI SaaS や、マルチエージェント基盤の PoC を一人で立ち上げています。今は副業 / 業務委託の相談を受け付けています。
+              Next.js / TypeScript / Python / GCP / 生成 AI を中心に、議事録から設計書を生む AI SaaS や、マルチエージェント基盤の PoC を一人で立ち上げています。
             </p>
             <div
               className="fade-up"
@@ -76,9 +74,6 @@ export function Hero() {
             >
               <a className="btn btn-primary" href="#projects" data-magnetic="0.22">
                 Projects を見る <ArrowR size={14} className="btn-arrow" />
-              </a>
-              <a className="btn btn-ghost" href="#work-style" data-magnetic="0.18">
-                働き方を見る <ArrowR size={13} />
               </a>
               <a className="btn btn-ghost" href="#contact" data-magnetic="0.18">
                 <Mail size={13} /> Contact
