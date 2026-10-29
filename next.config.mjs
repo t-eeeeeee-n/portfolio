@@ -29,6 +29,16 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   pageExtensions: ['tsx', 'ts', 'mdx'],
+  /* 実名入りの書類。HTML の /resume・/skill-sheet は metadata の robots で
+     noindex にしているが、PDF と .docx には meta タグを書けないのでヘッダーで
+     同じ扱いにする。 */
+  async headers() {
+    const noindex = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }];
+    return [
+      { source: '/resume.pdf', headers: noindex },
+      { source: '/skill-sheet/export', headers: noindex },
+    ];
+  },
   experimental: {
     optimizePackageImports: [],
   },

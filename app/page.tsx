@@ -9,7 +9,6 @@ import { Nav } from '@/components/sections/Nav';
 import { Notes } from '@/components/sections/Notes';
 import { Projects } from '@/components/sections/Projects';
 import { Skills } from '@/components/sections/Skills';
-import { WorkStyle } from '@/components/sections/WorkStyle';
 import { ZoneFade } from '@/components/sections/ZoneFade';
 import { getAllNotes } from '@/lib/notes';
 import { jsonLdScript, personJsonLd } from '@/lib/structured-data';
@@ -34,7 +33,6 @@ export default async function HomePage() {
       <About />
       <Career />
       <Skills />
-      <WorkStyle />
       <Contact />
       <Footer />
     </>

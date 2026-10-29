@@ -16,7 +16,6 @@ const SECTION_IDS = [
   'about',
   'career',
   'skills',
-  'work-style',
   'contact',
 ] as const;
 
@@ -26,7 +25,6 @@ const LINKS: Array<[(typeof SECTION_IDS)[number], string]> = [
   ['notes', 'Notes'],
   ['about', 'About'],
   ['career', 'Career'],
-  ['work-style', 'Work Style'],
   ['contact', 'Contact'],
 ];
 

@@ -83,7 +83,7 @@ export default function OG() {
             fontFamily: 'monospace',
           }}
         >
-          荒井天匠 · Tensho Arai · Tokyo, JST
+          teeeen · Tokyo, JST
         </div>
       </div>
     ),

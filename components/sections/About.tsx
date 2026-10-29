@@ -7,7 +7,7 @@ const IDENTITY: Array<[string, string]> = [
   ['focus', 'Web · AI Agent · GCP'],
   ['scope', '企画 → 設計 → 実装 → 運用'],
   ['language', 'ja / en (technical)'],
-  ['available', '副業・相談 受付中'],
+  ['available', '技術相談 受付中'],
 ];
 
 export function About() {
@@ -19,7 +19,7 @@ export function About() {
           <div className="about-id-stack">
             <Image
               src="/avatar.png"
-              alt="Tensho Arai — illustrated portrait, reclining in an egg-shaped hanging chair"
+              alt="teeeen — illustrated portrait, reclining in an egg-shaped hanging chair"
               width={1536}
               height={1024}
               className="about-avatar"

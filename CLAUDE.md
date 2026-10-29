@@ -10,8 +10,12 @@
 - ヤスイミセ・SpecPilot などの自社/受託プロダクトを「**何を考えて作っているか**」が伝わる形で紹介する。**ヤスイミセと SpecPilot はアイタイズの事業として立ち上げているもので「個人開発」ではない**（体制が 1 名なだけ。「一人で」は可、「個人開発」は不可）
 - `/component-lab` で再利用可能な UI を Preview / Code / Props / Notes の 4 面で公開する
 - `/notes` で設計判断や開発ログを軽量な記事として残す
-- About / Career / Skills / Work Style / Contact を一画面でスクロールでき、必要な人にすぐ届く形にする
+- About / Career / Skills / Contact を一画面でスクロールでき、必要な人にすぐ届く形にする
 - `/resume`（職務経歴書）と `/skill-sheet`（詳細スキルシート）を副業・業務委託の打診用に置く。どちらも `noindex`
+
+### 検索に実名を出さない
+
+インデックスされるページ（トップ・Projects・Notes・Lab、meta / OG 画像 / RSS / JSON-LD）には実名 `荒井天匠` / `Tensho Arai` と「副業受付中」の文言を出さない。名乗りはハンドル `teeeen` のみ。実名・稼働条件は noindex の `/resume`・`/skill-sheet`（と `X-Robots-Tag` を付けた `/resume.pdf`・`/skill-sheet/export`）に寄せ、打診してきた相手に URL を直接渡す。Work Style セクションはこの方針でトップから外した（コンポーネントは残してある）。
 
 トップは 1 枚の長いランディングで、別ページに切るのは Projects 詳細 / Component Lab / Notes / Resume / Skill Sheet。
 
@@ -38,7 +42,7 @@
 portfolio/
 ├── app/
 │   ├── layout.tsx            # ルートレイアウト・フォント・テーマ復元 inline script・<Analytics/>
-│   ├── page.tsx              # トップ (Hero + Intro + Projects + LabTeaser + Notes + About + Career + Skills + WorkStyle + Contact)
+│   ├── page.tsx              # トップ (Hero + Intro + Projects + LabTeaser + Notes + About + Career + Skills + Contact)
 │   ├── globals.css           # ★ CSS 変数・全コンポーネントスタイルの正本（約 3700 行）
 │   ├── component-lab/page.tsx
 │   ├── projects/[slug]/      # page.tsx + opengraph-image.tsx
@@ -50,14 +54,14 @@ portfolio/
 │   ├── robots.ts · sitemap.ts · not-found.tsx
 │   └── icon.tsx · apple-icon.tsx · opengraph-image.tsx
 ├── components/
-│   ├── sections/             # Nav, Hero, Intro, Projects, LabTeaser, Notes, About, Career, Skills, WorkStyle, Contact, Footer, BuildLog(未使用), ThemeButton, ZoneFade
+│   ├── sections/             # Nav, Hero, Intro, Projects, LabTeaser, Notes, About, Career, Skills, WorkStyle(未使用), Contact, Footer, BuildLog(未使用), ThemeButton, ZoneFade
 │   ├── ui/                   # SectionHead, BrandMark, PrintButton, icons
 │   ├── lab/                  # LabPage, LabModal, previews.tsx（19 種を 1 ファイルに）
 │   ├── visuals/              # FloatingDeck, ProjectMocks, {YasuiMise,SpecPilot,CmAgent}DeepDive
 │   └── effects/              # BackgroundFX, Effects（reveal / magnetic を内包）
 ├── content/notes/            # *.mdx（記事本体）
 ├── lib/
-│   ├── availability.ts       # ★ 稼働条件の正本（resume / skill-sheet / work-style が参照）
+│   ├── availability.ts       # ★ 稼働条件の正本（resume / skill-sheet が参照）
 │   ├── projects.ts · career.ts · skills.ts · build-log.ts
 │   ├── work-style.ts         # Work Style セクション
 │   ├── resume.ts · skill-sheet.ts
@@ -96,7 +100,7 @@ Tailwind の `container` は無効化（`corePlugins.container = false`）し、
 
 ### 稼働条件は `lib/availability.ts` だけを直す
 
-週あたり稼働時間・時間帯・開始可能時期の文面は `lib/availability.ts` が単一の正本。`/resume`・`/skill-sheet`・トップの Work Style がここを参照する。**個別ファイルに文面を複製しないこと** — 以前 `resume.ts` と `work-style.ts` に重複していて、片方だけ直した結果 4 箇所が別のことを言う状態になった。
+週あたり稼働時間・時間帯・開始可能時期の文面は `lib/availability.ts` が単一の正本。`/resume`・`/skill-sheet` がここを参照する（Work Style セクションは現在トップから外している）。**個別ファイルに文面を複製しないこと** — 以前 `resume.ts` と `work-style.ts` に重複していて、片方だけ直した結果 4 箇所が別のことを言う状態になった。
 
 ### inline style → Tailwind への移行
 
