@@ -175,9 +175,9 @@ Engagement（受付中の案件タイプ）/ Focus（関心領域）/ Phase（�
 
 ## 10. Contact（§ 07）
 
-コピーは `sections/Contact.tsx` にハードコード。ボタンは Email（主 CTA）/ GitHub / LinkedIn / Resume（`/resume.pdf`）/ Skill Sheet（`/skill-sheet`）。
+コピーは `sections/Contact.tsx` にハードコード。ボタンは Email（主 CTA）/ GitHub / LinkedIn の 3 つ。
 
-HTML 版の職務経歴書は `/resume` に別途あるが、Contact のボタンは PDF を指す（相手が保存・転送しやすいため）。
+Resume（`/resume.pdf`）と Skill Sheet（`/skill-sheet`）のボタンは**外した**。どちらも稼働条件が載っており、noindex でも LinkedIn 等からサイトに来た人がリンクを辿れば見えてしまうため。URL は打診してきた相手に直接渡す（CLAUDE.md「検索に実名を出さない」）。
 
 **X (Twitter) は載せない。** `@dev_teeeen` を所有しているが運用していないため、リンクすると「動いていないアカウント」を見せることになり、かえってネガティブなシグナルになる。発信を始める覚悟ができた時に再検討する。
 
