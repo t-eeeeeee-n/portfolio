@@ -1,4 +1,4 @@
-import { ArrowUR, Doc, Github, Linkedin, Mail } from '@/components/ui/icons';
+import { Github, Linkedin, Mail } from '@/components/ui/icons';
 import { skillSheetProfile } from '@/lib/skill-sheet';
 
 export function Contact() {
@@ -43,12 +43,6 @@ export function Contact() {
               data-magnetic="0.18"
             >
               <Linkedin size={14} /> LinkedIn
-            </a>
-            <a className="btn btn-ghost" href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-              Resume <ArrowUR size={12} />
-            </a>
-            <a className="btn btn-ghost" href="/skill-sheet">
-              <Doc size={13} /> Skill Sheet
             </a>
           </div>
         </div>

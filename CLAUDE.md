@@ -15,7 +15,7 @@
 
 ### 検索に実名を出さない
 
-インデックスされるページ（トップ・Projects・Notes・Lab、meta / OG 画像 / RSS / JSON-LD）には実名 `荒井天匠` / `Tensho Arai` と「副業受付中」の文言を出さない。名乗りはハンドル `teeeen` のみ。実名・稼働条件は noindex の `/resume`・`/skill-sheet`（と `X-Robots-Tag` を付けた `/resume.pdf`・`/skill-sheet/export`）に寄せ、打診してきた相手に URL を直接渡す。Work Style セクションはこの方針でトップから外した（コンポーネントは残してある）。
+インデックスされるページ（トップ・Projects・Notes・Lab、meta / OG 画像 / RSS / JSON-LD）には実名 `荒井天匠` / `Tensho Arai` と「副業受付中」の文言を出さない。名乗りはハンドル `teeeen` のみ。実名・稼働条件は noindex の `/resume`・`/skill-sheet`（と `X-Robots-Tag` を付けた `/resume.pdf`・`/skill-sheet/export`）に寄せ、サイト内からはリンクせず、打診してきた相手に URL を直接渡す。Work Style セクションはこの方針でトップから外した（コンポーネントは残してある）。
 
 トップは 1 枚の長いランディングで、別ページに切るのは Projects 詳細 / Component Lab / Notes / Resume / Skill Sheet。
 
@@ -116,7 +116,7 @@ Tailwind の `container` は無効化（`corePlugins.container = false`）し、
 
 - `tmp/` 配下は **コミット対象外**（`.gitignore` に `tmp/`）。現在 `tmp/resume.pdf` と `tmp/skill.sheet.teeeen.lab.pdf` がある
 - 公開用は `public/resume.pdf` に**最新版だけ**コピー（日付サフィックス無し）
-- Contact の "Resume" ボタンは PDF (`/resume.pdf`) を指す。HTML 版の職務経歴書は別ページ `/resume`
+- `/resume.pdf` はサイト内からリンクしていない（Contact のボタンは外した）。HTML 版の職務経歴書は別ページ `/resume`
 
 ## コマンド
 
