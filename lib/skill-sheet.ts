@@ -118,14 +118,14 @@ export const projectHistory: ProjectHistoryEntry[] = [
     featured: true,
     slug: 'yasui-mise',
     name: 'スーパーマーケット価格比較Webサービス「ヤスイミセ」（企画〜実装まで全工程）',
-    period: '2026年03月～現在',
+    period: '2026年03月～2026年07月',
     position: 'フルスタックエンジニア',
     teamSize: '1 名',
     industry: '小売 / 価格情報サービス',
-    phases: ['要件定義', '基本設計', '詳細設計', '実装', '単体テスト', '結合テスト', '保守運用'],
+    phases: ['要件定義', '基本設計', '詳細設計', '実装', '単体テスト', '結合テスト'],
     stack: ['PostgreSQL', 'Docker', 'Node.js', 'Google Cloud', 'TypeScript', 'Next.js', 'NestJS', 'Docker Compose'],
     description:
-      '複数のスーパーの価格を比較し「どこで買えば一番安いか」を直感的に判断できるサービスを、企画立案から設計・実装・運用まで一人で担当。',
+      '複数のスーパーの価格を比較し「どこで買えば一番安いか」を直感的に判断できるサービスを、企画立案から設計・実装まで一人で担当。',
     highlights: [
       'サービス企画・要件定義（ターゲット選定、MVP スコープ策定、マネタイズ戦略立案）',
       'UI/UX 設計（デザインシステム策定、ワイヤーフレーム）',

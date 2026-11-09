@@ -31,7 +31,7 @@ export const projects: Project[] = [
     slug: 'yasui-mise',
     n: '01',
     name: 'ヤスイミセ',
-    type: 'Work · Web Service · 2026–Now',
+    type: 'Work · Web Service · 2026',
     tagline: '近所のスーパーの価格を一画面で比較する。',
     summaryShort:
       '複数のスーパーの価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。',
@@ -39,7 +39,7 @@ export const projects: Project[] = [
       '複数のスーパーの商品価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。企画、画面設計、API、DB、インフラ、チラシ解析まで一通り自分で実装しています。',
     motivation:
       '毎週スーパーを何軒も回って価格を見比べているうちに、これは UI で解ける問題だと気づいた。自分が一番のユーザーなので、欲しい体験を一人で作りに行った。',
-    responsibility: ['企画', '設計', '実装', '運用'],
+    responsibility: ['企画', '設計', '実装'],
     role: [
       '企画',
       'MVP スコープ策定',
@@ -78,7 +78,7 @@ export const projects: Project[] = [
       },
       {
         title: '最小スタック',
-        body: 'Next.js + NestJS + Postgres + Cloud Run。最初から「スケールアウトに強い構成」を組むより、一人で運用していて頭の中に全部入る構成を優先した。Cloud Run のオートスケールに任せれば当面は足りる。',
+        body: 'Next.js + NestJS + Postgres + Cloud Run。最初から「スケールアウトに強い構成」を組むより、一人で回しても頭の中に全部入る構成を優先した。Cloud Run のオートスケールに任せれば当面は足りる。',
       },
       {
         title: '型安全な連携',
