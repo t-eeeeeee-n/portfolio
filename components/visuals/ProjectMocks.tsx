@@ -132,9 +132,9 @@ const SPECPILOT_NODES: Array<{
   emit?: boolean;
 }> = [
   { x: 8, y: 22, label: '議事録', sub: 'input.md', muted: true },
-  { x: 38, y: 8, label: 'Extractor', sub: 'Claude' },
-  { x: 38, y: 38, label: 'Question', sub: 'GPT-4o' },
-  { x: 68, y: 22, label: 'Designer', sub: 'Claude' },
+  { x: 38, y: 8, label: 'Extractor', sub: 'extract' },
+  { x: 38, y: 38, label: 'Question', sub: 'ask · verify' },
+  { x: 68, y: 22, label: 'Designer', sub: 'design · spec' },
   { x: 92, y: 22, label: 'Vibe Pack', sub: 'output', emit: true },
 ];
 
@@ -229,7 +229,7 @@ export function SpecPilotMock() {
             }}
           >
             <span style={{ color: 'var(--accent-2)' }}>● running</span>
-            <span style={{ marginLeft: 'auto' }}>4 agents · trace_id 9f2…</span>
+            <span style={{ marginLeft: 'auto' }}>6 agents · trace_id 9f2…</span>
           </div>
         </div>
       </div>
@@ -337,6 +337,91 @@ export function CmAgentMock() {
         </span>
         <span className="tag">A2A</span>
         <span className="tag">trace_id</span>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Project — kairi
+   Diff report as the review screen shows it. Rows are the seeded
+   divergences of kairi's own synthetic sample (samples/docs vs
+   samples/order-py), so the numbers match what the tool prints.
+   ============================================================ */
+
+const KAIRI_FINDINGS: Array<{
+  sev: 'Critical' | 'Warning' | 'Info';
+  item: string;
+  doc: string;
+  code: string;
+  verdict: string;
+}> = [
+  { sev: 'Critical', item: '上長承認の境界', doc: '> 1,000,000', code: '>= 1,000,000', verdict: '有用' },
+  { sev: 'Warning', item: 'ゴールド割引率', doc: '15%', code: '0.12', verdict: '有用' },
+  { sev: 'Warning', item: 'DELETE /orders/{id}', doc: '記載なし', code: 'あり', verdict: '保留' },
+  { sev: 'Info', item: 'MISSING: 例外処理の方針', doc: 'TBD', code: 'なし', verdict: '未判定' },
+];
+
+const KAIRI_SEV_COLOR = {
+  Critical: '#f87171',
+  Warning: '#fbbf24',
+  Info: 'var(--d-text-3)',
+} as const;
+
+export function KairiMock() {
+  return (
+    <div className="mini" style={{ width: '100%' }}>
+      <div className="mock-window">
+        <div className="mock-window-bar">
+          <span className="dot" />
+          <span className="dot" />
+          <span className="dot" />
+          <span
+            style={{
+              marginLeft: 6,
+              color: 'var(--d-text-3)',
+              fontFamily: 'var(--font-mono)',
+            }}
+          >
+            kairi diff docs/ order-py/
+          </span>
+        </div>
+        <div className="mock-window-body" style={{ padding: 0 }}>
+          {KAIRI_FINDINGS.map((f, i) => (
+            <div
+              key={f.item}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '58px 1fr 52px',
+                gap: 8,
+                alignItems: 'center',
+                padding: '9px 14px',
+                borderTop: i > 0 ? '1px solid var(--d-line-2)' : 0,
+                fontSize: 11,
+              }}
+            >
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: KAIRI_SEV_COLOR[f.sev] }}>
+                {f.sev}
+              </span>
+              <span style={{ minWidth: 0 }}>
+                <span style={{ display: 'block', color: 'var(--d-text-0)' }}>{f.item}</span>
+                <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--d-text-3)' }}>
+                  doc {f.doc} · code {f.code}
+                </span>
+              </span>
+              <span className="tag" style={{ fontSize: 10, padding: '2px 6px', justifySelf: 'end' }}>
+                {f.verdict}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+        <span className="tag">
+          <span className="tag-dot" />
+          Critical 2 · Warning 6 · Info 1
+        </span>
+        <span className="tag">AI なし既定</span>
       </div>
     </div>
   );

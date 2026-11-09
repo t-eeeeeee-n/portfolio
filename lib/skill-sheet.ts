@@ -2,8 +2,8 @@
    Profile metadata is kept inline (not in identity.json) because
    the skill sheet needs richer fields than the About card. Project
    history is the full historical list (all employers / all
-   projects), grouped by company. Featured projects (cm-agent /
-   specpilot / yasui-mise) reuse data from lib/projects.ts; all
+   projects), grouped by company. Featured projects (kairi /
+   specpilot / cm-agent / yasui-mise) reuse data from lib/projects.ts; all
    other entries carry their own description / stack inline. */
 
 import { availability } from './availability';
@@ -44,7 +44,7 @@ export const skillSheetProfile: SkillSheetProfile = {
   engagements: availability.engagements,
   workStyle: availability.prose,
   languages: ['日本語 (native)', 'English (technical)'],
-  updated: '2026-08-03',
+  updated: '2026-11-09',
 };
 
 export const workPhases = [
@@ -107,36 +107,34 @@ export type ProjectHistoryEntry = {
   highlights?: string[];
 };
 
-/* Sorted from most recent to oldest within each company. Featured 3
+/* Sorted from most recent to oldest within each company. Featured 4
    first by visual priority, then the rest of the most recent employer,
    then back through history. */
 export const projectHistory: ProjectHistoryEntry[] = [
   // ── 株式会社アイタイズ ─────────────────────────────────
   {
-    id: 'yasui-mise',
+    id: 'kairi',
     companyId: 'itize',
     featured: true,
-    slug: 'yasui-mise',
-    name: 'スーパーマーケット価格比較Webサービス「ヤスイミセ」（企画〜実装まで全工程）',
-    period: '2026年03月～2026年07月',
+    slug: 'kairi',
+    name: '設計書とコードの乖離検出システム「kairi」（企画〜実装まで全工程）',
+    period: '2026年07月～現在',
     position: 'フルスタックエンジニア',
     teamSize: '1 名',
-    industry: '小売 / 価格情報サービス',
+    industry: 'SI / 受託開発（保守・レビュー支援）',
     phases: ['要件定義', '基本設計', '詳細設計', '実装', '単体テスト', '結合テスト'],
-    stack: ['PostgreSQL', 'Docker', 'Node.js', 'Google Cloud', 'TypeScript', 'Next.js', 'NestJS', 'Docker Compose'],
+    stack: ['Python', 'TypeScript', 'Next.js', 'React', 'Docker', 'Google Cloud', 'Vertex AI', 'Gemini', 'GitHub Actions', 'Claude Code'],
     description:
-      '複数のスーパーの価格を比較し「どこで買えば一番安いか」を直感的に判断できるサービスを、企画立案から設計・実装まで一人で担当。',
+      'Excel / Word の設計書とソースコード（Python / TypeScript）を同じ形の Markdown（標準スキーマ）に変換して突き合わせ、設計書とコードの食い違い（乖離）と、どちらにも根拠がない情報（MISSING）を検出するレビュー支援システム。アイタイズの自社プロダクトとして発案し、企画から実装まで一人で担当。',
     highlights: [
-      'サービス企画・要件定義（ターゲット選定、MVP スコープ策定、マネタイズ戦略立案）',
-      'UI/UX 設計（デザインシステム策定、ワイヤーフレーム）',
-      'DB 設計（ER 図設計、インデックス設計、RLS）',
-      'API 設計・実装（REST、OpenAPI 自動生成、orval による型安全なクライアント連携）',
-      'フロントエンド実装（App Router、Server Components、TanStack Query）',
-      'Vertex AI / Gemini による商品データ解析・チラシ OCR',
-      '価格データ収集基盤（スクレイピング、進捗管理・再開機構）',
-      'GCP インフラ構築（Cloud Run、Cloud SQL、Artifact Registry、Secret Manager）',
-      'CI/CD（GitHub Actions + Workload Identity Federation）',
-      '監視・エラートラッキング（Sentry、Cloud Error Reporting）',
+      '企画・課題設定、MVP スコープ策定',
+      '標準スキーマ（設計書とコードの中間表現）の設計',
+      'Excel / Word の読み取り（結合セル・方眼紙・図形を含む設計書の構造化）',
+      'コード解析（Python は標準 ast、TypeScript は ts-morph）',
+      '乖離・MISSING の検出と重大度付け、走行をまたいで判定を引き継ぐ指紋',
+      '判定画面（Next.js）と判定台帳、CI 連携（PR コメント・チェックの成否）',
+      'LLM 連携（Vertex AI の Gemini。既定は AI なし・外部送信なし、実行前に費用を見積もり）',
+      'テスト約 1,700 件、文脈を持たない評価者による cold レビュー',
     ],
   },
   {
@@ -145,19 +143,20 @@ export const projectHistory: ProjectHistoryEntry[] = [
     featured: true,
     slug: 'specpilot',
     name: 'SpecPilot（企画〜実装まで全工程）',
-    period: '2026年03月～現在',
+    period: '2026年02月～現在',
     position: 'フルスタックエンジニア',
     teamSize: '1 名',
     industry: 'SaaS / 受託開発支援',
     phases: ['要件定義', '基本設計', '詳細設計', '実装'],
-    stack: ['PostgreSQL', 'Docker', 'TypeScript', 'Next.js', 'Prisma', 'Stripe', 'Docker Compose', 'ChatGPT', 'Claude', 'Gemini', 'Claude Code', 'Mastra'],
+    stack: ['PostgreSQL', 'Docker', 'TypeScript', 'Next.js', 'Hono', 'tRPC', 'Prisma', 'BullMQ', 'Stripe', 'Docker Compose', 'Google Cloud', 'Vertex AI', 'Gemini', 'Claude', 'OpenAI API', 'Claude Code'],
     description:
-      '受託開発の上流工程（要件整理〜基本設計）に特化した AI 設計支援 SaaS。議事録から AI Agent パイプラインで仕様の不足・矛盾・未決事項を質問形式で収束させ、vibe coding にそのまま渡せる「vibe pack」（設計書 + Lint 結果 + 雛形）を生成。',
+      '受託開発の上流工程（要件整理〜基本設計）に特化した AI 設計支援 SaaS。議事録から AI Agent パイプラインで仕様の不足・矛盾・未決事項を質問形式で収束させ、vibe coding にそのまま渡せる「vibe pack」（設計書 + 機械可読な仕様 + タスク・見積もり）を生成。開発中で、一般公開前。',
     highlights: [
       '企画・コンセプト設計、ターゲット顧客とマネタイズ設計（GTM・課金モデル・LTV 試算）',
       '全体アーキテクチャ設計（モノレポ構成、Agent パイプライン、データモデル、RBAC、認証・課金フロー）',
-      'AI Agent パイプライン設計（Mastra ベースで Extractor / Question / Designer / Linter を構成）',
-      'Claude API・GPT-4o・Gemini を用途別に使い分け',
+      'AI Agent パイプライン設計（BullMQ + 自前の agent-core で Extractor / Question / Verifier / Designer / Spec / Estimator の 6 Agent を構成。Mastra は 3 回のスパイクで検証し、純益が薄く不採用）',
+      '整合チェック（Linter）は LLM を使わない決定論の検査で実装',
+      'LLM プロバイダの抽象化（既定は Vertex AI 経由の Gemini、Claude / OpenAI に差し替え可能）',
       '型を Source of Truth として運用（Hono + tRPC、OpenAPI は Lint 参照のみ）',
       '認証（JWT + httpOnly Cookie）、決済（Stripe Checkout / Portal / Webhook）',
       'ドキュメント駆動開発（意思決定ログ D-XXXX / ADR の継続的整備）',
@@ -186,6 +185,33 @@ export const projectHistory: ProjectHistoryEntry[] = [
       '構造化 JSON ログ基盤の整備（span_id / agent_name / model を必須項目化）',
       'Registry / Pipeline 構成で仕様変更頻発下でも責務差し替えを容易に',
       'PLAN → DIFF → COMMANDS → VERIFICATION の段階的開発フロー設計',
+    ],
+  },
+  {
+    id: 'yasui-mise',
+    companyId: 'itize',
+    featured: true,
+    slug: 'yasui-mise',
+    name: 'スーパーマーケット価格比較Webサービス「ヤスイミセ」（企画〜実装まで全工程）',
+    period: '2025年12月～2026年07月',
+    position: 'フルスタックエンジニア',
+    teamSize: '1 名',
+    industry: '小売 / 価格情報サービス',
+    phases: ['要件定義', '基本設計', '詳細設計', '実装', '単体テスト', '結合テスト'],
+    stack: ['PostgreSQL', 'Docker', 'Node.js', 'Google Cloud', 'TypeScript', 'Next.js', 'NestJS', 'Docker Compose'],
+    description:
+      '複数のスーパーの価格を比較し「どこで買えば一番安いか」を直感的に判断できるサービスを、企画立案から設計・実装まで一人で担当。Cloud Run 上で動く状態まで構築したが、市場調査の結果 2026年07月に一般公開前で撤退を決定。',
+    highlights: [
+      'サービス企画・要件定義（ターゲット選定、MVP スコープ策定、マネタイズ戦略立案）',
+      'UI/UX 設計（デザインシステム策定、ワイヤーフレーム）',
+      'DB 設計（ER 図設計、インデックス設計、RLS）',
+      'API 設計・実装（REST、OpenAPI 自動生成、orval による型安全なクライアント連携）',
+      'フロントエンド実装（App Router、Server Components、TanStack Query）',
+      'Vertex AI / Gemini による商品データ解析・チラシ OCR',
+      '価格データ収集基盤（スクレイピング、進捗管理・再開機構）',
+      'GCP インフラ構築（Cloud Run、Cloud SQL、Artifact Registry、Secret Manager）',
+      'CI/CD（GitHub Actions + Workload Identity Federation）',
+      '監視・エラートラッキング（Sentry、Cloud Error Reporting）',
     ],
   },
   {

@@ -75,13 +75,14 @@ export const metadata: Metadata = {
 ### 3.1 `lib/projects.ts`
 
 ```ts
-export type ProjectSlug = 'yasui-mise' | 'specpilot' | 'cm-agent';
+export type ProjectSlug = 'kairi' | 'specpilot' | 'cm-agent' | 'yasui-mise';
 
 export type Project = {
   slug: ProjectSlug;
-  n: '01' | '02' | '03';
+  n: '01' | '02' | '03' | '04';
   name: string;
   type: string;
+  stamp: string;            // カード右上の体制（Solo · 0 → 1 / Team · PoC Lead）
   tagline: string;
   summaryShort: string;     // 一覧用
   summaryLong: string;      // 詳細ページ用
@@ -99,7 +100,7 @@ export const projects: Project[] = [...];
 export const projectSlugs = projects.map(p => p.slug);
 ```
 
-`ProjectSlug` は `lib/skills.ts` の `usedIn` と `lib/skill-sheet.ts` からも参照される共通型。`Mock` は `components/visuals/ProjectMocks.tsx`（3 つのモックを 1 ファイルに同居）から import する。各プロジェクトの詳細ページ用の作り込んだ図は `{YasuiMise,SpecPilot,CmAgent}DeepDive.tsx` に分けてある。
+`ProjectSlug` は `lib/skills.ts` の `usedIn` と `lib/skill-sheet.ts` からも参照される共通型。`Mock` は `components/visuals/ProjectMocks.tsx`（4 つのモックを 1 ファイルに同居）から import する。各プロジェクトの詳細ページ用の作り込んだ図は `{YasuiMise,SpecPilot,CmAgent}DeepDive.tsx` に分けてある。kairi には DeepDive が無く、詳細ページはモックと設計判断までで終わる。
 
 ### 3.2 `lib/career.ts`
 
