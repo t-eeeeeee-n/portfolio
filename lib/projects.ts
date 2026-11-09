@@ -1,7 +1,12 @@
 import type { ComponentType } from 'react';
-import { CmAgentMock, SpecPilotMock, YasuimiseMock } from '@/components/visuals/ProjectMocks';
+import {
+  CmAgentMock,
+  KairiMock,
+  SpecPilotMock,
+  YasuimiseMock,
+} from '@/components/visuals/ProjectMocks';
 
-export type ProjectSlug = 'yasui-mise' | 'specpilot' | 'cm-agent';
+export type ProjectSlug = 'kairi' | 'specpilot' | 'cm-agent' | 'yasui-mise';
 
 export type ProjectDecision = {
   title: string;
@@ -10,9 +15,11 @@ export type ProjectDecision = {
 
 export type Project = {
   slug: ProjectSlug;
-  n: '01' | '02' | '03';
+  n: '01' | '02' | '03' | '04';
   name: string;
   type: string;
+  /** カードの右上に出す体制。PoC はチームなので Solo と書かない。 */
+  stamp: string;
   tagline: string;
   summaryShort: string;
   summaryLong: string;
@@ -28,75 +35,77 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: 'yasui-mise',
+    slug: 'kairi',
     n: '01',
-    name: 'ヤスイミセ',
-    type: 'Work · Web Service · 2026–Now',
-    tagline: '近所のスーパーの価格を一画面で比較する。',
+    name: 'kairi',
+    type: 'Work · Dev Tool · 2026–Now',
+    stamp: 'Solo · 0 → 1',
+    tagline: '設計書とコードの食い違いを、人が判定できる形で挙げる。',
     summaryShort:
-      '複数のスーパーの価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。',
+      'Excel / Word の設計書とソースコードを同じ形の Markdown に変換して突き合わせ、食い違い（乖離）と、どちらにも書かれていない情報（MISSING）を挙げるレビュー支援システム。',
     summaryLong:
-      '複数のスーパーの商品価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。企画、画面設計、API、DB、インフラ、チラシ解析まで一通り自分で実装しています。',
+      'Excel / Word の設計書とソースコード（Python / TypeScript）を、同じ形の Markdown（標準スキーマ）に変換して突き合わせ、設計書とコードの食い違い（乖離）と、どちらにも根拠がない情報（MISSING）を挙げるレビュー支援システム。指摘は人が「有用 / 誤検出 / 保留」で判定し、CI では PR へのコメントとチェックの成否で知らせます。アイタイズの自社プロダクトとして自分で発案し、一人で開発しています。',
     motivation:
-      '毎週スーパーを何軒も回って価格を見比べているうちに、これは UI で解ける問題だと気づいた。自分が一番のユーザーなので、欲しい体験を一人で作りに行った。',
-    responsibility: ['企画', '設計', '実装', '運用'],
+      '受託の現場では、設計書は Excel のまま、コードはコードで育っていき、どちらが正しいのか分からなくなる。AI にコードを書かせるようになっても、読ませる設計書が古ければ意味がない。設計書を AI が読める形に直しつつ、コードとのズレを毎回機械で洗い出せれば、保守と属人化の問題をまとめて小さくできると考えて企画した。',
+    responsibility: ['企画', '設計', '実装', 'テスト'],
     role: [
-      '企画',
-      'MVP スコープ策定',
-      'UI/UX 設計',
-      'DB / API 設計',
-      'Frontend / Backend',
-      'GCP インフラ',
-      'CI/CD',
-      '監視・エラートラッキング',
-      'Gemini / Vertex AI による商品データ解析・チラシ OCR',
-      'OpenAPI / orval による型安全な API 連携',
+      '企画（課題設定・MVP スコープ）',
+      '標準スキーマ（中間表現）の設計',
+      'Excel / Word の読み取りと正規化',
+      'Python（ast）/ TypeScript（ts-morph）のコード解析',
+      '乖離・MISSING の検出と重大度付け',
+      '判定画面と判定台帳',
+      'CI 連携（PR コメント・チェック）',
+      'LLM 連携（費用の見積もりを先に出す）',
     ],
     stack: [
-      'Next.js',
-      'NestJS',
+      'Python',
       'TypeScript',
-      'PostgreSQL',
-      'GCP',
-      'Cloud Run',
+      'Next.js',
+      'React',
+      'openpyxl',
+      'python-docx',
+      'ts-morph',
       'Vertex AI',
       'Gemini',
       'Docker',
-      'OpenAPI',
+      'GitHub Actions',
+      'pytest',
     ],
-    href: '/projects/yasui-mise',
+    href: '/projects/kairi',
     challenge:
-      'スーパーごとにチラシのレイアウトが違う。商品名の表記も「卵」「たまご」「玉子」みたいに揺れる。人手で正規化マスタを直し続ける運用は早晩破綻するのが見えていて、ここを自動で吸収できる仕組みを最初から組まないとサービスとして成立しないと判断した。',
+      '設計書は結合セル・方眼紙・図形だらけで、書き方も会社ごとに違う。コードの「同じ項目」と対応付けること自体が難しく、精度 100% を狙うといつまでも終わらない。かといって誤検出が多ければ誰も見なくなる。どこまでを機械で決め、どこからを人に判定してもらうかの線引きが、このプロダクトの中心になった。',
     decisions: [
       {
-        title: '商品マスタ正規化',
-        body: 'ベクター類似度だけだと精度が頭打ちになったので、ルール（数量・容量・ブランド名）を上に重ねたハイブリッドにした。「100% 正しくマージする」は早々に諦めて、誤マージは UI から訂正できる導線を残す方針に倒した。',
+        title: '同じ形に揃えてから比べる',
+        body: '設計書とコードを直接比べず、両方を同じ形の Markdown（標準スキーマ）に変換してから突き合わせる。変換結果はそれ自体が資産として残り、AI に読ませる前処理にもそのまま使える。必須項目は最小限にして、根拠が見つからない項目は推測で埋めずに MISSING と明示する。',
       },
       {
-        title: 'OCR パイプライン',
-        body: 'チラシ画像をそのまま Gemini に投げて、商品名・価格・有効期限の構造化 JSON で受ける。失敗したものはキューに戻して再試行。「OCR の後段で人手チェック」みたいな運用は最初から作らないと決めた。',
+        title: 'AI なしを既定にする',
+        body: '既定の読み取りは LLM を使わない決定論の変換で、設計書もコードも外部へ送らない。LLM を使う処理は費用の見積もりだけを先に出し、明示的に実行を指示したときだけ動かす。社外秘の設計書を扱う以上、「送らない」を既定にしないと検討の土俵に乗らない。',
       },
       {
-        title: '最小スタック',
-        body: 'Next.js + NestJS + Postgres + Cloud Run。最初から「スケールアウトに強い構成」を組むより、一人で運用していて頭の中に全部入る構成を優先した。Cloud Run のオートスケールに任せれば当面は足りる。',
+        title: '判定は人に返す',
+        body: '指摘は「有用 / 誤検出 / 保留」で人が判定し、判定は台帳に残す。指摘の内容から指紋を作って走行をまたいで判定を引き継ぐので、一度誤検出と判定したものを毎回見せない。CI では、未判定の Critical が残っていればチェックを落とす。',
       },
       {
-        title: '型安全な連携',
-        body: 'API は OpenAPI で書いて、orval でフロントの SDK を自動生成。手書きの fetch は 0 にする。API の形を変えるとフロントが先に壊れてくれるので、変更が伝わるのが早い。',
+        title: '文脈を持たない読み手にレビューさせる',
+        body: 'テストが全部緑でも、それは自分が思いついた検査が通っただけ。変更の評価は、経緯を渡さない AI の評価者にコード・ドキュメント・テストを別々に見せて行い、手元で再現できた欠陥だけを直す。テストは約 1,700 件になった。',
       },
     ],
-    Mock: YasuimiseMock,
+    Mock: KairiMock,
   },
   {
     slug: 'specpilot',
     n: '02',
     name: 'SpecPilot',
     type: 'Work · AI SaaS · 2026–Now',
+    stamp: 'Solo · 0 → 1',
     tagline: '議事録から、設計書と実装のたたき台へ。',
     summaryShort:
       '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。議事録から質問・設計書・vibe pack を生成します。',
     summaryLong:
-      '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。打ち合わせの議事録から、仕様の不足や未決事項を整理し、設計書や実装のたたき台までつなげる AI 支援ツールを作っています。',
+      '受託開発の上流工程、要件整理〜基本設計を AI で支援する SaaS。打ち合わせの議事録から、仕様の不足や未決事項を整理し、設計書や実装のたたき台までつなげる AI 支援ツールを作っています。開発中で、一般公開はまだです。',
     motivation:
       '要件整理 → 設計書という段を何度も繰り返すうちに、議事録から仕様への翻訳工程の大半は LLM で吸収できると感じた。一人で 0→1 まで運ぶことで、上流〜SaaS まで一貫した思考フローを掴みたかった。',
     responsibility: ['企画', '設計', '実装', 'GTM 設計'],
@@ -106,8 +115,9 @@ export const projects: Project[] = [
       'GTM 設計',
       '課金モデル設計 / LTV 試算',
       'AI Agent パイプライン設計',
-      'Extractor / Question / Designer / Linter の Agent 構成',
-      'Claude / GPT-4o / Gemini を用途別に使い分け',
+      'Extractor / Question / Verifier / Designer / Spec / Estimator の 6 Agent 構成',
+      'LLM を使わない整合チェック（Linter）',
+      'LLM プロバイダの抽象化（既定は Vertex AI の Gemini）',
       'ドキュメント駆動開発 / 意思決定ログ',
     ],
     stack: [
@@ -117,10 +127,11 @@ export const projects: Project[] = [
       'tRPC',
       'Prisma',
       'PostgreSQL',
-      'Mastra',
-      'Claude API',
-      'GPT-4o',
+      'BullMQ',
+      'Vertex AI',
       'Gemini',
+      'Claude API',
+      'OpenAI API',
       'Stripe',
       'Docker',
     ],
@@ -130,11 +141,11 @@ export const projects: Project[] = [
     decisions: [
       {
         title: 'Agent を役割で分ける',
-        body: '1 Agent に「議事録読んで設計書出して」と全部任せると、出力が悪かったときに何が悪かったのか分からなくなる。Extractor（抽出）・Question（未決抽出）・Designer（設計化）・Linter（検証）の 4 段に分けて、各段で出力をその場で検証できる構成にした。',
+        body: '1 Agent に「議事録読んで設計書出して」と全部任せると、出力が悪かったときに何が悪かったのか分からなくなる。Extractor（抽出）・Question（質問）・Verifier（質問の根拠の検証）・Designer（設計書）・Spec（OpenAPI / Prisma / RBAC）・Estimator（タスクと見積もり）の 6 つに分け、各段の出力をその場で検証できる構成にした。最後の整合チェック（Linter）は、LLM に任せると判定自体が揺れるので、LLM を使わない決定論の検査だけにしている。',
       },
       {
-        title: 'モデル使い分け',
-        body: '抽出は Claude、探索は GPT-4o、長文整理は Gemini。性能特性とコストが用途で違うので役割ごとに替える。Agent 抽象側でモデルとプロンプトを差し替えられるようにしておくと、新しいモデルが出たときに数行で乗せ替えられる。',
+        title: 'モデルは差し替え前提',
+        body: 'Gemini / Claude / OpenAI を同じ provider 抽象の裏に置き、既定は Vertex AI 経由の Gemini にしている。最初は Claude を主モデルに決めていたが、Vertex AI 経由の Claude の利用枠が下りるまで Gemini で回していたところ、分類と抽出の誤りが実測で大きく減ったので Gemini を既定にした。抽象を先に作っておいたので、切り替えは既定値の変更で済んだ。',
       },
       {
         title: '人間のレビュー導線',
@@ -151,7 +162,8 @@ export const projects: Project[] = [
     slug: 'cm-agent',
     n: '03',
     name: 'メディア業界向け 業務オペレーション支援 AI エージェント基盤 (PoC)',
-    type: 'Work · PoC Lead · 2025',
+    type: 'Work · PoC Lead · 2025–2026',
+    stamp: 'Team · PoC Lead',
     tagline: '業務オペレーション最適化を、Agent で支援する。',
     summaryShort:
       'メディア業界向けの業務オペレーション最適化を目的とした社内 PoC。Main + 6 Sub Agent のマルチエージェント基盤として設計。',
@@ -205,6 +217,67 @@ export const projects: Project[] = [
       },
     ],
     Mock: CmAgentMock,
+  },
+  {
+    slug: 'yasui-mise',
+    n: '04',
+    name: 'ヤスイミセ',
+    type: 'Work · Web Service · 2025–2026 · 撤退',
+    stamp: 'Solo · 0 → 1',
+    tagline: '近所のスーパーの価格を一画面で比較する。',
+    summaryShort:
+      '複数のスーパーの価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。Cloud Run 上で動く状態まで作り、公開前に撤退を決めた。',
+    summaryLong:
+      '複数のスーパーの商品価格を比較し、「どこで買えば一番安いか」を直感的に判断できる価格比較サービス。企画、画面設計、API、DB、インフラ、チラシ解析まで一通り自分で実装し、Cloud Run 上で動く状態まで作りました。市場を調べ直した結果、2026 年 7 月に一般公開の前で撤退を決めています。',
+    motivation:
+      '毎週スーパーを何軒も回って価格を見比べているうちに、これは UI で解ける問題だと気づいた。自分が一番のユーザーなので、欲しい体験を一人で作りに行った。',
+    responsibility: ['企画', '設計', '実装'],
+    role: [
+      '企画',
+      'MVP スコープ策定',
+      'UI/UX 設計',
+      'DB / API 設計',
+      'Frontend / Backend',
+      'GCP インフラ',
+      'CI/CD',
+      '監視・エラートラッキング',
+      'Gemini / Vertex AI による商品データ解析・チラシ OCR',
+      'OpenAPI / orval による型安全な API 連携',
+    ],
+    stack: [
+      'Next.js',
+      'NestJS',
+      'TypeScript',
+      'PostgreSQL',
+      'GCP',
+      'Cloud Run',
+      'Vertex AI',
+      'Gemini',
+      'Docker',
+      'OpenAPI',
+    ],
+    href: '/projects/yasui-mise',
+    challenge:
+      'スーパーごとにチラシのレイアウトが違う。商品名の表記も「卵」「たまご」「玉子」みたいに揺れる。人手で正規化マスタを直し続ける運用は早晩破綻するのが見えていて、ここを自動で吸収できる仕組みを最初から組まないとサービスとして成立しないと判断した。',
+    decisions: [
+      {
+        title: '商品マスタ正規化',
+        body: 'ベクター類似度だけだと精度が頭打ちになったので、ルール（数量・容量・ブランド名）を上に重ねたハイブリッドにした。「100% 正しくマージする」は早々に諦めて、誤マージは UI から訂正できる導線を残す方針に倒した。',
+      },
+      {
+        title: 'OCR パイプライン',
+        body: 'チラシ画像をそのまま Gemini に投げて、商品名・価格・有効期限の構造化 JSON で受ける。失敗したものはキューに戻して再試行。「OCR の後段で人手チェック」みたいな運用は最初から作らないと決めた。',
+      },
+      {
+        title: '最小スタック',
+        body: 'Next.js + NestJS + Postgres + Cloud Run。最初から「スケールアウトに強い構成」を組むより、一人で回しても頭の中に全部入る構成を優先した。Cloud Run のオートスケールに任せれば当面は足りる。',
+      },
+      {
+        title: '型安全な連携',
+        body: 'API は OpenAPI で書いて、orval でフロントの SDK を自動生成。手書きの fetch は 0 にする。API の形を変えるとフロントが先に壊れてくれるので、変更が伝わるのが早い。',
+      },
+    ],
+    Mock: YasuimiseMock,
   },
 ];
 

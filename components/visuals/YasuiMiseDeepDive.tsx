@@ -214,7 +214,7 @@ const ARCH_NODES: ArchNode[] = [
 const ARCH_KEYS: [string, string][] = [
   [
     'Service + Jobs',
-    'Cloud Run を Service (常駐 frontend/backend) と Jobs (scrape/store-collect) の 2 系統で運用。',
+    'Cloud Run を Service (常駐 frontend/backend) と Jobs (scrape/store-collect) の 2 系統に分けた。',
   ],
   [
     '非対称な認証設計',
@@ -329,7 +329,7 @@ const LEVELS: { lv: string; title: string; sub: string; state: LevelState; offse
 
 const STATE_STYLE: Record<LevelState, { dot: string; label: string }> = {
   legacy: { dot: TONE.text3, label: 'legacy' },
-  now: { dot: 'var(--accent)', label: 'now · production' },
+  now: { dot: 'var(--accent)', label: 'built' },
   next: { dot: 'var(--accent)', label: 'next' },
   future: { dot: TONE.text2, label: 'design ready' },
 };
@@ -911,7 +911,7 @@ const ROADMAP: { p: string; title: string; week: string; state: RoadmapState }[]
   { p: '2', title: '認証 + ユーザー機能', week: 'W4-5', state: 'done' },
   { p: '3', title: '推移グラフ + 品質', week: 'W6-7', state: 'done' },
   { p: '4', title: '管理機能', week: 'W8-9', state: 'done' },
-  { p: '5', title: 'CI/CD + 監視', week: 'W10', state: 'active' },
+  { p: '5', title: 'CI/CD + 監視', week: 'W10', state: 'done' },
   { p: 'B', title: 'Web Push / LINE', week: '+1-3 mo', state: 'plan' },
   { p: 'C', title: 'ネイティブ化', week: '+6-12 mo', state: 'plan' },
   { p: 'D', title: '買物最適化 AI', week: '+12+ mo', state: 'plan' },
@@ -924,7 +924,7 @@ const ROADMAP_STATE: Record<
 > = {
   done: { c: TONE.text2, dot: TONE.text3, label: 'done' },
   active: { c: 'var(--accent)', dot: 'var(--accent)', label: 'active' },
-  plan: { c: TONE.text3, dot: TONE.text3, label: 'plan', dashed: true },
+  plan: { c: TONE.text3, dot: TONE.text3, label: 'frozen', dashed: true },
 };
 
 function YmRoadmap() {
@@ -1086,7 +1086,7 @@ export function YasuiMiseDeepDive() {
             Deep dive · System Design
           </div>
           <h2 className="h-section" style={{ fontSize: 'clamp(28px, 3.4vw, 42px)' }}>
-            アーキテクチャ・Agent・運用バッチ。
+            アーキテクチャ・Agent・収集バッチ。
           </h2>
           <p
             style={{
@@ -1097,7 +1097,7 @@ export function YasuiMiseDeepDive() {
               maxWidth: 640,
             }}
           >
-            企画から運用までの設計判断をいくつか抜粋しました。
+            企画から実装までの設計判断をいくつか抜粋しました。
             システム構成、Agent の段階設計、チラシ解析、店舗収集バッチ、そして全体ロードマップ。
           </p>
         </div>
@@ -1107,7 +1107,7 @@ export function YasuiMiseDeepDive() {
             idx="A"
             eyebrow="System Architecture"
             title="Cloud Run · Vertex AI · Firebase の最小スタック。"
-            lede="Service + Jobs を Cloud Run に寄せ、認証は FE/BE で責任を分け、AI は Vertex AI で揃える。1人で運用しきれる構成に絞っています。"
+            lede="Service + Jobs を Cloud Run に寄せ、認証は FE/BE で責任を分け、AI は Vertex AI で揃える。1 人で回しきれる構成に絞りました。"
           />
           <YmArch />
         </div>
@@ -1146,8 +1146,8 @@ export function YasuiMiseDeepDive() {
           <YmHead
             idx="E"
             eyebrow="Roadmap"
-            title="MVP 10 週 + 公開後 Phase B-E。"
-            lede="MVP は基盤 → 認証 → 推移 → 管理 → デプロイの 5 Phase に分割し、公開後は Push / ネイティブ化 / AI / B2B API の順で拡張する計画。"
+            title="MVP 10 週の計画と、公開前の撤退。"
+            lede="MVP は基盤 → 認証 → 推移 → 管理 → デプロイの 5 Phase に分割して最後まで作った。公開後は Push / ネイティブ化 / AI / B2B API の順で広げる計画だったが、市場を調べ直した結果 2026 年 7 月に公開前で撤退を決め、Phase B-E は凍結した。"
           />
           <YmRoadmap />
         </div>

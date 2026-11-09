@@ -308,7 +308,7 @@ function SpPositioning() {
 }
 
 /* ===========================================================
-   SECTION B — Agent Pipeline (11 stages + 2 feedback loops)
+   SECTION B — Agent Pipeline (12 stages + 2 feedback loops)
    =========================================================== */
 type Step = { n: string; k: NodeKind; label: string; sub: string };
 
@@ -316,20 +316,21 @@ const PIPELINE_STEPS: Step[] = [
   { n: '01', k: 'muted', label: '議事録 (input)', sub: 'input.md' },
   { n: '02', k: 'agent', label: 'Extractor Agent', sub: '要件候補 · 確定 · 未決を抽出' },
   { n: '03', k: 'agent', label: 'Question Agent', sub: '質問生成 + 拡張カタログ判定' },
-  { n: '04', k: 'muted', label: 'ユーザー回答', sub: 'interactive · 収束まで反復' },
+  { n: '04', k: 'agent', label: 'Verifier Agent', sub: '質問の根拠を検証 · 無根拠な質問を外す' },
+  { n: '05', k: 'muted', label: 'ユーザー回答', sub: 'interactive · 収束まで反復' },
   {
-    n: '05',
+    n: '06',
     k: 'accent',
     label: '収束判定',
     sub: 'Blocker / Major = 0 · Archetype 必須 = 100%',
   },
-  { n: '06', k: 'accent', label: '確認フェーズ', sub: 'AI 理解のすり合わせ · ユーザー承認' },
-  { n: '07', k: 'agent', label: 'Designer Agent', sub: 'docs/prd · design · decisions' },
-  { n: '08', k: 'agent', label: 'Spec Agent', sub: 'openapi · prisma · sql · rbac' },
-  { n: '09', k: 'agent', label: 'Linter Agent', sub: '整合チェック · 3レイヤー完全性' },
-  { n: '10', k: 'default', label: 'AGENTS.md 再生成 + tasks.md', sub: 'vibe pack assembly' },
+  { n: '07', k: 'accent', label: '確認フェーズ', sub: 'AI 理解のすり合わせ · ユーザー承認' },
+  { n: '08', k: 'agent', label: 'Designer Agent', sub: 'docs/prd · design · decisions · AGENTS.md' },
+  { n: '09', k: 'agent', label: 'Spec Agent', sub: 'openapi · prisma · rbac' },
+  { n: '10', k: 'agent', label: 'Estimator Agent', sub: 'tasks.md · 工数見積もり' },
+  { n: '11', k: 'default', label: 'Linter（LLM なし）', sub: '決定論の整合チェック · 3レイヤー完全性' },
   {
-    n: '11',
+    n: '12',
     k: 'output',
     label: 'vibe pack 出力',
     sub: 'Claude Code / Cursor / Kiro 等 25+ ツール',
@@ -339,8 +340,8 @@ const PIPELINE_STEPS: Step[] = [
 type Loop = { from: number; to: number; label: string };
 
 const PIPELINE_LOOPS: Loop[] = [
-  { from: 4, to: 3, label: '不十分 → ユーザーへ戻る' },
-  { from: 5, to: 2, label: '大きな相違 → 質問へ戻る' },
+  { from: 5, to: 4, label: '不十分 → ユーザーへ戻る' },
+  { from: 6, to: 2, label: '大きな相違 → 質問へ戻る' },
 ];
 
 function SpPipeline() {
@@ -459,45 +460,6 @@ function SpPipeline() {
         </div>
       </div>
 
-      {/* Phase 2 — Estimator annotation */}
-      <div
-        style={{
-          marginTop: 28,
-          padding: '14px 18px',
-          border: '1px dashed var(--d-line)',
-          borderRadius: 10,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 14,
-          background: TONE.surfaceMuted,
-          flexWrap: 'wrap',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 10,
-            color: TONE.text3,
-            letterSpacing: '0.06em',
-            padding: '2px 6px',
-            border: '1px solid var(--d-line)',
-            borderRadius: 4,
-            textTransform: 'uppercase',
-          }}
-        >
-          Phase 2
-        </span>
-        <span style={{ fontSize: 13.5, color: TONE.text0, fontWeight: 500 }}>Estimator Agent</span>
-        <span
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 11.5,
-            color: TONE.text2,
-          }}
-        >
-          estimate.md (工数見積もり) · Linter → AGENTS.md 間に接続
-        </span>
-      </div>
     </div>
   );
 }
@@ -526,10 +488,10 @@ const VIBE_COLUMNS: Column[] = [
     docs: [
       'AGENTS.md',
       'tasks.md',
+      { text: 'docs/estimate.md', note: '見積書 · 顧客向け' },
       'docs/prd/overview.md',
       'docs/prd/requirements.md',
       'docs/prd/scope.md',
-      'docs/decisions/log.md',
     ],
   },
   {
@@ -539,19 +501,12 @@ const VIBE_COLUMNS: Column[] = [
     rule: '欠落 = Linter Warning',
     kind: 'agent',
     docs: [
-      'docs/prd/non-functional.md',
-      'docs/detail/ui.md',
       'docs/design/architecture.md',
-      'docs/design/api-design.md',
-      'docs/design/ui-guidelines.md',
-      'docs/design/design-system.md',
+      'docs/detail/ui.md',
       'docs/diagrams/er.mmd',
-      'docs/diagrams/screen-flow.mmd',
       'docs/specs/openapi.yaml',
       'docs/specs/schema.prisma',
-      'docs/specs/schema.sql',
       'docs/specs/rbac.yaml',
-      { text: 'docs/estimate.md', note: '任意 · Phase 2' },
     ],
   },
   {
@@ -561,11 +516,11 @@ const VIBE_COLUMNS: Column[] = [
     rule: '収束ループ中に動的追加',
     kind: 'default',
     docs: [
-      { text: 'docs/diagrams/*.mmd', note: 'ステータス遷移 · API フロー等' },
-      { text: 'docs/specs/design-tokens.json', note: 'Phase 2' },
+      { text: 'docs/diagrams/*.mmd', note: 'バッチ · 通知フロー等' },
+      { text: 'docs/specs/*', note: '帳票など' },
       {
         text: '拡張カタログ発動による追加',
-        note: '対象外は decisions/log.md に根拠記録',
+        note: '議事録のキーワードからパターンを判定',
       },
     ],
   },
@@ -775,8 +730,8 @@ export function SpecPilotDeepDive() {
           <SpHead
             idx="B"
             eyebrow="Agent Pipeline"
-            title="11 段の Agent + 人間の収束ループ。"
-            lede="抽出 → 質問 → 収束 → 確認 → 設計 → 仕様 → リント。各段は独立した Agent として差し替え可能。Phase 2 で Estimator を追加。"
+            title="6 つの Agent と決定論の検査、人間の収束ループ。"
+            lede="抽出 → 質問 → 検証 → 収束 → 確認 → 設計 → 仕様 → 見積もり → 整合チェック。LLM を使う段は独立した Agent として差し替えられ、最後の整合チェック（Linter）だけは LLM を使わない決定論の検査にしている。"
           />
           <SpPipeline />
         </div>

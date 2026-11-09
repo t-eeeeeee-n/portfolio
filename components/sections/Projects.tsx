@@ -13,7 +13,7 @@ function ProjectCard({ p }: { p: Project }) {
           </span>
           <span className="w-2.5 h-px bg-d-line" />
           <span className="eyebrow">{p.type}</span>
-          <span className="pc-stamp">Solo · 0 → 1</span>
+          <span className="pc-stamp">{p.stamp}</span>
         </div>
         <h3 className="h-card mt-1" style={{ fontSize: 26, letterSpacing: '-0.02em' }}>
           {p.name}
@@ -96,8 +96,8 @@ export function Projects() {
         <SectionHead
           n="01"
           eyebrow="Projects · Featured Work"
-          title="一人で 0 → 1 まで作っているもの。"
-          lede="企画から実装・運用まで一人称で関わった 3 案件。それぞれ「なぜ作ったか / 何が難しかったか / どう設計判断したか」が伝わるように並べています。"
+          title="0 → 1 で作っているもの。"
+          lede="企画から実装まで一人で担ってきた自社プロダクト 3 つと、リードとして進めた PoC 1 つ。それぞれ「なぜ作ったか / 何が難しかったか / どう設計判断したか」が伝わるように並べています。"
         />
         <div className="grid gap-6" data-reveal="stagger">
           {projects.map((p) => (

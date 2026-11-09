@@ -58,9 +58,10 @@ export function About() {
               が重要だと考えています。誰のどの課題を解くのか、どの範囲を MVP として切り出すのか、どのように収益化・運用していくのかまで含めて考えることを大切にしています。
             </p>
             <p style={{ margin: '0 0 18px' }}>
-              直近では、スーパー価格比較サービス
-              <span style={{ color: 'var(--d-text-0)' }}>「ヤスイミセ」</span> や、AI 設計支援 SaaS
-              <span style={{ color: 'var(--d-text-0)' }}>「SpecPilot」</span> を、企画立案・要件定義・UI/UX・DB/API 設計・フロントエンド／バックエンド実装・インフラ・CI/CD・AI 活用まで一人で担当して開発しています。
+              直近では、設計書とコードの乖離検出システム
+              <span style={{ color: 'var(--d-text-0)' }}>「kairi」</span> と、AI 設計支援 SaaS
+              <span style={{ color: 'var(--d-text-0)' }}>「SpecPilot」</span> を、自社プロダクトとして企画立案・要件定義・設計・実装・AI 活用まで一人で開発しています。その前に手がけたスーパー価格比較サービス
+              <span style={{ color: 'var(--d-text-0)' }}>「ヤスイミセ」</span> は、Cloud Run 上で動く状態まで作ったうえで、市場を調べ直して公開前に撤退を決めました。
             </p>
             <p style={{ margin: 0 }}>
               人との対話を楽しみ、野心を持って新しい挑戦を続けるタイプです。学生時代は

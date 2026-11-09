@@ -7,7 +7,8 @@
 
 ## 何をやっているサイトか
 
-- ヤスイミセ・SpecPilot などの自社/受託プロダクトを「**何を考えて作っているか**」が伝わる形で紹介する。**ヤスイミセと SpecPilot はアイタイズの事業として立ち上げているもので「個人開発」ではない**（体制が 1 名なだけ。「一人で」は可、「個人開発」は不可）
+- kairi・SpecPilot・ヤスイミセなどの自社/受託プロダクトを「**何を考えて作っているか**」が伝わる形で紹介する。**この 3 つはアイタイズの自社プロダクトとして本人が発案・開発しているもので「個人開発」ではない**（体制が 1 名なだけ。「一人で」は可、「個人開発」は不可）
+- **ヤスイミセと SpecPilot は一般公開・本番運用に至っていない**（ヤスイミセは 2026-07 に公開前で撤退、SpecPilot は開発中）。「運用まで」「production」と書かない。kairi も開発中
 - `/component-lab` で再利用可能な UI を Preview / Code / Props / Notes の 4 面で公開する
 - `/notes` で設計判断や開発ログを軽量な記事として残す
 - About / Career / Skills / Contact を一画面でスクロールでき、必要な人にすぐ届く形にする
@@ -57,7 +58,7 @@ portfolio/
 │   ├── sections/             # Nav, Hero, Intro, Projects, LabTeaser, Notes, About, Career, Skills, WorkStyle(未使用), Contact, Footer, BuildLog(未使用), ThemeButton, ZoneFade
 │   ├── ui/                   # SectionHead, BrandMark, PrintButton, icons
 │   ├── lab/                  # LabPage, LabModal, previews.tsx（19 種を 1 ファイルに）
-│   ├── visuals/              # FloatingDeck, ProjectMocks, {YasuiMise,SpecPilot,CmAgent}DeepDive
+│   ├── visuals/              # FloatingDeck, ProjectMocks（4 件）, {YasuiMise,SpecPilot,CmAgent}DeepDive（kairi は無し）
 │   └── effects/              # BackgroundFX, Effects（reveal / magnetic を内包）
 ├── content/notes/            # *.mdx（記事本体）
 ├── lib/
