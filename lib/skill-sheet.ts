@@ -44,7 +44,7 @@ export const skillSheetProfile: SkillSheetProfile = {
   engagements: availability.engagements,
   workStyle: availability.prose,
   languages: ['日本語 (native)', 'English (technical)'],
-  updated: '2026-11-09',
+  updated: '2026-11-17',
 };
 
 export const workPhases = [
@@ -67,7 +67,15 @@ export type Company = {
   employment: string;
 };
 
+/* 副業の 2 社は守秘義務のため社名・顧客名・プロダクト名を出さない。
+   業種とシステムの種類までに留める。 */
 export const companies: Company[] = [
+  {
+    id: 'side',
+    name: '副業（業務委託・2 社）',
+    period: '2025年04月～現在',
+    employment: '業務委託',
+  },
   {
     id: 'itize',
     name: '株式会社アイタイズ',
@@ -111,6 +119,50 @@ export type ProjectHistoryEntry = {
    first by visual priority, then the rest of the most recent employer,
    then back through history. */
 export const projectHistory: ProjectHistoryEntry[] = [
+  // ── 副業（業務委託） ───────────────────────────────────
+  {
+    id: 'signage-cms',
+    companyId: 'side',
+    name: '大手小売チェーン向け デジタルサイネージ CMS 開発',
+    period: '2026年06月～現在',
+    position: 'フルスタックエンジニア',
+    teamRole: 'メンバー',
+    teamSize: '1-10 名',
+    industry: '小売 / デジタルサイネージ',
+    phases: ['基本設計', '詳細設計', '実装', '単体テスト', '結合テスト'],
+    stack: ['Python', 'TypeScript', 'React', 'Vite', 'Refine', 'PostgreSQL', 'Azure', 'Azure Functions', 'Azure Static Web Apps', 'Entra ID', 'OpenAPI', 'Playwright', 'Docker Compose', 'Claude Code'],
+    description:
+      '店舗のサイネージで流す広告コンテンツと放映スケジュールを管理する CMS の開発に、副業（業務委託）で参画。管理画面・API・DB・設計書を横断して担当。2026年10月からは、複数の配信先 CMS へ広告枠の設定を一律に配信する統合 CMS を、リポジトリの立ち上げから担当。',
+    highlights: [
+      '放映枠方式の番組管理（枠の作成・複製、優先度付きの入稿、番組コピーの複製条件）を DB・API・画面まで一貫して実装',
+      '番組表生成ロジック（コンテンツ単位の放映期間・配信先端末・優先放送の評価）',
+      '端末マスタの Excel 入出力、オンライン判定の統一、枠方式ダッシュボード（KPI・アラート）',
+      '統合 CMS の土台づくり（モノレポ、Azure Functions、動画変換ジョブ、DB マイグレーション、Entra ID サインイン）と、Figma に沿った管理画面一式',
+      'pytest・Playwright による E2E と、要件・画面・DB 設計書の更新を実装とセットで実施',
+    ],
+  },
+  {
+    id: 'ai-task-saas',
+    companyId: 'side',
+    name: 'AI タスク管理 SaaS の Web・Chrome 拡張・API 開発',
+    period: '2025年04月～2026年02月',
+    position: 'フルスタックエンジニア',
+    teamRole: 'メンバー',
+    teamSize: '1-10 名',
+    industry: 'SaaS / 生産性ツール',
+    phases: ['詳細設計', '実装', '単体テスト', '保守運用'],
+    stack: ['TypeScript', 'Next.js', 'React', 'Vite', 'Tailwind CSS', 'Express', 'tsoa', 'Prisma', 'PostgreSQL', 'OpenAPI', 'OpenAI API', 'AWS', 'Chrome Extension'],
+    description:
+      'タスクごとに AI と対話しながら進められるタスク管理 SaaS の開発に、副業（業務委託）で参画。Web アプリ・Chrome 拡張・API の 3 つを横断して担当し、プロジェクト終了まで約 10 か月継続。',
+    highlights: [
+      'タスク単位の AI チャット API（OpenAI API）とチャット履歴の保存',
+      '子タスクの一覧・編集・削除、期日のタイムゾーン対応（UTC 保存・12/24 時間表記）',
+      'Chrome 拡張のサイドパネル化と、拡張から Web への再認証を不要にする連携トークン',
+      'tsoa による OpenAPI 生成と orval による型付きクライアント',
+      'Next.js 14 → 16・React 19・ESLint 9 への更新、チーム設定・メンバー招待の画面と API',
+    ],
+  },
+
   // ── 株式会社アイタイズ ─────────────────────────────────
   {
     id: 'kairi',

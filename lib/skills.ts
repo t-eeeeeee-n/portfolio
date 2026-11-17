@@ -145,6 +145,12 @@ export const skillCategories: SkillCategory[] = [
         note: '一人で回しても頭に入るスタックを優先',
       },
       { name: 'Cloud SQL', level: 'normal' },
+      {
+        name: 'Azure',
+        level: 'normal',
+        aliases: ['Azure Functions'],
+        note: 'Functions（Python）+ Static Web Apps + PostgreSQL の業務システム開発',
+      },
       { name: 'AWS', level: 'secondary' },
     ],
   },
