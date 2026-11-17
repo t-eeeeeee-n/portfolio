@@ -14,14 +14,14 @@ export type ResumeStrength = { title: string; body: string };
 
 export const resumeMeta = {
   /** ISO date. Bump when you revise the resume prose below. */
-  updated: '2026-11-09',
+  updated: '2026-11-17',
   engagements: availability.engagements.join(' / '),
   workStyle: availability.prose,
 };
 
 /* 職務要約 — the lead paragraph a recruiter reads first. */
 export const careerSummary =
-  'Web と AI を軸に、企画・要件定義から設計・実装・GCP へのデプロイまで一人で完走できるフルスタックエンジニアです（エンジニア歴約 6 年）。直近はアイタイズで、自社プロダクトとして設計書とコードの乖離検出システム「kairi」と AI 設計支援 SaaS「SpecPilot」を、いずれも自分で発案・企画し一人で開発しています。メディア業界向けの業務オペレーション支援 AI エージェント基盤 PoC はリードとして推進しました。0 → 1 の立ち上げと、生成 AI を「実際に使われる・運用に耐える機能」へ落とし込む実装を得意としています。';
+  'Web と AI を軸に、企画・要件定義から設計・実装・GCP へのデプロイまで一人で完走できるフルスタックエンジニアです（エンジニア歴約 6 年）。直近はアイタイズで、自社プロダクトとして設計書とコードの乖離検出システム「kairi」と AI 設計支援 SaaS「SpecPilot」を、いずれも自分で発案・企画し一人で開発しています。メディア業界向けの業務オペレーション支援 AI エージェント基盤 PoC はリードとして推進しました。本業と並行して副業（業務委託）でも 2 社の開発に参画しており、AI タスク管理 SaaS（約 10 か月・終了）と、Azure 上の小売向けサイネージ CMS（継続中）を担当しています。0 → 1 の立ち上げと、生成 AI を「実際に使われる・運用に耐える機能」へ落とし込む実装を得意としています。';
 
 /* 活かせる経験・スキル — the 3 pillars to skim before the detail. */
 export const strengths: ResumeStrength[] = [
